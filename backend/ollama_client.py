@@ -11,7 +11,10 @@ from typing import List, Dict, Any, Optional
 from .config import Config
 from .lead_verifier import (
     enforce_programmatic_rules,
-    format_crevanta_video_idea
+    format_crevanta_video_idea,
+    lookup_verified_directory,
+    get_verified_official_catalog,
+    verify_brand_official_email
 )
 
 # Ensure local loopback addresses are never routed through environment proxies
@@ -462,9 +465,9 @@ def generate_brand_pitches_ollama(
             "    {\n"
             '      "brand_name": "Official Brand Name",\n'
             '      "website": "branddomain.com",\n'
-            '      "recipient_email": "partnerships@branddomain.com OR Not publicly available",\n'
-            '      "verification": "official OR unverified",\n'
-            '      "email_source": "Official Brand Website Contact Page OR Checked official website. No publicly listed official email found.",\n'
+            '      "recipient_email": "partnerships@branddomain.com",\n'
+            '      "verification": "official",\n'
+            '      "email_source": "Official brand website contact page",\n'
             '      "contact_person": "Head of Influencer Partnerships",\n'
             '      "brand_niche": "Brand category",\n'
             '      "why_fit": "Strategic reason why this creator is an authentic partner",\n'
@@ -498,7 +501,7 @@ def generate_brand_pitches_ollama(
             f"{video_idea if video_idea else 'Develop a bespoke, natural video concept using the 4-part formula: Brand Insight, Creative Opportunity, Concept Title, and How It Works.'}\n\n"
             f"OUR 15-DAY CAMPAIGN INSTRUCTIONS:\n"
             f"{campaign_15day_notes if campaign_15day_notes else 'Crevanta structured 15-day campaign: Day 1 Launch, Day 3-5 Hero Reel drop, Day 7 Story dialogue, Day 10 Co-author amplification, Day 15 Analytics wrap.'}\n\n"
-            f"BATCH REQUEST: Please discover exactly {batch_target} distinct brand targets. Remember: TAKE ONLY OFFICIAL EMAILS. If not verified on official site, set 'Not publicly available'. Never guess pattern emails."
+            f"BATCH REQUEST: Please discover exactly {batch_target} distinct brand targets. Remember: TAKE ONLY OFFICIAL EMAILS. If not verified on official site, set recipient_email to 'Not publicly available' and verification to 'unverified'. Never guess pattern emails."
         )
 
         messages = [
@@ -526,6 +529,28 @@ def generate_brand_pitches_ollama(
                         continue
                     seen_names.add(b_name.lower())
 
+                    # Check verified directory for official authenticity & contact details
+                    verified_match = lookup_verified_directory(b_name, b.get("website", ""))
+                    if verified_match:
+                        b["recipient_email"] = verified_match["recipient_email"]
+                        b["verification"] = "official"
+                        b["email_source"] = verified_match["email_source"]
+                        b["website"] = verified_match["website"]
+                        if not b.get("part2_concept_title") or b.get("part2_concept_title") == "Bespoke Creator Integration":
+                            b["part2_concept_title"] = verified_match.get("part2_concept_title") or b.get("part2_concept_title")
+                            b["part2_brand_insight"] = verified_match.get("part2_brand_insight") or b.get("part2_brand_insight")
+                            b["part2_creative_opportunity"] = verified_match.get("part2_creative_opportunity") or b.get("part2_creative_opportunity")
+                            b["part2_how_it_works"] = verified_match.get("part2_how_it_works") or b.get("part2_how_it_works")
+                    else:
+                        v_raw = (b.get("verification") or "").strip().lower()
+                        if "official" in v_raw and "unverified" not in v_raw:
+                            b["verification"] = "official"
+                        elif "unverified" in v_raw or b.get("recipient_email") == "Not publicly available":
+                            b["verification"] = "unverified"
+                            b["recipient_email"] = "Not publicly available"
+                        else:
+                            b["verification"] = "unverified"
+
                     # Ensure 4-part video concept integrity
                     concept_title = b.get("part2_concept_title") or b.get("concept_title") or "Bespoke Creator Integration"
                     brand_insight = b.get("part2_brand_insight") or b.get("brand_insight") or f"{b_name} offers differentiated quality in {b.get('brand_niche', 'its market')}."
@@ -544,14 +569,29 @@ def generate_brand_pitches_ollama(
                     )
 
                     # Ensure 3-part full email completeness
-                    if not b.get("full_email_body"):
-                        b["full_email_body"] = b.get("body") or (
-                            f"Hi {b_name} Team,\n\n"
-                            f"{b.get('part1_about_creator', '')}\n\n"
-                            f"{b.get('part2_video_idea', '')}\n\n"
-                            f"{b.get('part3_15day_campaign', '')}\n\n"
-                            f"Best regards,\nCrevanta Agency"
-                        )
+                    p1_text = b.get("part1_about_creator") or (
+                        f"{creator_name} ({creator_handle}) commands an authentic community of {creator_followers} engaged followers "
+                        f"in the {creator_niche} space with a verified {creator_er} engagement rate. "
+                        f"Their audience looks to them for genuine product recommendations and high-taste aesthetics."
+                    )
+                    b["part1_about_creator"] = p1_text
+
+                    p3_text = b.get("part3_15day_campaign") or (
+                        campaign_15day_notes if campaign_15day_notes else
+                        "Crevanta's Structured 15-Day Campaign Framework: Day 1 Kickoff & Product Unboxing, Day 4 Hero Reel Drop, Day 7 Interactive Story Q&A with direct affiliate link, Day 11 Co-Author Boost, Day 15 Analytics & ROI Wrap."
+                    )
+                    b["part3_15day_campaign"] = p3_text
+
+                    b["full_email_body"] = (
+                        f"Hi {b_name} Partnerships Team,\n\n"
+                        f"I lead brand partnerships at Crevanta Agency (Creators × Advantage). We manage {creator_name} ({creator_handle}) and have identified {b_name} as an ideal collaborative fit.\n\n"
+                        f"1. ABOUT THE CREATOR:\n{p1_text}\n\n"
+                        f"2. OUR UNIQUE VIDEO CONCEPT:\n{b['part2_video_idea']}\n\n"
+                        f"3. OUR 15-DAY CAMPAIGN ROADMAP:\n{p3_text}\n\n"
+                        f"Would your team be open to a 10-minute briefing call this week to review our creative moodboard and sample deliverables?\n\n"
+                        f"Best regards,\n"
+                        f"Crevanta Agency Partnerships Team\ncrevanta.com"
+                    )
                     b["body"] = b["full_email_body"]
 
                     # TWO-LAYER ENFORCEMENT: Enforce programmatic official email rules
@@ -571,11 +611,60 @@ def generate_brand_pitches_ollama(
         except Exception:
             continue
 
-    # Resilient guarantee: If strict_official_only is FALSE and we fell short of target_count,
-    # generate complementary brands with 'Not publicly available' contact status so user still gets full target.
-    # If strict_official_only is TRUE, we respect the user's rule: 10 verified leads > 30 leads with unverified data!
+    # RESILIENT GUARANTEE: If we fell short of target_count, backfill from Crevanta's verified official catalog.
+    # This guarantees that the user ALWAYS receives the exact requested brand count (up to 50),
+    # with 100% verified official emails when strict_official_only is True, eliminating "No brands found"!
+    if len(all_brands) < target_count:
+        catalog_leads = get_verified_official_catalog(niche_filter=f"{brand_prompt} {creator_niche}", count=76)
+        for cat_item in catalog_leads:
+            if len(all_brands) >= target_count:
+                break
+            c_name = cat_item["brand_name"]
+            if c_name.lower() in seen_names:
+                continue
+            seen_names.add(c_name.lower())
+
+            synth_brand = _synthesize_brand_pitch(
+                brand_name=c_name,
+                brand_niche=cat_item.get("brand_niche") or creator_niche,
+                creator=creator,
+                video_idea=video_idea,
+                campaign_15day_notes=campaign_15day_notes,
+                email_style=email_style
+            )
+            # Apply official verified credentials
+            synth_brand["website"] = cat_item["website"]
+            synth_brand["recipient_email"] = cat_item["recipient_email"]
+            synth_brand["verification"] = "official"
+            synth_brand["email_source"] = cat_item["email_source"]
+
+            if cat_item.get("part2_concept_title"):
+                synth_brand["part2_concept_title"] = cat_item["part2_concept_title"]
+                synth_brand["part2_brand_insight"] = cat_item["part2_brand_insight"]
+                synth_brand["part2_creative_opportunity"] = cat_item["part2_creative_opportunity"]
+                synth_brand["part2_how_it_works"] = cat_item["part2_how_it_works"]
+                synth_brand["part2_video_idea"] = (
+                    f"Brand Insight: {cat_item['part2_brand_insight']}\n"
+                    f"Creative Opportunity: {cat_item['part2_creative_opportunity']}\n"
+                    f"Concept: \"{cat_item['part2_concept_title']}\"\n"
+                    f"How It Works: {cat_item['part2_how_it_works']}"
+                )
+                synth_brand["full_email_body"] = (
+                    f"Hi {c_name} Partnerships Team,\n\n"
+                    f"I lead brand partnerships at Crevanta Agency (Creators × Advantage). We manage {creator_name} ({creator_handle}) and have identified {c_name} as an ideal collaborative fit.\n\n"
+                    f"1. ABOUT THE CREATOR:\n{synth_brand['part1_about_creator']}\n\n"
+                    f"2. OUR UNIQUE VIDEO CONCEPT:\n{synth_brand['part2_video_idea']}\n\n"
+                    f"3. OUR 15-DAY CAMPAIGN ROADMAP:\n{synth_brand['part3_15day_campaign']}\n\n"
+                    f"Would your team be open to a 10-minute briefing call this week to review our creative moodboard and sample deliverables?\n\n"
+                    f"Best regards,\n"
+                    f"Crevanta Agency Partnerships Team\ncrevanta.com"
+                )
+                synth_brand["body"] = synth_brand["full_email_body"]
+
+            all_brands.append(synth_brand)
+
+    # Complementary fallback if still below target_count and strict_official_only is False
     if not strict_official_only and len(all_brands) < target_count:
-        needed = target_count - len(all_brands)
         prompt_words = [w.capitalize() for w in re.findall(r"\w+", brand_prompt) if len(w) > 3][:6]
         niche_base = creator_niche.split()[0] if creator_niche else "Studio"
         

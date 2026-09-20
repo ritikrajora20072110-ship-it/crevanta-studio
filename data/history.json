@@ -8,7 +8,19 @@
     "brand_name": "Test Brand",
     "status": "Delivery Failed: [Errno 8] nodename nor servname provided, or not known",
     "success": false,
-    "id": "outreach_05edbadf",
-    "timestamp": "2026-09-20T17:16:15.060449+00:00"
+    "id": "outreach_19c54d70",
+    "timestamp": "2026-09-20T17:28:47.845438+00:00"
+  },
+  {
+    "type": "failed",
+    "to_email": "test@brand.com",
+    "subject": "Collab Pitch",
+    "body": "Hi,\nLet's work together.",
+    "creator_name": "Maya Sen",
+    "brand_name": "Test Brand",
+    "status": "Delivery Failed: [Errno 8] nodename nor servname provided, or not known",
+    "success": false,
+    "id": "outreach_3643bd01",
+    "timestamp": "2026-09-20T17:28:33.781666+00:00"
   }
 ]

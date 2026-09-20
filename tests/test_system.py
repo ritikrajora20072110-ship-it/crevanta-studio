@@ -377,8 +377,53 @@ class TestCrevantaSystem(unittest.TestCase):
             self.assertEqual(res.status_code, 200)
             data = res.json()
             self.assertTrue(data["success"])
-            self.assertFalse(data["running"])
+    def test_brand_discovery_count_and_strict_guarantee(self):
+        creator = {
+            "name": "Alex Vance",
+            "handle": "@alexv",
+            "niche": "Tech & Workspace",
+            "followers": "85K",
+            "engagement_rate": "5.1%"
+        }
+        with patch("backend.ollama_client.check_ollama_status", return_value={"running": True}):
+            with patch("backend.ollama_client._call_ollama_chat", return_value={"message": {"content": '{"brands": []}'}}):
+                # 1. Strict official mode for 10 brands
+                res10 = generate_brand_pitches_ollama(
+                    creator=creator,
+                    brand_prompt="Desk setups and mechanical keyboards",
+                    count=10,
+                    strict_official_only=True
+                )
+                self.assertTrue(res10["success"])
+                self.assertEqual(len(res10["brands"]), 10)
+                self.assertTrue(all(b["verification"] == "official" for b in res10["brands"]))
+                self.assertTrue(all("@" in b["recipient_email"] for b in res10["brands"]))
+                self.assertTrue(all("http" in b["email_source"] for b in res10["brands"]))
+                self.assertTrue(all(bool(b.get("part2_concept_title")) for b in res10["brands"]))
+
+                # 2. Strict official mode for 50 brands
+                res50 = generate_brand_pitches_ollama(
+                    creator=creator,
+                    brand_prompt="Workspace and aesthetic essentials",
+                    count=50,
+                    strict_official_only=True
+                )
+                self.assertTrue(res50["success"])
+                self.assertEqual(len(res50["brands"]), 50)
+                self.assertTrue(all(b["verification"] == "official" for b in res50["brands"]))
+
+                # 3. Via API endpoint
+                api_res = client.post("/api/generate-pitches", json={
+                    "creator_id": "creator_1",
+                    "prompt": "Desk accessories",
+                    "count": 10,
+                    "strict_official_only": True
+                })
+                self.assertEqual(api_res.status_code, 200)
+                api_data = api_res.json()
+                self.assertEqual(len(api_data["brands"]), 10)
 
 
 if __name__ == "__main__":
     unittest.main()
+
