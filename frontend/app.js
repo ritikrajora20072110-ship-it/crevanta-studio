@@ -83,6 +83,9 @@ function switchTab(tabName) {
       }
     }
   });
+  if (tabName === "verifier") {
+    refreshVerifierStatsAndRecords();
+  }
   if (window.lucide) lucide.createIcons();
 }
 
@@ -2047,13 +2050,16 @@ async function runBrandLeadVerification() {
   btnText.innerText = "Inspecting Official Website...";
 
   try {
+    const indianOnly = document.getElementById("verifierIndianOnly") ? document.getElementById("verifierIndianOnly").checked : true;
+
     const res = await fetch("/api/verify-lead", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         brand_name: brandName,
         website: website,
-        creator_id: creatorId
+        creator_id: creatorId,
+        indian_only: indianOnly
       })
     });
 
@@ -2297,6 +2303,299 @@ async function loadDeliverabilityStatus() {
   } catch (e) {
     // Non-blocking
   }
+}
+
+// =========================================================================
+// SELF-HOSTED EMAIL VERIFICATION CHECKER & INDIAN BRAND PIPELINE (UI)
+// =========================================================================
+let cachedEvHistory = [];
+
+async function refreshVerifierStatsAndRecords() {
+  await Promise.all([
+    loadEmailVerificationStats(),
+    loadEmailVerificationHistory()
+  ]);
+}
+
+async function loadEmailVerificationStats() {
+  try {
+    const res = await fetch("/api/email-verifier/stats");
+    if (!res.ok) return;
+    const stats = await res.json();
+    const setTxt = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.innerText = val;
+    };
+    setTxt("statTotal", stats.total || 0);
+    setTxt("statValid", stats.valid || 0);
+    setTxt("statCatchAll", stats.catch_all || 0);
+    setTxt("statDisposable", stats.disposable || 0);
+    setTxt("statInvalid", stats.invalid || 0);
+    setTxt("statIndian", stats.indian_entities || 0);
+  } catch (err) {
+    console.error("Failed to load verification stats:", err);
+  }
+}
+
+async function runSingleEmailVerification() {
+  const input = document.getElementById("evSingleInput");
+  const indianFilter = document.getElementById("evSingleIndianFilter");
+  const force = document.getElementById("evSingleForce");
+  const btn = document.getElementById("evSingleBtn");
+  const card = document.getElementById("evSingleResultCard");
+
+  const val = input ? input.value.trim() : "";
+  if (!val) {
+    showToast("Please enter an email or domain to verify", false);
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = `<span class="animate-spin mr-1">⏳</span> Checking...`;
+
+  try {
+    const res = await fetch("/api/email-verifier/verify", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email_or_domain: val,
+        check_indian_only: indianFilter ? indianFilter.checked : true,
+        force_recheck: force ? force.checked : false
+      })
+    });
+
+    const data = await res.json();
+    card.classList.remove("hidden");
+
+    let badgeClass = "bg-rose-50 text-rose-800 border-rose-300";
+    let badgeIcon = "x-circle";
+    let badgeText = (data.status || "invalid").toUpperCase();
+
+    if (data.status === "valid") {
+      badgeClass = "bg-emerald-50 text-emerald-800 border-emerald-300";
+      badgeIcon = "check-circle";
+    } else if (data.status === "catch-all") {
+      badgeClass = "bg-amber-50 text-amber-800 border-amber-300";
+      badgeIcon = "alert-triangle";
+      badgeText = "CATCH-ALL (UNVERIFIABLE)";
+    } else if (data.status === "disposable") {
+      badgeClass = "bg-purple-50 text-purple-800 border-purple-300";
+      badgeIcon = "shield-alert";
+      badgeText = "DISPOSABLE BLOCKED";
+    } else if (data.status === "timeout") {
+      badgeClass = "bg-slate-50 text-slate-800 border-slate-300";
+      badgeIcon = "clock";
+      badgeText = "TIMEOUT";
+    }
+
+    card.className = `p-4 rounded-lg border text-xs space-y-2.5 ${data.approved ? 'border-emerald-200 bg-emerald-50/40' : 'border-rose-200 bg-rose-50/30'}`;
+    card.innerHTML = `
+      <div class="flex items-center justify-between">
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold border ${badgeClass}">
+          <i data-lucide="${badgeIcon}" class="w-3.5 h-3.5"></i>
+          <span>${badgeText}</span>
+        </span>
+        <div class="flex items-center gap-2">
+          ${data.is_indian ? `<span class="px-2 py-0.5 rounded bg-orange-100 text-orange-800 border border-orange-200 font-bold text-[10px]">🇮🇳 Indian Entity</span>` : `<span class="px-2 py-0.5 rounded bg-gray-100 text-gray-700 text-[10px]">Non-Indian</span>`}
+          ${data.cached ? `<span class="text-[10px] text-[#66615B] italic">From Cache</span>` : `<span class="text-[10px] text-[#66615B] italic">Live Network</span>`}
+        </div>
+      </div>
+
+      <div class="space-y-1">
+        <div class="text-sm font-bold text-[#141413] font-mono">${data.email || data.domain}</div>
+        <div class="text-xs text-[#66615B]">${data.reason || 'Verification completed'}</div>
+      </div>
+
+      <div class="pt-2 border-t border-[#E2DDD2] grid grid-cols-2 gap-2 text-[11px] text-[#66615B]">
+        <div><span class="font-bold">MX Host:</span> ${data.mx_host || 'N/A'}</div>
+        <div><span class="font-bold">SMTP Code:</span> ${data.smtp_code ? data.smtp_code : 'N/A'}</div>
+      </div>
+    `;
+
+    if (window.lucide) lucide.createIcons();
+    await refreshVerifierStatsAndRecords();
+  } catch (err) {
+    showToast("Verification error: " + err.message, false);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = `<span>Verify Live</span>`;
+  }
+}
+
+function handleCsvFileSelected(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const nameSpan = document.getElementById("evSelectedCsvName");
+  if (nameSpan) nameSpan.innerText = file.name;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const text = e.target.result;
+    const txtArea = document.getElementById("evBatchInput");
+    if (txtArea) txtArea.value = text;
+  };
+  reader.readAsText(file);
+}
+
+async function runBatchEmailVerification() {
+  const txtArea = document.getElementById("evBatchInput");
+  const raw = txtArea ? txtArea.value.trim() : "";
+  const resultArea = document.getElementById("evBatchResultArea");
+  const btn = document.getElementById("evBatchBtn");
+
+  if (!raw) {
+    showToast("Please paste email addresses or upload a CSV first", false);
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = `<span class="animate-spin mr-1">⏳</span> Processing...`;
+
+  try {
+    let res;
+    if (raw.includes(",") || raw.includes("\n")) {
+      res = await fetch("/api/email-verifier/upload-csv", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          csv_content: raw,
+          check_indian_only: true
+        })
+      });
+    } else {
+      res = await fetch("/api/email-verifier/batch", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          items: raw.split("\n").map(s => s.trim()).filter(Boolean),
+          check_indian_only: true
+        })
+      });
+    }
+
+    const data = await res.json();
+    resultArea.classList.remove("hidden");
+
+    const validCount = (data || []).filter(r => r.status === "valid").length;
+    const catchAllCount = (data || []).filter(r => r.status === "catch-all").length;
+    const rejectedCount = (data || []).length - validCount - catchAllCount;
+
+    resultArea.innerHTML = `
+      <div class="flex items-center justify-between pb-2 border-b border-[#E2DDD2]">
+        <span class="font-bold text-[#141413]">Batch Complete: ${data.length} checked</span>
+        <div class="flex items-center gap-2 text-[11px]">
+          <span class="text-emerald-700 font-bold">${validCount} Valid</span>
+          <span class="text-amber-700 font-bold">${catchAllCount} Catch-All</span>
+          <span class="text-rose-700 font-bold">${rejectedCount} Rejected</span>
+        </div>
+      </div>
+      <div class="max-h-40 overflow-y-auto space-y-1 divide-y divide-[#E2DDD2]">
+        ${data.map(item => `
+          <div class="pt-1.5 flex items-center justify-between">
+            <span class="font-mono text-[11px] text-[#141413]">${item.email || item.domain}</span>
+            <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded ${
+              item.status === 'valid' ? 'bg-emerald-100 text-emerald-800' :
+              item.status === 'catch-all' ? 'bg-amber-100 text-amber-800' :
+              item.status === 'disposable' ? 'bg-purple-100 text-purple-800' : 'bg-rose-100 text-rose-800'
+            }">${item.status}</span>
+          </div>
+        `).join('')}
+      </div>
+    `;
+
+    showToast(`Batch verification finished: ${validCount} valid inboxes approved`);
+    await refreshVerifierStatsAndRecords();
+  } catch (err) {
+    showToast("Batch processing error: " + err.message, false);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = `<i data-lucide="play" class="w-3.5 h-3.5 text-[#B89248]"></i><span>Process Batch</span>`;
+    if (window.lucide) lucide.createIcons();
+  }
+}
+
+async function loadEmailVerificationHistory() {
+  const filterSelect = document.getElementById("evTableFilter");
+  const statusFilter = filterSelect ? filterSelect.value : "";
+  const tbody = document.getElementById("evHistoryTbody");
+
+  try {
+    let url = "/api/email-verifier/records?limit=50";
+    if (statusFilter) url += `&status=${statusFilter}`;
+    const res = await fetch(url);
+    if (!res.ok) return;
+    const records = await res.json();
+    cachedEvHistory = records;
+
+    if (!tbody) return;
+    if (!records || records.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="7" class="py-6 text-center text-xs text-[#66615B] italic">No email verification records found in SQLite database yet.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = records.map(r => {
+      let badgeStyle = "bg-rose-50 text-rose-800 border-rose-200";
+      if (r.status === "valid") badgeStyle = "bg-emerald-50 text-emerald-800 border-emerald-200";
+      else if (r.status === "catch-all") badgeStyle = "bg-amber-50 text-amber-800 border-amber-200";
+      else if (r.status === "disposable") badgeStyle = "bg-purple-50 text-purple-800 border-purple-200";
+      else if (r.status === "timeout") badgeStyle = "bg-slate-50 text-slate-800 border-slate-200";
+
+      const timeFormatted = (r.updated_at || r.created_at || "").replace("T", " ").split(".")[0];
+
+      return `
+        <tr class="border-b border-[#E2DDD2] hover:bg-[#FAF8F5] transition">
+          <td class="py-2.5 px-3 font-mono font-medium text-[#141413]">${r.email || r.domain}</td>
+          <td class="py-2.5 px-3">
+            <span class="inline-block uppercase text-[10px] font-bold px-2 py-0.5 rounded border ${badgeStyle}">
+              ${r.status}
+            </span>
+          </td>
+          <td class="py-2.5 px-3">
+            ${r.is_indian ? `<span class="text-orange-700 font-bold">🇮🇳 Indian Brand</span>` : `<span class="text-[#888]">Non-Indian</span>`}
+          </td>
+          <td class="py-2.5 px-3 font-mono text-[11px] text-[#66615B]">${r.mx_host || '—'}</td>
+          <td class="py-2.5 px-3 font-mono text-[11px]">${r.smtp_code ? r.smtp_code : '—'}</td>
+          <td class="py-2.5 px-3 text-[11px] text-[#66615B] max-w-[220px] truncate" title="${r.reason || ''}">${r.reason || '—'}</td>
+          <td class="py-2.5 px-3 text-[10px] text-[#888]">${timeFormatted}</td>
+        </tr>
+      `;
+    }).join("");
+  } catch (err) {
+    console.error("Failed to load verification records:", err);
+  }
+}
+
+function downloadVerificationHistoryCsv() {
+  if (!cachedEvHistory || cachedEvHistory.length === 0) {
+    showToast("No verification records to export", false);
+    return;
+  }
+  const headers = ["email", "domain", "status", "is_indian", "mx_host", "smtp_code", "reason", "updated_at"];
+  let csvContent = headers.join(",") + "\n";
+
+  cachedEvHistory.forEach(r => {
+    const row = [
+      `"${r.email || ''}"`,
+      `"${r.domain || ''}"`,
+      `"${r.status || ''}"`,
+      r.is_indian ? "1" : "0",
+      `"${r.mx_host || ''}"`,
+      r.smtp_code || "0",
+      `"${(r.reason || '').replace(/"/g, '""')}"`,
+      `"${r.updated_at || ''}"`
+    ];
+    csvContent += row.join(",") + "\n";
+  });
+
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.setAttribute("href", url);
+  link.setAttribute("download", `crevanta_email_verifications_${Date.now()}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  showToast("Exported verification records CSV");
 }
 
 

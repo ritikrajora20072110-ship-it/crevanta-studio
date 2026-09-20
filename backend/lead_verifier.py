@@ -911,6 +911,614 @@ VERIFIED_OFFICIAL_DIRECTORY = {
         "brand_insight": "Diptyque Paris blends historic French perfumery, botanical essences, and iconic oval graphic labels.",
         "creative_opportunity": "An evening studio wind-down ritual lit by Baies and Figuier candle glow.",
         "how_it_works": "Creator trims the wick of a Diptyque Baies candle and transitions the studio from bright day work to warm ambient reading."
+    },
+    # =========================================================================
+    # INDIAN BRANDS & D2C ENTERPRISES (OFFICIAL VERIFIED CONTACT DIRECTORY)
+    # =========================================================================
+    "boat": {
+        "brand_name": "boAt Lifestyle",
+        "website": "boat-lifestyle.com",
+        "email": "collab@boat-lifestyle.com",
+        "source_url": "https://www.boat-lifestyle.com/pages/contact-us",
+        "category": "Consumer Audio & Wearables",
+        "concept_title": "The Commute Endurance Test",
+        "brand_insight": "boAt delivers bass-heavy, durable consumer audio designed for the dynamic movement of Indian urban commutes.",
+        "creative_opportunity": "Testing active noise cancellation and battery life during a chaotic metro journey.",
+        "how_it_works": "Creator wears boAt Nirvana ANC headphones through a busy metro commute, showing the transition from station noise to focused acoustic silence."
+    },
+    "mamaearth": {
+        "brand_name": "Mamaearth",
+        "website": "mamaearth.in",
+        "email": "care@mamaearth.in",
+        "source_url": "https://mamaearth.in/contact-us",
+        "category": "Toxin-Free Personal Care & Beauty",
+        "concept_title": "The Honest 7-Day Ingredient Reset",
+        "brand_insight": "Mamaearth pioneers Made Safe-certified natural formulations backed by traditional Indian botanicals.",
+        "creative_opportunity": "A stripped-back morning skincare ritual focusing on brightening natural actives.",
+        "how_it_works": "Creator replaces complex chemical routines with Mamaearth's Ubtan hero range, documenting skin clarity over 7 days."
+    },
+    "sugar cosmetics": {
+        "brand_name": "SUGAR Cosmetics",
+        "website": "sugarcosmetics.com",
+        "email": "collab@sugarcosmetics.com",
+        "source_url": "https://in.sugarcosmetics.com/pages/contact-us",
+        "category": "High-Performance Color Cosmetics",
+        "concept_title": "The 12-Hour Transfer-Proof Challenge",
+        "brand_insight": "SUGAR creates hyper-pigmented, transfer-proof makeup engineered specifically for Indian skin tones and humid climates.",
+        "creative_opportunity": "A high-energy wear test proving lipstick and base longevity through a grueling summer day.",
+        "how_it_works": "Creator applies SUGAR Matte As Hell Crayon at 8 AM and conducts smudge tests after coffee, lunch, and a workout."
+    },
+    "snitch": {
+        "brand_name": "Snitch",
+        "website": "snitch.co.in",
+        "email": "support@snitch.co.in",
+        "source_url": "https://www.snitch.co.in/pages/contact-us",
+        "category": "Fast-Paced Men's Trendwear",
+        "concept_title": "Capsule Wardrobe in 60 Seconds",
+        "brand_insight": "Snitch drops weekly limited-edition contemporary menswear tailored for youthful, fast-paced street culture.",
+        "creative_opportunity": "Styling three rapid-fire silhouette transformations using relaxed-fit linens and oversized tees.",
+        "how_it_works": "Creator builds three complete weekend outfits using Snitch textured shirts, showing how Korean minimalism translates to Indian street styling."
+    },
+    "the souled store": {
+        "brand_name": "The Souled Store",
+        "website": "thesouledstore.com",
+        "email": "connect@thesouledstore.com",
+        "source_url": "https://www.thesouledstore.com/contact-us",
+        "category": "Fandom & Casual Streetwear",
+        "concept_title": "Pop-Culture Styling Battle",
+        "brand_insight": "The Souled Store licenses iconic global pop-culture fandoms into premium heavyweight everyday cotton basics.",
+        "creative_opportunity": "Pairing graphic oversized tees with structured streetwear outerwear for casual Friday styling.",
+        "how_it_works": "Creator compares three fandom pieces against plain tees, showing how to elevate graphic streetwear without looking childish."
+    },
+    "bewakoof": {
+        "brand_name": "Bewakoof",
+        "website": "bewakoof.com",
+        "email": "care@bewakoof.com",
+        "source_url": "https://www.bewakoof.com/contact-us",
+        "category": "Youth Casualwear & Color Block",
+        "concept_title": "Color Pop Streetwear Transition",
+        "brand_insight": "Bewakoof provides expressively bold color-blocked apparel accessible for college and creative culture.",
+        "creative_opportunity": "A seamless beat-matched transition video showcasing expressive color palettes.",
+        "how_it_works": "Creator switches between four contrasting Bewakoof colorway joggers and tees in rhythm with an upbeat audio track."
+    },
+    "licious": {
+        "brand_name": "Licious",
+        "website": "licious.in",
+        "email": "talktous@licious.in",
+        "source_url": "https://www.licious.in/contact-us",
+        "category": "Gourmet Fresh Meats & Seafood",
+        "concept_title": "Mastering the 15-Minute Gourmet Steak",
+        "brand_insight": "Licious delivers cold-chain temperature-controlled fresh cuts with zero antibiotic residues.",
+        "creative_opportunity": "A satisfying ASMR pan-sear cooking video showing knife-work and meat tenderness.",
+        "how_it_works": "Creator shows unboxing fresh vacuum-sealed cuts, marinating with simple sea salt and butter, and achieving a perfect medium-rare sear in 15 minutes."
+    },
+    "bombay shaving company": {
+        "brand_name": "Bombay Shaving Company",
+        "website": "bombayshavingcompany.com",
+        "email": "care@bombayshavingcompany.com",
+        "source_url": "https://bombayshavingcompany.com/pages/contact-us",
+        "category": "Men's Premium Grooming & Shaving",
+        "concept_title": "The Single-Blade Precision Ritual",
+        "brand_insight": "Bombay Shaving Company transforms shaving from a chore into a luxurious, irritation-free self-care ritual.",
+        "creative_opportunity": "A crisp, tactile shaving sequence demonstrating zero razor bumps and soothing aftercare.",
+        "how_it_works": "Creator demonstrates the hot-towel pre-shave, lathering with turmeric charcoal cream, and a smooth single-blade pass with the Precision Safety Razor."
+    },
+    "mcaffeine": {
+        "brand_name": "mCaffeine",
+        "website": "mcaffeine.com",
+        "email": "wethinkyou@mcaffeine.com",
+        "source_url": "https://www.mcaffeine.com/pages/contact-us",
+        "category": "Caffeinated Personal Care",
+        "concept_title": "The Morning Body Polish Reset",
+        "brand_insight": "mCaffeine infuses pure Arabica coffee and antioxidants to energize, exfoliate, and de-tan skin.",
+        "creative_opportunity": "An invigorating morning shower routine featuring tactile coffee grit and foaming textures.",
+        "how_it_works": "Creator demonstrates using the Coffee Body Scrub to buff away dull skin on arms and elbows, revealing silky texture."
+    },
+    "plum goodness": {
+        "brand_name": "Plum Goodness",
+        "website": "plumgoodness.com",
+        "email": "hello@plumgoodness.com",
+        "source_url": "https://plumgoodness.com/pages/contact-us",
+        "category": "100% Vegan Ethical Skincare",
+        "concept_title": "The Green Tea Clarifying Challenge",
+        "brand_insight": "Plum Goodness crafts 100% vegan, cruelty-free formulas powered by antioxidant-rich green tea actives.",
+        "creative_opportunity": "Addressing oily, acne-prone summer skin with a 3-step non-comedogenic regimen.",
+        "how_it_works": "Creator demonstrates morning toner spritz, mattifying moisturizer, and oil control balance over a warm outdoor shoot."
+    },
+    "dot & key": {
+        "brand_name": "Dot & Key",
+        "website": "dotandkey.com",
+        "email": "care@dotandkey.com",
+        "source_url": "https://www.dotandkey.com/pages/contact-us",
+        "category": "Fruit-Infused Active Skincare",
+        "concept_title": "The Cica Calming Experiment",
+        "brand_insight": "Dot & Key combines fruit extracts with clinically proven actives for soothing, lightweight skin barrier repair.",
+        "creative_opportunity": "Demonstrating redness reduction and deep hydration using water-light gel textures.",
+        "how_it_works": "Creator applies the Cica Niacinamide Gel on post-workout flushed skin, capturing immediate thermal cooling on camera."
+    },
+    "wakefit": {
+        "brand_name": "Wakefit",
+        "website": "wakefit.co",
+        "email": "contactus@wakefit.co",
+        "source_url": "https://www.wakefit.co/contact-us",
+        "category": "Ergonomic Sleep & Workspace Furniture",
+        "concept_title": "From Back Pain to 8-Hour Focus",
+        "brand_insight": "Wakefit reverse-engineers orthopaedic lumbar support into accessible, science-backed ergonomic furniture.",
+        "creative_opportunity": "A before/after posture breakdown comparing an old dining chair with an ergonomic mesh setup.",
+        "how_it_works": "Creator shows their posture throughout an 8-hour editing day, demonstrating how the Wakefit chair eliminates neck and spine fatigue."
+    },
+    "bluestone": {
+        "brand_name": "BlueStone",
+        "website": "bluestone.com",
+        "email": "care@bluestone.com",
+        "source_url": "https://www.bluestone.com/contact-us.html",
+        "category": "Contemporary Fine Jewelry",
+        "concept_title": "Everyday Gold: Desk to Dinner",
+        "brand_insight": "BlueStone crafts lightweight, contemporary 18K gold and diamond jewelry designed for modern daily wear.",
+        "creative_opportunity": "Styling minimalist gold stacking rings and pendants across contrasting day and evening looks.",
+        "how_it_works": "Creator pairs subtle geometric gold bands with casual office tailoring, then layers a statement pendant for evening drinks."
+    },
+    "caratlane": {
+        "brand_name": "CaratLane",
+        "website": "caratlane.com",
+        "email": "contactus@caratlane.com",
+        "source_url": "https://www.caratlane.com/contactus",
+        "category": "Affordable Modern Diamond Jewelry",
+        "concept_title": "Demystifying Modern Diamonds",
+        "brand_insight": "CaratLane (A Tanishq Partnership) makes everyday certified diamond jewelry affordable and wearable.",
+        "creative_opportunity": "A close-up macro review showing diamond brilliance, hallmark certification, and styling ease.",
+        "how_it_works": "Creator styles CaratLane's Postcards collection, showing the subtle shine under natural morning sunlight."
+    },
+    "chumbak": {
+        "brand_name": "Chumbak",
+        "website": "chumbak.com",
+        "email": "help@chumbak.com",
+        "source_url": "https://www.chumbak.com/pages/contact-us",
+        "category": "Eclectic Indian Design & Home Decor",
+        "concept_title": "Adding Soul to a Minimalist Room",
+        "brand_insight": "Chumbak weaves vibrant Indian folk art, handcrafted ceramics, and joyful color into modern spaces.",
+        "creative_opportunity": "A cozy room corner transformation using artisanal floral cushions, ceramic planters, and wall plates.",
+        "how_it_works": "Creator demonstrates how three colorful Chumbak accent pieces instantly bring warmth to a stark white reading nook."
+    },
+    "fabindia": {
+        "brand_name": "FabIndia",
+        "website": "fabindia.com",
+        "email": "support@fabindia.net",
+        "source_url": "https://www.fabindia.com/contact-us",
+        "category": "Handcrafted Indian Textiles & Heritage",
+        "concept_title": "The Timeless Khadi Test",
+        "brand_insight": "FabIndia connects over 55,000 rural craftspersons with contemporary silhouettes, celebrating handloom heritage.",
+        "creative_opportunity": "Demonstrating the breathable luxury and natural drape of authentic handspun linen and cotton.",
+        "how_it_works": "Creator styles an indigo hand-block printed kurta with tailored trousers for an aesthetic gallery exhibition visit."
+    },
+    "mokobara": {
+        "brand_name": "Mokobara",
+        "website": "mokobara.com",
+        "email": "hello@mokobara.com",
+        "source_url": "https://mokobara.com/pages/contact-us",
+        "category": "Elevated Travel & Daily Luggage",
+        "concept_title": "The Airport Sprint & Pack Test",
+        "brand_insight": "Mokobara engineers indestructible German Makrolon polycarbonate luggage with whisper-quiet Japanese Hinomoto wheels.",
+        "creative_opportunity": "A sleek, satisfying packing video fitting 4 days of creator gear into a single carry-on.",
+        "how_it_works": "Creator glides the Mokobara Cabin Pro across airport tarmac and demonstrates the quick-access front tech compartment."
+    },
+    "daily objects": {
+        "brand_name": "DailyObjects",
+        "website": "dailyobjects.com",
+        "email": "support@dailyobjects.com",
+        "source_url": "https://www.dailyobjects.com/contact-us",
+        "category": "Design-First Tech Accessories & Desks",
+        "concept_title": "The Aesthetic Desk Reset",
+        "brand_insight": "DailyObjects creates modular vegan leather desk mats, cable organizers, and phone stands for mindful workstations.",
+        "creative_opportunity": "A high-satisfaction cable management and desk organization transformation.",
+        "how_it_works": "Creator replaces a cluttered desk with DailyObjects Mesa organizer and vegan leather mat, showcasing magnetic cord clips."
+    },
+    "noise": {
+        "brand_name": "Noise",
+        "website": "gonoise.com",
+        "email": "support@nexxbase.com",
+        "source_url": "https://www.gonoise.com/pages/contact-us",
+        "category": "Connected Smartwatches & Audio",
+        "concept_title": "The 24-Hour Heart & Sleep Audit",
+        "brand_insight": "Noise leads Indian smart wearables with high-resolution AMOLED displays and comprehensive wellness tracking.",
+        "creative_opportunity": "Putting the ColorFit smartwatch through athletic conditioning, stress monitoring, and sleep analysis.",
+        "how_it_works": "Creator wears Noise ColorFit through a morning run, midday deep work session, and evening sleep cycle, reviewing accurate biometric graphs."
+    },
+    "sleepy owl": {
+        "brand_name": "Sleepy Owl Coffee",
+        "website": "sleepyowl.co",
+        "email": "hello@sleepyowl.co",
+        "source_url": "https://sleepyowl.co/pages/contact-us",
+        "category": "Artisan Cold Brew & Specialty Coffee",
+        "concept_title": "Barista-Quality Cold Brew at Home",
+        "brand_insight": "Sleepy Owl brews 100% Arabica beans from Chikmagalur into smooth, chocolatey cold brew brew-packs.",
+        "creative_opportunity": "An aesthetic slow-motion morning iced coffee pour with creamy oat milk marbling.",
+        "how_it_works": "Creator steeps a Sleepy Owl pitch-black brew bag overnight, pours it over clear ice, and crafts an elevated vanilla cold foam latte."
+    },
+    "paper boat": {
+        "brand_name": "Paper Boat",
+        "website": "paperboatdrinks.com",
+        "email": "paperboat@hectorbeverages.com",
+        "source_url": "https://www.paperboatdrinks.com/contact",
+        "category": "Nostalgic Traditional Indian Drinks",
+        "concept_title": "The Taste of Childhood Summers",
+        "brand_insight": "Paper Boat preserves authentic Indian nostalgic culinary memories with natural Aam Panna, Jaljeera, and Anar.",
+        "creative_opportunity": "A heartwarming storytelling video connecting traditional Indian summer memories with refreshing thirst quench.",
+        "how_it_works": "Creator sits down after an intense afternoon shoot, opening a chilled Paper Boat Aam Panna and sharing a nostalgic childhood story."
+    },
+    "bira 91": {
+        "brand_name": "Bira 91",
+        "website": "bira91.com",
+        "email": "cheers@bira91.com",
+        "source_url": "https://www.bira91.com/contact",
+        "category": "Craft Beer & Modern Refreshment",
+        "concept_title": "The Sundowner Creator Tasting",
+        "brand_insight": "Bira 91 brings playful, flavorful craft beers brewed with natural wheat and exotic citrus aromas to young India.",
+        "creative_opportunity": "An ambient rooftop sundowner gathering celebrating creative collaboration milestones.",
+        "how_it_works": "Creator pairs Bira 91 White and Gold with gourmet street snacks during an golden hour terrace wind-down."
+    },
+    "chaayos": {
+        "brand_name": "Chaayos",
+        "website": "chaayos.com",
+        "email": "contact@chaayos.com",
+        "source_url": "https://www.chaayos.com/contact-us",
+        "category": "Personalized Fresh Chai & Snacks",
+        "concept_title": "Finding My Exact Chai Formula",
+        "brand_insight": "Chaayos combines IoT tech and traditional brewing to offer 80,000 customizable desi chai variations.",
+        "creative_opportunity": "Testing personalized ginger-tulsi-cardamom formulas against rainy day work moods.",
+        "how_it_works": "Creator demonstrates customizing their exact chai spice ratio and pairing it with bun maska during a rainy afternoon editing session."
+    },
+    "blue tokai": {
+        "brand_name": "Blue Tokai Coffee",
+        "website": "bluetokaicoffee.com",
+        "email": "getcoffee@bluetokaicoffee.com",
+        "source_url": "https://bluetokaicoffee.com/pages/contact-us",
+        "category": "Estate-Grown Specialty Coffee",
+        "concept_title": "The Pour-Over Tasting Protocol",
+        "brand_insight": "BlueTokai roasts single-estate, fully traceable Arabica coffees directly from top South Indian estates.",
+        "creative_opportunity": "A meditative manual pour-over routine showcasing extraction blooming and tasting notes.",
+        "how_it_works": "Creator grinds fresh Attikan Estate beans, demonstrates the water bloom, and reviews the delicate dark chocolate tasting notes."
+    },
+    "country delight": {
+        "brand_name": "Country Delight",
+        "website": "countrydelight.in",
+        "email": "info@countrydelight.in",
+        "source_url": "https://countrydelight.in/contact-us",
+        "category": "Natural Unadulterated Dairy & Produce",
+        "concept_title": "The 24-Hour Farm-to-Door Purity Test",
+        "brand_insight": "Country Delight tests every batch for milk purity and delivers within 24 to 36 hours of milking.",
+        "creative_opportunity": "Demonstrating the freshness, rich cream layer, and natural taste of unadulterated cow milk.",
+        "how_it_works": "Creator tests the Country Delight milk purity strip on camera, prepares thick homemade curd, and shows the rich malai layer."
+    },
+    "epigamia": {
+        "brand_name": "Epigamia",
+        "website": "epigamia.com",
+        "email": "dp@epigamia.com",
+        "source_url": "https://epigamia.com/pages/contact",
+        "category": "High-Protein Greek Yogurt & Snacks",
+        "concept_title": "High-Protein Snack Swap in 3 Minutes",
+        "brand_insight": "Epigamia strains fresh cow milk to deliver double-protein Greek yogurt without preservatives or refined sugar.",
+        "creative_opportunity": "Building a delicious, macro-balanced post-workout breakfast parfait.",
+        "how_it_works": "Creator layers Epigamia Alphonso Mango Greek Yogurt with chia seeds, fresh berries, and raw honey for a quick 15g protein boost."
+    },
+    "true elements": {
+        "brand_name": "True Elements",
+        "website": "trueelements.com",
+        "email": "care@trueelements.com",
+        "source_url": "https://www.trueelements.com/pages/contact-us",
+        "category": "100% Whole Grain Breakfasts & Seeds",
+        "concept_title": "The Zero Added Sugar Breakfast Test",
+        "brand_insight": "True Elements delivers 100% whole grain rolled oats, muesli, and seeds certified clean and free of hidden sugars.",
+        "creative_opportunity": "Making three distinct overnight oats jars for meal-prepping busy creator filming weeks.",
+        "how_it_works": "Creator prepares dark chocolate, berry chia, and nutty peanut butter overnight jars using True Elements rolled oats."
+    },
+    "kapiva": {
+        "brand_name": "Kapiva",
+        "website": "kapiva.in",
+        "email": "info@kapiva.in",
+        "source_url": "https://kapiva.in/pages/contact-us",
+        "category": "Modern Ayurvedic Nutrition & Wellness",
+        "concept_title": "The 14-Day Ayurvedic Energy Reset",
+        "brand_insight": "Kapiva combines authentic Himalayan herbs like Shilajit and Amla with modern lab purity testing.",
+        "creative_opportunity": "Tracking daily stamina and physical recovery across two weeks of high physical output.",
+        "how_it_works": "Creator dissolves Himalayan Shilajit resin in warm water each morning, documenting steady mental alertness without caffeine jitters."
+    },
+    "ather energy": {
+        "brand_name": "Ather Energy",
+        "website": "atherenergy.com",
+        "email": "contact@atherenergy.com",
+        "source_url": "https://www.atherenergy.com/contact-us",
+        "category": "Smart Electric Performance Scooters",
+        "concept_title": "The Warp Mode City Sprint",
+        "brand_insight": "Ather engineers intelligent, connected EV scooters built from the ground up in Bengaluru with dashboard Google Maps and Warp Mode.",
+        "creative_opportunity": "A dynamic cinematic drone and gimbal city ride showcasing instant electric torque and smart routing.",
+        "how_it_works": "Creator navigates through peak city traffic on the Ather 450X, showing live touchscreen navigation and regenerative braking in action."
+    },
+    "lenskart": {
+        "brand_name": "Lenskart",
+        "website": "lenskart.com",
+        "email": "support@lenskart.com",
+        "source_url": "https://www.lenskart.com/contact.html",
+        "category": "Eyewear & Blue-Light Protection",
+        "concept_title": "Screen Shield: The 10-Hour Screen Test",
+        "brand_insight": "Lenskart blends robotic lens cutting with ultra-stylish acetate frames and anti-glare Blu lenses for digital creators.",
+        "creative_opportunity": "Testing eye fatigue reduction during extended timeline editing under dual 4K monitors.",
+        "how_it_works": "Creator wears Lenskart Air Light frames with Blu cut lenses through an intensive 10-hour video edit, documenting zero eye strain."
+    },
+    "fireboltt": {
+        "brand_name": "Fire-Boltt",
+        "website": "fireboltt.com",
+        "email": "infocare@boltt.com",
+        "source_url": "https://www.fireboltt.com/pages/contact-us",
+        "category": "Connected Smartwatches & Audio",
+        "concept_title": "The Workout Heart Rate Benchmark",
+        "brand_insight": "Fire-Boltt combines luxury AMOLED displays with comprehensive outdoor sports tracking at accessible value.",
+        "creative_opportunity": "A side-by-side HIIT training workout showcasing heart rate tracking and Bluetooth calling.",
+        "how_it_works": "Creator puts Fire-Boltt through intense sprints and strength circuits, tracking recovery intervals on the wrist."
+    },
+    "zebronics": {
+        "brand_name": "Zebronics",
+        "website": "zebronics.com",
+        "email": "enquiry@zebronics.com",
+        "source_url": "https://zebronics.com/pages/contact-us",
+        "category": "Gaming Peripherals & Soundbars",
+        "concept_title": "From Flat TV Sound to Dolby Atmos",
+        "brand_insight": "Zebronics democratizes cinematic multi-channel home audio and responsive mechanical gaming accessories.",
+        "creative_opportunity": "A fast-paced audio before/after comparison watching a blockbuster film trailer.",
+        "how_it_works": "Creator connects Zebronics 5.1 Dolby soundbar and captures authentic room-filling spatial rumble on video."
+    },
+    "portronics": {
+        "brand_name": "Portronics",
+        "website": "portronics.com",
+        "email": "help@portronics.com",
+        "source_url": "https://www.portronics.com/pages/contact-us",
+        "category": "Portable Gadgets & Workspace Tech",
+        "concept_title": "The 1-Bag Mobile Studio Setup",
+        "brand_insight": "Portronics designs compact, multi-functional charging docks and portable audio for mobile creators.",
+        "creative_opportunity": "Unpacking a complete travel workstation setup in an airport lounge.",
+        "how_it_works": "Creator sets up a 3-in-1 charging pad, portable projector, and wireless speaker from a small sling bag in 60 seconds."
+    },
+    "boult": {
+        "brand_name": "Boult Audio",
+        "website": "boultaudio.com",
+        "email": "info@boultaudio.com",
+        "source_url": "https://www.boultaudio.com/pages/contact-us",
+        "category": "Bass-Forward TWS Audio & Wearables",
+        "concept_title": "The Subway Bass & Call Clarity Test",
+        "brand_insight": "Boult Audio engineers environmental noise cancellation and BoomX bass drivers for crystal-clear outdoor calling.",
+        "creative_opportunity": "Making a business call in the middle of a noisy coffee shop with zero background interference.",
+        "how_it_works": "Creator demonstrates taking an agency briefing call surrounded by cafe bustle, showing the microphone beamforming."
+    },
+    "crossbeats": {
+        "brand_name": "Crossbeats",
+        "website": "crossbeats.com",
+        "email": "support@crossbeats.com",
+        "source_url": "https://crossbeats.com/pages/contact-us",
+        "category": "Active Smartwatches & Fitness Tech",
+        "concept_title": "The Extreme Adventure Test",
+        "brand_insight": "Crossbeats engineers rugged, MIL-STD shockproof smartwatches with titanium bezels for outdoor enthusiasts.",
+        "creative_opportunity": "Testing rugged durability through a grueling trail run and open water swim.",
+        "how_it_works": "Creator documents altitude, GPS accuracy, and battery stamina through a weekend trek."
+    },
+    "mivi": {
+        "brand_name": "Mivi",
+        "website": "mivi.in",
+        "email": "support@mivi.in",
+        "source_url": "https://www.mivi.in/pages/contact-us",
+        "category": "Proudly Made in India Sound Equipment",
+        "concept_title": "The Acoustic Craftsmanship Review",
+        "brand_insight": "Mivi manufactures high-fidelity audio equipment entirely in Hyderabad with localized sound tuning.",
+        "creative_opportunity": "Highlighting indigenous manufacturing precision and pure Indian audio acoustics.",
+        "how_it_works": "Creator visits an audio testing chamber to evaluate soundstage clarity and vocal crispness."
+    },
+    "ptron": {
+        "brand_name": "pTron",
+        "website": "ptron.in",
+        "email": "support@ptron.in",
+        "source_url": "https://ptron.in/pages/contact-us",
+        "category": "Accessible Smart Wearables",
+        "concept_title": "Budget Tech That Punches Above Its Weight",
+        "brand_insight": "pTron delivers full-featured True Wireless earbuds and AMOLED smartwatches at unbeatable value.",
+        "creative_opportunity": "A blind audio challenge comparing budget earbuds against 5x expensive competitors.",
+        "how_it_works": "Creator conducts a blind listening test with friends to guess which audio track is playing through pTron."
+    },
+    "ambrane": {
+        "brand_name": "Ambrane",
+        "website": "ambraneindia.com",
+        "email": "care@ambraneindia.com",
+        "source_url": "https://ambraneindia.com/pages/contact-us",
+        "category": "Power Delivery & Mobile Accessories",
+        "concept_title": "The 65W Laptop Emergency Fast-Charge",
+        "brand_insight": "Ambrane designs high-capacity Power Delivery power banks certified for multi-device laptop charging.",
+        "creative_opportunity": "Powering a MacBook and camera rig simultaneously while filming in an off-grid location.",
+        "how_it_works": "Creator shows their laptop battery at 5% during an outdoor shoot and demonstrates full 65W charging from Ambrane."
+    },
+    "wings lifestyle": {
+        "brand_name": "Wings Lifestyle",
+        "website": "wingslifestyle.com",
+        "email": "support@wingslifestyle.com",
+        "source_url": "https://wingslifestyle.com/pages/contact-us",
+        "category": "Ultra-Low Latency Gaming Audio",
+        "concept_title": "The 40ms Footstep Reflex Test",
+        "brand_insight": "Wings Lifestyle builds ultra-low-latency 40ms gaming earbuds with aggressive RGB styling.",
+        "creative_opportunity": "Demonstrating zero audio-visual lag during competitive mobile gaming rounds.",
+        "how_it_works": "Creator plays intense tactical shooter matches, proving footsteps and gunshots sync instantly with display frames."
+    },
+    "headphone zone": {
+        "brand_name": "Headphone Zone",
+        "website": "headphonezone.in",
+        "email": "crew@headphonezone.in",
+        "source_url": "https://www.headphonezone.in/pages/contact-us",
+        "category": "Audiophile Sound & DAC Equipment",
+        "concept_title": "Hearing My Favorite Song for the First Time",
+        "brand_insight": "Headphone Zone curates high-resolution planar magnetic headphones and DACs for pure uncompressed sound.",
+        "creative_opportunity": "Capturing the genuine emotional reaction of hearing studio master tracks through dedicated audiophile gear.",
+        "how_it_works": "Creator pairs an external DAC with planar magnetic headphones, reacting to micro-details in acoustic guitar tracks."
+    },
+    "foxtale": {
+        "brand_name": "Foxtale",
+        "website": "foxtale.in",
+        "email": "contact@foxtale.in",
+        "source_url": "https://foxtale.in/pages/contact-us",
+        "category": "Efficacy-Driven Targeted Skincare",
+        "concept_title": "The Instant Glow Vitamin C Test",
+        "brand_insight": "Foxtale stabilizes pure L-Ascorbic acid to brighten dull skin and fade hyperpigmentation rapidly.",
+        "creative_opportunity": "A morning antioxidant layering sequence showing real-skin dewy finish under natural morning sun.",
+        "how_it_works": "Creator applies Foxtale Vitamin C serum followed by their dewy sunscreen, capturing skin luminosity."
+    },
+    "aqualogica": {
+        "brand_name": "Aqualogica",
+        "website": "aqualogica.in",
+        "email": "care@aqualogica.in",
+        "source_url": "https://aqualogica.in/pages/contact-us",
+        "category": "Hydration-Focused Sun Protection",
+        "concept_title": "Zero White Cast Sunscreen Challenge",
+        "brand_insight": "Aqualogica combines Hyaluronic Acid and Coconut Water for ultra-light water-burst sunscreens that leave zero residue.",
+        "creative_opportunity": "Applying generous two-finger sunscreen amounts on camera showing instant absorption without greasy shine.",
+        "how_it_works": "Creator applies Aqualogica Radiance+ Dewy Sunscreen on deeper skin tones, proving zero chalkiness."
+    },
+    "minimalist": {
+        "brand_name": "Minimalist",
+        "website": "beminimalist.co",
+        "email": "help@beminimalist.co",
+        "source_url": "https://beminimalist.co/pages/contact-us",
+        "category": "Transparent Active Science Skincare",
+        "concept_title": "Decoding Active Concentrations",
+        "brand_insight": "Minimalist offers clinically proven actives like Salicylic Acid and Niacinamide with full transparency on origin.",
+        "creative_opportunity": "An educational deep-dive explaining how percentages and pH levels determine skincare efficacy.",
+        "how_it_works": "Creator explains their targeted PM routine for congested pores, testing oil-control across a 14-day timeline."
+    },
+    "pilgrim": {
+        "brand_name": "Pilgrim",
+        "website": "discoverpilgrim.com",
+        "email": "hello@discoverpilgrim.com",
+        "source_url": "https://discoverpilgrim.com/pages/contact-us",
+        "category": "Global Island Beauty Rituals",
+        "concept_title": "The French Red Vine Anti-Aging Test",
+        "brand_insight": "Pilgrim imports native beauty rituals from Jeju Island and Bordeaux into clean FDA-approved formulas.",
+        "creative_opportunity": "An aesthetic evening night-cream and face oil wind-down ritual.",
+        "how_it_works": "Creator uses the Pilgrim 24K Gold Serum with a gua sha tool, documenting skin firmness."
+    },
+    "giva": {
+        "brand_name": "GIVA",
+        "website": "giva.co",
+        "email": "care@giva.co",
+        "source_url": "https://www.giva.co/pages/contact-us",
+        "category": "Minimalist Pure 925 Silver Jewelry",
+        "concept_title": "The Capsule Silver Stacking Guide",
+        "brand_insight": "GIVA creates authentic, rhodium-plated 925 sterling silver jewelry with lifetime authenticity cards.",
+        "creative_opportunity": "Styling minimalist silver pendants and bracelets with neutral linen blazers.",
+        "how_it_works": "Creator demonstrates stacking three delicate GIVA silver necklaces for an understated luxury office aesthetic."
+    },
+    "rare rabbit": {
+        "brand_name": "Rare Rabbit",
+        "website": "thehouseofrare.com",
+        "email": "support@thehouseofrare.com",
+        "source_url": "https://thehouseofrare.com/pages/contact-us",
+        "category": "Contemporary Elevated Menswear",
+        "concept_title": "The Executive Evening Transition",
+        "brand_insight": "Rare Rabbit redefines Indian menswear with sharp European silhouettes, custom hardware, and luxurious fabrics.",
+        "creative_opportunity": "A sophisticated transition from board meeting tailoring to rooftop dinner chic.",
+        "how_it_works": "Creator styles a Rare Rabbit structured blazer with tailored chinos and Italian leather loafers."
+    },
+    "nicobar": {
+        "brand_name": "Nicobar",
+        "website": "nicobar.com",
+        "email": "care@nicobar.com",
+        "source_url": "https://www.nicobar.com/pages/contact-us",
+        "category": "Modern Coastal Lifestyle & Home",
+        "concept_title": "Mindful Living in the City",
+        "brand_insight": "Nicobar creates breezy organic cotton apparel and artisanal stoneware inspired by Indian Ocean travel.",
+        "creative_opportunity": "A peaceful Sunday morning routine featuring Nicobar ceramic coffee mugs and relaxed linen loungewear.",
+        "how_it_works": "Creator brews morning filter coffee in a Nicobar ceramic mug and reads on their sunlit balcony."
+    },
+    "the sleep company": {
+        "brand_name": "The Sleep Company",
+        "website": "thesleepcompany.in",
+        "email": "care@thesleepcompany.in",
+        "source_url": "https://thesleepcompany.in/pages/contact-us",
+        "category": "Patented SmartGRID Sleep Tech",
+        "concept_title": "The Raw Egg Bounce & Pressure Test",
+        "brand_insight": "The Sleep Company uses patented Japanese SmartGRID hyper-elastic polymer to provide adaptive spine relief.",
+        "creative_opportunity": "Conducting the famous raw egg test to prove zero pressure-point resistance.",
+        "how_it_works": "Creator drops a raw egg onto the SmartGRID mattress without cracking, demonstrating body weight distribution."
+    },
+    "sleepycat": {
+        "brand_name": "SleepyCat",
+        "website": "sleepycat.in",
+        "email": "info@sleepycat.in",
+        "source_url": "https://sleepycat.in/pages/contact-us",
+        "category": "Orthopedic Box Mattresses & Bedding",
+        "concept_title": "The 60-Second Box Mattress Unroll",
+        "brand_insight": "SleepyCat delivers orthopaedic memory foam mattresses with cooling gel and bamboo fiber removable covers.",
+        "creative_opportunity": "A satisfying unboxing and expansion time-lapse of a compressed king-size mattress.",
+        "how_it_works": "Creator unboxes the SleepyCat mattress in their newly renovated bedroom, showing instant decompression."
+    },
+    "pepperfry": {
+        "brand_name": "Pepperfry",
+        "website": "pepperfry.com",
+        "email": "talk@pepperfry.com",
+        "source_url": "https://www.pepperfry.com/contact-us.html",
+        "category": "Curated Modern Home Furniture",
+        "concept_title": "Living Room Transformation Under 48 Hours",
+        "brand_insight": "Pepperfry offers handcrafted solid wood furniture and modern accents with seamless home delivery.",
+        "creative_opportunity": "A complete living room styling makeover showing furniture delivery, assembly, and final decor.",
+        "how_it_works": "Creator styles a Pepperfry Sheesham wood coffee table and accent armchair with warm lighting and rugs."
+    },
+    "ola electric": {
+        "brand_name": "Ola Electric",
+        "website": "olaelectric.com",
+        "email": "support@olaelectric.com",
+        "source_url": "https://www.olaelectric.com/contact-us",
+        "category": "Next-Generation Electric Mobility",
+        "concept_title": "The Zero-Petrol Urban Commute",
+        "brand_insight": "Ola Electric manufactures high-speed smart electric scooters with MoveOS software and party mode audio.",
+        "creative_opportunity": "Calculating monthly fuel savings while enjoying instant electric acceleration through city traffic.",
+        "how_it_works": "Creator rides the Ola S1 Pro through their weekly commute, testing cruise control and hill hold assist."
+    },
+    "urban company": {
+        "brand_name": "Urban Company",
+        "website": "urbancompany.com",
+        "email": "help@urbancompany.com",
+        "source_url": "https://www.urbancompany.com/contact-us",
+        "category": "On-Demand Home Services & Salon",
+        "concept_title": "Studio Grooming Reset Before Shoot Day",
+        "brand_insight": "Urban Company delivers standardized, hygienic at-home grooming and home maintenance services.",
+        "creative_opportunity": "Preparing for a major commercial brand shoot with an at-home haircut and skin reset.",
+        "how_it_works": "Creator books a master barber at home, documenting the hygienic setup and precision trim."
+    },
+    "cult fit": {
+        "brand_name": "Cult.fit",
+        "website": "cult.fit",
+        "email": "hello@cult.fit",
+        "source_url": "https://www.cult.fit/contact-us",
+        "category": "Holistic Fitness & HIIT Centers",
+        "concept_title": "Surviving 45 Minutes of S&C",
+        "brand_insight": "Cult.fit gamifies group functional training, boxing, and yoga with world-class trainers and energy meters.",
+        "creative_opportunity": "An intense, sweat-drenched group workout video capturing the contagious community energy.",
+        "how_it_works": "Creator participates in a high-intensity Strength & Conditioning class, tracking heart rate and calories on app."
+    },
+    "zomato": {
+        "brand_name": "Zomato",
+        "website": "zomato.com",
+        "email": "partnerships@zomato.com",
+        "source_url": "https://www.zomato.com/contact",
+        "category": "Food Discovery & On-Demand Dining",
+        "concept_title": "Finding Hidden Culinary Gems",
+        "brand_insight": "Zomato connects millions with authentic local street food and fine dining with verified reviews and live tracking.",
+        "creative_opportunity": "Exploring the 3 best late-night dining spots in the city powered by Zomato Gold.",
+        "how_it_works": "Creator visits three iconic restaurants, reviewing secret off-menu items and using Zomato Pay."
+    },
+    "swiggy": {
+        "brand_name": "Swiggy",
+        "website": "swiggy.in",
+        "email": "support@swiggy.in",
+        "source_url": "https://www.swiggy.in/support",
+        "category": "Hyperlocal Food & Instamart Delivery",
+        "concept_title": "The 10-Minute Midnight Snack Emergency",
+        "brand_insight": "Swiggy delivers freshly cooked restaurant meals and groceries in 10 minutes via Instamart.",
+        "creative_opportunity": "A fast-paced creator editing marathon where midnight cravings are solved in under 10 minutes.",
+        "how_it_works": "Creator orders artisanal ice cream and gourmet snacks during a late night editing sprint, clocking delivery at 9 minutes."
     }
 }
 
@@ -943,18 +1551,33 @@ def lookup_verified_directory(brand_name: str, website: str = "") -> Optional[Di
     return None
 
 
-def get_verified_official_catalog(niche_filter: str = "", count: int = 50) -> List[Dict[str, Any]]:
+def get_verified_official_catalog(
+    niche_filter: str = "",
+    count: int = 50,
+    indian_only: bool = True
+) -> List[Dict[str, Any]]:
     """
     Returns up to 'count' authentic brands with verified official website emails.
-    Filtered by relevance to niche_filter when applicable.
+    Filtered by relevance to niche_filter and Indian brands strict filter.
     """
+    from .email_verifier import is_indian_entity
+
     results: List[Dict[str, Any]] = []
     lower_filter = (niche_filter or "").lower()
     
+    # Filter by Indian origin if required
+    eligible_brands = []
+    for data in VERIFIED_OFFICIAL_DIRECTORY.values():
+        if indian_only:
+            is_ind, _ = is_indian_entity(data["website"], brand_name=data["brand_name"])
+            if not is_ind:
+                continue
+        eligible_brands.append(data)
+
     # Priority matching by niche
     matched = []
     others = []
-    for data in VERIFIED_OFFICIAL_DIRECTORY.values():
+    for data in eligible_brands:
         cat = (data.get("category") or "").lower()
         if any(w in cat for w in lower_filter.split() if len(w) > 3):
             matched.append(data)
@@ -1073,16 +1696,19 @@ def fetch_page_content(url: str, timeout: float = 3.5) -> Tuple[Optional[str], O
 def verify_brand_official_email(
     brand_name: str,
     website: str,
-    timeout: float = 3.5
+    timeout: float = 3.5,
+    indian_only: bool = True
 ) -> Dict[str, Any]:
     """
-    Executes Crevanta's Protocol 1 & 2:
-    - Verifies the official website.
+    Executes Crevanta's Protocol 1 & 2 + Strict Indian Brand Filter:
+    - Verifies if brand belongs to an Indian company or works in India.
     - Inspects homepage and official contact/partnerships pages.
     - Extracts ONLY explicitly published emails.
-    - Zero pattern-guessing (never outputs fake partnerships@brand.com).
-    - Returns structured official source verification.
+    - Runs candidate emails through Crevanta's Self-Hosted Email Verification Checker.
+    - Approves brand ONLY if email verification approves ('valid').
     """
+    from .email_verifier import is_indian_entity, verify_email
+
     base_url = normalize_domain_url(website)
     clean_domain = base_url.replace("https://", "").replace("http://", "").split("/")[0]
 
@@ -1097,8 +1723,24 @@ def verify_brand_official_email(
             "verification": "unverified",
             "email_source": "No valid official website domain provided",
             "sources_checked": ["No domain provided"],
-            "is_official": False
+            "is_official": False,
+            "is_indian": False
         }
+
+    # 0. STRICT INDIAN BRAND FILTER
+    if indian_only:
+        is_ind, ind_reason = is_indian_entity(clean_domain, brand_name=brand_name)
+        if not is_ind:
+            return {
+                "brand_name": brand_name,
+                "website": clean_domain,
+                "recipient_email": "Not publicly available",
+                "verification": "unverified",
+                "email_source": f"Rejected by Indian Brands Only Filter: {ind_reason}",
+                "sources_checked": ["Indian Brand Filter"],
+                "is_official": False,
+                "is_indian": False
+            }
 
     # 1. Fetch homepage first
     hp_html, hp_url = fetch_page_content(base_url, timeout=timeout)
@@ -1150,21 +1792,25 @@ def verify_brand_official_email(
         if any(cand[2] >= 65 for cand in discovered_candidates):
             break
 
-    # 3. Select best verified email if any exists
+    # 3. Select best verified email if any exists, and verify via self-hosted email verification checker
     if discovered_candidates:
-        # Sort by score descending
         discovered_candidates.sort(key=lambda x: x[2], reverse=True)
-        best_email, best_source, _ = discovered_candidates[0]
-
-        return {
-            "brand_name": brand_name,
-            "website": clean_domain,
-            "recipient_email": best_email,
-            "verification": "official",
-            "email_source": best_source,
-            "sources_checked": sources_checked,
-            "is_official": True
-        }
+        
+        for best_email, best_source, _ in discovered_candidates:
+            # Self-hosted email verification check (syntax, disposable, DNS, MX, SMTP)
+            ev_result = verify_email(best_email, brand_name=brand_name, check_indian_only=indian_only)
+            if ev_result.get("approved") or ev_result.get("status") == "valid":
+                return {
+                    "brand_name": brand_name,
+                    "website": clean_domain,
+                    "recipient_email": best_email,
+                    "verification": "official",
+                    "email_source": best_source,
+                    "sources_checked": sources_checked,
+                    "is_official": True,
+                    "is_indian": True,
+                    "email_verification": ev_result
+                }
 
     # 4. No email found — STRICT ENFORCEMENT
     termination_note = f"Checked official website and contact pages ({', '.join([s.replace(base_url, '') or '/' for s in sources_checked[:3]])}). No publicly listed official email was found."
@@ -1175,16 +1821,21 @@ def verify_brand_official_email(
         "verification": "unverified",
         "email_source": termination_note,
         "sources_checked": sources_checked,
-        "is_official": False
+        "is_official": False,
+        "is_indian": True if not indian_only else (is_indian_entity(clean_domain, brand_name=brand_name)[0])
     }
 
 
 def enforce_programmatic_rules(
     lead: Dict[str, Any],
-    require_official: bool = False
+    require_official: bool = False,
+    require_indian: bool = False,
+    verify_checker: bool = False
 ) -> Optional[Dict[str, Any]]:
     """
     Two-Layer Protection: Code-level hard rule.
+    - INDIAN BRANDS ONLY: If require_indian=True, discards non-Indian brands.
+    - EMAIL VERIFICATION GATE: If verify_checker=True, passes email through self-hosted verifier.
     - Rejects third-party emails completely ('take only official emails no third party').
     - Rejects pattern-guessed addresses (no source = no email).
     - If require_official=True (Brand Skipping Rule):
@@ -1192,12 +1843,41 @@ def enforce_programmatic_rules(
     - If require_official=False:
         Sets recipient_email = 'Not publicly available', verification = 'unverified'.
     """
+    from .email_verifier import is_indian_entity, verify_email
+
+    brand_name = lead.get("brand_name", "")
+    website = lead.get("website", "")
+
+    if require_indian:
+        is_ind, ind_reason = is_indian_entity(website, brand_name=brand_name)
+        if not is_ind:
+            if require_official:
+                return None
+            lead["recipient_email"] = "Not publicly available"
+            lead["verification"] = "unverified"
+            lead["email_source"] = f"Rejected: {ind_reason}"
+            lead["is_indian"] = False
+            return lead
+        lead["is_indian"] = True
+
     verification = (lead.get("verification") or "").strip().lower()
     email = (lead.get("recipient_email") or "").strip()
     source = (lead.get("email_source") or "").strip()
 
     is_valid_email = "@" in email and "." in email.split("@")[1] and not email.endswith(".com.com")
     is_official = (verification == "official") and bool(source) and is_valid_email and "No publicly listed" not in source
+
+    # Run through self-hosted email verification checker if requested
+    if is_official and verify_checker and email and email != "Not publicly available":
+        ev_res = verify_email(email, brand_name=brand_name, check_indian_only=require_indian)
+        lead["email_verification"] = ev_res
+        if not ev_res.get("approved"):
+            is_official = False
+            if require_official:
+                return None
+            lead["recipient_email"] = "Not publicly available"
+            lead["verification"] = "unverified"
+            lead["email_source"] = f"Verification rejected: {ev_res.get('reason')}"
 
     if not is_official:
         if require_official:

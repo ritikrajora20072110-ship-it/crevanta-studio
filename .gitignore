@@ -47,5 +47,7 @@ htmlcov/
 *.swp
 *.swo
 
-# Logs
+# Logs & Databases
 *.log
+*.db
+data/*.db

@@ -379,7 +379,8 @@ def generate_brand_pitches_ollama(
     count: int = 10,
     model: Optional[str] = None,
     base_url: Optional[str] = None,
-    strict_official_only: bool = False
+    strict_official_only: bool = False,
+    indian_only: bool = False
 ) -> Dict[str, Any]:
     """
     Real-time dynamic brand discovery and pitch writer using local Ollama.
@@ -392,10 +393,14 @@ def generate_brand_pitches_ollama(
          - NEVER generate pattern-based or personal emails.
          - Two-layer protection (Prompt rule + Programmatic rule).
          - Brand skipping rule: discard unverified leads if strict_official_only is True.
+         - Self-Hosted Email Verification: Validates syntax, DNS, MX, SMTP handshake, and catch-all.
       2. Crevanta Unique Video Ideas Protocol:
          - Brand -> Differentiator -> Audience problem/desire -> Creator behaviour -> Content hook -> Concept.
          - Exact 4-part breakdown: Brand Insight, Creative Opportunity, Concept Title, How It Works.
       3. Signature 15-Day Campaign Roadmap.
+      4. Anti-Spam & Primary Inbox Deliverability Protocol.
+      5. INDIAN BRANDS ONLY — STRICT FILTER:
+         - Filters out all non-Indian companies or brands not operating in India.
     """
     b_url = base_url or Config.OLLAMA_BASE_URL
     target_model = model or Config.OLLAMA_MODEL
@@ -475,6 +480,10 @@ def generate_brand_pitches_ollama(
             "- NO EXCLAMATION MARKS: Zero '!' in subject line; maximum one polite '!' in the entire body.\n"
             "- CRISP LENGTH: Keep the complete outreach body between 120 and 190 words. Long emails trigger spam algorithms.\n"
             "- CONVERSATIONAL SUBJECT LINE: Short (under 7 words), natural sentence or title case (e.g., 'Partnership Concept: {creator_name} × {brand_name}').\n\n"
+            "PART 5: INDIAN BRANDS ONLY — STRICT FILTER\n"
+            "- Prioritize and discover ONLY brands that are Indian companies or brands with active operations in India.\n"
+            "- Focus on prominent Indian D2C brands, consumer tech, fashion, wellness, beauty, and lifestyle companies (e.g. boAt, Mamaearth, SUGAR Cosmetics, Licious, Snitch, Bewakoof, The Souled Store, Wakefit, BlueStone, CaratLane, Chumbak, FabIndia, Ather Energy, Noise, Paper Boat, Bira 91, Chaayos, Blue Tokai, etc.).\n"
+            "- Reject foreign brands without Indian presence or operations.\n\n"
             f"Tone / Style Requirement: {style_desc}\n"
             "Agency Name: Crevanta Agency (Creators × Advantage)\n\n"
             "OUTPUT REQUIREMENT: Respond ONLY with a valid JSON object matching this schema:\n"
@@ -620,11 +629,23 @@ def generate_brand_pitches_ollama(
                     b["full_email_body"] = clean_body
                     b["body"] = clean_body
 
+                    # STRICT INDIAN BRANDS FILTER
+                    if indian_only:
+                        from .email_verifier import is_indian_entity
+                        is_ind, _ = is_indian_entity(b.get("website", ""), brand_name=b_name)
+                        if not is_ind:
+                            continue
+
                     # Attach live deliverability score
                     b["deliverability"] = analyze_deliverability(b["subject"], b["body"], b.get("recipient_email", ""))
 
-                    # TWO-LAYER ENFORCEMENT: Enforce programmatic official email rules
-                    lead = enforce_programmatic_rules(b, require_official=strict_official_only)
+                    # TWO-LAYER ENFORCEMENT: Enforce programmatic official email rules & email verifier gate
+                    lead = enforce_programmatic_rules(
+                        b,
+                        require_official=strict_official_only,
+                        require_indian=indian_only,
+                        verify_checker=strict_official_only
+                    )
                     if lead is not None:
                         all_brands.append(lead)
 
@@ -644,7 +665,11 @@ def generate_brand_pitches_ollama(
     # This guarantees that the user ALWAYS receives the exact requested brand count (up to 50),
     # with 100% verified official emails when strict_official_only is True, eliminating "No brands found"!
     if len(all_brands) < target_count:
-        catalog_leads = get_verified_official_catalog(niche_filter=f"{brand_prompt} {creator_niche}", count=76)
+        catalog_leads = get_verified_official_catalog(
+            niche_filter=f"{brand_prompt} {creator_niche}",
+            count=76,
+            indian_only=indian_only
+        )
         for cat_item in catalog_leads:
             if len(all_brands) >= target_count:
                 break
@@ -691,7 +716,15 @@ def generate_brand_pitches_ollama(
             else:
                 synth_brand["deliverability"] = analyze_deliverability(synth_brand["subject"], synth_brand["body"], cat_item["recipient_email"])
 
-            all_brands.append(synth_brand)
+            # Check through programmatic rules
+            lead = enforce_programmatic_rules(
+                synth_brand,
+                require_official=strict_official_only,
+                require_indian=indian_only,
+                verify_checker=False  # Catalog directory is pre-verified
+            )
+            if lead is not None:
+                all_brands.append(lead)
 
     # Complementary fallback if still below target_count and strict_official_only is False
     if not strict_official_only and len(all_brands) < target_count:

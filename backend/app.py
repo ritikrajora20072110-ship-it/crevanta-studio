@@ -56,6 +56,14 @@ from .anti_spam import (
     optimize_subject_line,
     append_opt_out_footer
 )
+from .email_verifier import (
+    verify_email,
+    verify_email_list,
+    verify_csv,
+    get_verification_records,
+    get_verification_stats,
+    is_indian_entity
+)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 FRONTEND_DIR = BASE_DIR / "frontend"
@@ -138,12 +146,35 @@ class GenerateRequest(BaseModel):
     count: Optional[int] = 10
     ollama_model: Optional[str] = None
     strict_official_only: Optional[bool] = False
+    indian_only: Optional[bool] = True
 
 
 class VerifyLeadRequest(BaseModel):
     brand_name: str
     website: str
     creator_id: Optional[str] = None
+    indian_only: Optional[bool] = True
+
+
+class VerifyEmailRequest(BaseModel):
+    email_or_domain: str
+    brand_name: Optional[str] = None
+    check_indian_only: Optional[bool] = True
+    force_recheck: Optional[bool] = False
+    skip_smtp: Optional[bool] = False
+
+
+class BatchVerifyEmailRequest(BaseModel):
+    items: List[str]
+    check_indian_only: Optional[bool] = True
+    force_recheck: Optional[bool] = False
+    skip_smtp: Optional[bool] = False
+
+
+class UploadCsvVerifyRequest(BaseModel):
+    csv_content: str
+    check_indian_only: Optional[bool] = True
+    force_recheck: Optional[bool] = False
 
 
 class ChatRequest(BaseModel):
@@ -320,7 +351,8 @@ def generate_pitches(req: GenerateRequest):
         email_style=req.email_style or "punchy",
         count=req.count or 10,
         model=req.ollama_model or Config.OLLAMA_MODEL,
-        strict_official_only=req.strict_official_only or False
+        strict_official_only=req.strict_official_only or False,
+        indian_only=req.indian_only if req.indian_only is not None else True
     )
 
 
@@ -344,10 +376,11 @@ def verify_lead_endpoint(req: VerifyLeadRequest):
             "engagement_rate": "5.4%"
         }
 
-    # 1. Live contact verification on official website
+    # 1. Live contact verification on official website with Indian Brand Filter
     verification_result = verify_brand_official_email(
         brand_name=req.brand_name,
-        website=req.website
+        website=req.website,
+        indian_only=req.indian_only if req.indian_only is not None else True
     )
 
     # 2. Formulate 4-part video concept adhering to 10 Archetypes
@@ -364,12 +397,78 @@ def verify_lead_endpoint(req: VerifyLeadRequest):
     synth["email_source"] = verification_result["email_source"]
     synth["sources_checked"] = verification_result.get("sources_checked", [])
     synth["website"] = verification_result.get("website", req.website)
+    synth["is_indian"] = verification_result.get("is_indian", True)
 
     return {
         "success": True,
         "lead": synth,
         "verification": verification_result
     }
+
+
+# --- Self-Hosted Email Verification & Strict Indian Brand Filter Endpoints ---
+@app.post("/api/email-verifier/verify")
+def api_verify_single_email(req: VerifyEmailRequest):
+    """Verifies single email/domain across syntax, disposable, DNS, MX, and SMTP handshake."""
+    return verify_email(
+        email_or_domain=req.email_or_domain,
+        brand_name=req.brand_name,
+        check_indian_only=req.check_indian_only if req.check_indian_only is not None else True,
+        force_recheck=req.force_recheck or False,
+        skip_smtp=req.skip_smtp or False
+    )
+
+
+@app.post("/api/email-verifier/batch")
+def api_verify_batch_emails(req: BatchVerifyEmailRequest):
+    """Batch verifies a list of emails or domains."""
+    return verify_email_list(
+        items=req.items,
+        check_indian_only=req.check_indian_only if req.check_indian_only is not None else True,
+        force_recheck=req.force_recheck or False,
+        skip_smtp=req.skip_smtp or False
+    )
+
+
+@app.post("/api/email-verifier/upload-csv")
+def api_verify_csv_upload(req: UploadCsvVerifyRequest):
+    """Parses uploaded CSV text and runs verification pipeline on extracted emails/domains."""
+    import io
+    f_in = io.StringIO(req.csv_content.strip())
+    reader = csv.reader(f_in)
+    items = []
+    for r in reader:
+        if r and r[0].strip():
+            val = r[0].strip()
+            if val.lower() not in ("email", "emails", "domain", "domains", "website"):
+                items.append(val)
+    return verify_email_list(
+        items=items,
+        check_indian_only=req.check_indian_only if req.check_indian_only is not None else True,
+        force_recheck=req.force_recheck or False
+    )
+
+
+@app.get("/api/email-verifier/records")
+def api_get_verification_records(
+    limit: int = 50,
+    offset: int = 0,
+    status: Optional[str] = None,
+    indian_only: Optional[bool] = None
+):
+    """Retrieves verified email history and audit logs from local SQLite database."""
+    return get_verification_records(
+        limit=limit,
+        offset=offset,
+        status_filter=status,
+        indian_only=indian_only
+    )
+
+
+@app.get("/api/email-verifier/stats")
+def api_get_verification_stats():
+    """Returns real-time verification stats categorized by status and Indian origins."""
+    return get_verification_stats()
 
 
 # --- Real-Time AI Conversation with Persistent Record Keeping ---
