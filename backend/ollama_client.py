@@ -16,6 +16,13 @@ from .lead_verifier import (
     get_verified_official_catalog,
     verify_brand_official_email
 )
+from .anti_spam import (
+    sanitize_for_inbox,
+    optimize_subject_line,
+    append_opt_out_footer,
+    generate_spintax_pitch,
+    analyze_deliverability
+)
 
 # Ensure local loopback addresses are never routed through environment proxies
 for _k in ["no_proxy", "NO_PROXY"]:
@@ -325,17 +332,20 @@ def _synthesize_brand_pitch(
         + (campaign_15day_notes if campaign_15day_notes else "Day 1 Kickoff & Product Unboxing, Day 4 Hero Reel Drop, Day 7 Interactive Story Q&A with direct affiliate link, Day 11 Co-Author Boost, Day 15 Analytics & ROI Wrap.")
     )
 
-    subject = f"Partnership Concept: {c_name} × {brand_name}"
-    full_body = (
-        f"Hi {brand_name} Partnerships Team,\n\n"
-        f"I lead brand partnerships at Crevanta Agency (Creators × Advantage). We manage {c_name} ({c_handle}) and have identified {brand_name} as an ideal collaborative fit.\n\n"
-        f"1. ABOUT THE CREATOR:\n{p1}\n\n"
-        f"2. OUR UNIQUE VIDEO CONCEPT:\n{p2}\n\n"
-        f"3. OUR 15-DAY CAMPAIGN ROADMAP:\n{p3}\n\n"
-        f"Would your team be open to a 10-minute briefing call this week to review our creative moodboard and sample deliverables?\n\n"
-        f"Best regards,\n"
-        f"Crevanta Agency Partnerships Team\ncrevanta.com"
+    # INHERENT ANTI-SPAM DELIVERABILITY: Generate dynamic spintax pitch with opt-out footer
+    spintax = generate_spintax_pitch(
+        brand_name=brand_name,
+        brand_niche=brand_niche,
+        creator=creator,
+        concept_title=concept_title,
+        brand_insight=brand_insight,
+        creative_opportunity=creative_opp,
+        how_it_works=how_it_works,
+        campaign_notes=campaign_15day_notes
     )
+    subject = spintax["subject"]
+    full_body = spintax["full_email_body"]
+    deliverability = analyze_deliverability(subject, full_body, recipient_email)
 
     return {
         "brand_name": brand_name,
@@ -347,15 +357,16 @@ def _synthesize_brand_pitch(
         "brand_niche": brand_niche,
         "why_fit": f"High demographic affinity with {c_name}'s community seeking premium {brand_niche}.",
         "subject": subject,
-        "part1_about_creator": p1,
+        "part1_about_creator": spintax["part1_about_creator"],
         "part2_concept_title": concept_title,
         "part2_brand_insight": brand_insight,
         "part2_creative_opportunity": creative_opp,
         "part2_how_it_works": how_it_works,
-        "part2_video_idea": p2,
-        "part3_15day_campaign": p3,
+        "part2_video_idea": spintax["part2_video_idea"],
+        "part3_15day_campaign": spintax["part3_15day_campaign"],
         "full_email_body": full_body,
-        "body": full_body
+        "body": full_body,
+        "deliverability": deliverability
     }
 
 
@@ -456,6 +467,14 @@ def generate_brand_pitches_ollama(
             "  * How It Works: 2-4 sentences explaining what the creator actually DOES with the product.\n\n"
             "PART 3: SIGNATURE 15-DAY CAMPAIGN ROADMAP\n"
             "- Day 1 Kickoff, Day 3-5 Hero Reel Drop, Day 7 Interactive Story Engagement, Day 10 Amplification, Day 15 Analytics Wrap.\n\n"
+            "PART 4: ANTI-SPAM & PRIMARY INBOX DELIVERABILITY PROTOCOL\n"
+            "- Your goal is to guarantee that the generated outreach lands in the brand's PRIMARY INBOX, NEVER in spam or junk.\n"
+            "- ZERO SPAM TRIGGER WORDS: Never use words like '100% free', 'guaranteed', 'urgent', 'act now', 'limited time', 'risk-free', 'buy now', 'cash', 'exclusive offer', 'winner', 'click here'.\n"
+            "- NATURAL CONVERSATIONAL TONE: Write like a senior talent manager composing a direct 1-to-1 message in Gmail.\n"
+            "- NO ALL-CAPS WORDS: Never write words in full capitals in subject or body.\n"
+            "- NO EXCLAMATION MARKS: Zero '!' in subject line; maximum one polite '!' in the entire body.\n"
+            "- CRISP LENGTH: Keep the complete outreach body between 120 and 190 words. Long emails trigger spam algorithms.\n"
+            "- CONVERSATIONAL SUBJECT LINE: Short (under 7 words), natural sentence or title case (e.g., 'Partnership Concept: {creator_name} × {brand_name}').\n\n"
             f"Tone / Style Requirement: {style_desc}\n"
             "Agency Name: Crevanta Agency (Creators × Advantage)\n\n"
             "OUTPUT REQUIREMENT: Respond ONLY with a valid JSON object matching this schema:\n"
@@ -582,7 +601,11 @@ def generate_brand_pitches_ollama(
                     )
                     b["part3_15day_campaign"] = p3_text
 
-                    b["full_email_body"] = (
+                    # INHERENT ANTI-SPAM FORMATTING: Clean subject, sanitize copy, add opt-out reputation footer
+                    raw_subject = b.get("subject") or f"Partnership Concept: {creator_name} × {b_name}"
+                    b["subject"] = optimize_subject_line(raw_subject, b_name, creator_name)
+
+                    raw_body = b.get("full_email_body") or (
                         f"Hi {b_name} Partnerships Team,\n\n"
                         f"I lead brand partnerships at Crevanta Agency (Creators × Advantage). We manage {creator_name} ({creator_handle}) and have identified {b_name} as an ideal collaborative fit.\n\n"
                         f"1. ABOUT THE CREATOR:\n{p1_text}\n\n"
@@ -592,7 +615,13 @@ def generate_brand_pitches_ollama(
                         f"Best regards,\n"
                         f"Crevanta Agency Partnerships Team\ncrevanta.com"
                     )
-                    b["body"] = b["full_email_body"]
+                    clean_body, _ = sanitize_for_inbox(raw_body)
+                    clean_body = append_opt_out_footer(clean_body)
+                    b["full_email_body"] = clean_body
+                    b["body"] = clean_body
+
+                    # Attach live deliverability score
+                    b["deliverability"] = analyze_deliverability(b["subject"], b["body"], b.get("recipient_email", ""))
 
                     # TWO-LAYER ENFORCEMENT: Enforce programmatic official email rules
                     lead = enforce_programmatic_rules(b, require_official=strict_official_only)
@@ -624,6 +653,7 @@ def generate_brand_pitches_ollama(
                 continue
             seen_names.add(c_name.lower())
 
+            # Synthesize anti-spam spintax pitch
             synth_brand = _synthesize_brand_pitch(
                 brand_name=c_name,
                 brand_niche=cat_item.get("brand_niche") or creator_niche,
@@ -639,27 +669,27 @@ def generate_brand_pitches_ollama(
             synth_brand["email_source"] = cat_item["email_source"]
 
             if cat_item.get("part2_concept_title"):
+                spintax = generate_spintax_pitch(
+                    brand_name=c_name,
+                    brand_niche=cat_item.get("brand_niche") or creator_niche,
+                    creator=creator,
+                    concept_title=cat_item["part2_concept_title"],
+                    brand_insight=cat_item["part2_brand_insight"],
+                    creative_opportunity=cat_item["part2_creative_opportunity"],
+                    how_it_works=cat_item["part2_how_it_works"],
+                    campaign_notes=campaign_15day_notes
+                )
+                synth_brand["subject"] = spintax["subject"]
                 synth_brand["part2_concept_title"] = cat_item["part2_concept_title"]
                 synth_brand["part2_brand_insight"] = cat_item["part2_brand_insight"]
                 synth_brand["part2_creative_opportunity"] = cat_item["part2_creative_opportunity"]
                 synth_brand["part2_how_it_works"] = cat_item["part2_how_it_works"]
-                synth_brand["part2_video_idea"] = (
-                    f"Brand Insight: {cat_item['part2_brand_insight']}\n"
-                    f"Creative Opportunity: {cat_item['part2_creative_opportunity']}\n"
-                    f"Concept: \"{cat_item['part2_concept_title']}\"\n"
-                    f"How It Works: {cat_item['part2_how_it_works']}"
-                )
-                synth_brand["full_email_body"] = (
-                    f"Hi {c_name} Partnerships Team,\n\n"
-                    f"I lead brand partnerships at Crevanta Agency (Creators × Advantage). We manage {creator_name} ({creator_handle}) and have identified {c_name} as an ideal collaborative fit.\n\n"
-                    f"1. ABOUT THE CREATOR:\n{synth_brand['part1_about_creator']}\n\n"
-                    f"2. OUR UNIQUE VIDEO CONCEPT:\n{synth_brand['part2_video_idea']}\n\n"
-                    f"3. OUR 15-DAY CAMPAIGN ROADMAP:\n{synth_brand['part3_15day_campaign']}\n\n"
-                    f"Would your team be open to a 10-minute briefing call this week to review our creative moodboard and sample deliverables?\n\n"
-                    f"Best regards,\n"
-                    f"Crevanta Agency Partnerships Team\ncrevanta.com"
-                )
-                synth_brand["body"] = synth_brand["full_email_body"]
+                synth_brand["part2_video_idea"] = spintax["part2_video_idea"]
+                synth_brand["full_email_body"] = spintax["full_email_body"]
+                synth_brand["body"] = spintax["full_email_body"]
+                synth_brand["deliverability"] = analyze_deliverability(spintax["subject"], spintax["full_email_body"], cat_item["recipient_email"])
+            else:
+                synth_brand["deliverability"] = analyze_deliverability(synth_brand["subject"], synth_brand["body"], cat_item["recipient_email"])
 
             all_brands.append(synth_brand)
 

@@ -6,9 +6,16 @@ import threading
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.utils import formatdate, make_msgid
+import random
 from typing import Dict, Any, Optional, List
 from .config import Config
 from .storage import record_outreach
+from .anti_spam import (
+    sanitize_for_inbox,
+    optimize_subject_line,
+    append_opt_out_footer,
+    analyze_deliverability
+)
 
 # Thread-safe in-memory store for active bulk background jobs
 BULK_JOBS: Dict[str, Dict[str, Any]] = {}
@@ -82,20 +89,36 @@ def _create_mime_message(
     sender_name: Optional[str] = None,
     sender_email: Optional[str] = None
 ) -> MIMEMultipart:
+    """
+    Constructs an RFC 5322 compliant MIME message optimized for PRIMARY INBOX deliverability:
+    - Auto-sanitizes spam trigger words and shouting casing.
+    - Appends polite 1-line opt-out reputation shield.
+    - Message-ID generated under sender's domain (never leaks localhost).
+    - Reply-To and X-Mailer headers configured for trusted client behavior.
+    - Clean 1:1 personal styling matching manual Gmail compose.
+    """
+    clean_subject = optimize_subject_line(subject)
+    clean_body, _ = sanitize_for_inbox(body_text)
+    clean_body = append_opt_out_footer(clean_body)
+
     msg = MIMEMultipart("alternative")
     s_email = sender_email or Config.SENDER_EMAIL or Config.GMAIL_USER
     s_name = sender_name or Config.SENDER_NAME or Config.AGENCY_NAME
+    sender_domain = s_email.split("@")[1] if "@" in s_email else "gmail.com"
 
     msg["From"] = f"{s_name} <{s_email}>"
     msg["To"] = to_email
-    msg["Subject"] = subject
+    msg["Reply-To"] = f"{s_name} <{s_email}>"
+    msg["Subject"] = clean_subject
     msg["Date"] = formatdate(localtime=True)
-    msg["Message-ID"] = make_msgid()
+    msg["Message-ID"] = make_msgid(domain=sender_domain)
+    msg["X-Mailer"] = "Crevanta Mail Engine (Macintosh; Apple Silicon)"
+    msg["X-Priority"] = "3"
 
-    part1 = MIMEText(body_text, "plain", "utf-8")
+    part1 = MIMEText(clean_body, "plain", "utf-8")
     msg.attach(part1)
 
-    html_content = body_text.replace("\n", "<br>")
+    html_content = clean_body.replace("\n", "<br>")
     html_body = f"""\
     <html>
       <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 15px; line-height: 1.6; color: #171717;">
@@ -230,8 +253,14 @@ def save_as_gmail_draft(
         }
 
 
-def _run_bulk_job(job_id: str, pitches: List[Dict[str, Any]], mode: str, delay_seconds: float):
-    """Executes live delivery in background thread with rate limiting."""
+def _run_bulk_job(
+    job_id: str,
+    pitches: List[Dict[str, Any]],
+    mode: str,
+    delay_seconds: float,
+    pacing_mode: str = "human_safe"
+):
+    """Executes live delivery in background thread with smart human jitter pacing to defeat spam algorithms."""
     with BULK_JOBS_LOCK:
         if job_id not in BULK_JOBS:
             return
@@ -256,6 +285,7 @@ def _run_bulk_job(job_id: str, pitches: List[Dict[str, Any]], mode: str, delay_s
         with BULK_JOBS_LOCK:
             BULK_JOBS[job_id]["current_brand"] = brand_name
             BULK_JOBS[job_id]["current_index"] = idx + 1
+            BULK_JOBS[job_id]["pacing_note"] = f"Dispatching to {brand_name}..."
 
         if mode == "draft":
             res = save_as_gmail_draft(to_email, subject, body, creator_name, brand_name)
@@ -282,21 +312,43 @@ def _run_bulk_job(job_id: str, pitches: List[Dict[str, Any]], mode: str, delay_s
             BULK_JOBS[job_id]["failed_count"] = failed_count
             BULK_JOBS[job_id]["logs"].append(log_entry)
 
-        if delay_seconds > 0 and idx < total - 1:
-            time.sleep(delay_seconds)
+        # Smart Anti-Spam Human Jitter Pacing:
+        if idx < total - 1:
+            if mode == "draft":
+                sleep_time = max(0.5, delay_seconds if delay_seconds > 0 else 1.0)
+            elif pacing_mode == "human_safe":
+                # High-deliverability human cadence (20 - 35 seconds with random jitter)
+                sleep_time = round(random.uniform(20.0, 35.0), 1)
+            elif pacing_mode == "balanced":
+                # Balanced safe cadence (8 - 15 seconds)
+                sleep_time = round(random.uniform(8.0, 15.0), 1)
+            elif delay_seconds >= 3.0:
+                # Custom specified delay with micro-jitter
+                sleep_time = round(delay_seconds + random.uniform(-1.0, 2.0), 1)
+            else:
+                sleep_time = max(0.5, delay_seconds)
+
+            with BULK_JOBS_LOCK:
+                BULK_JOBS[job_id]["pacing_note"] = (
+                    f"Anti-Spam Human Jitter: Pausing {sleep_time}s to emulate manual typing and protect Gmail sender reputation..."
+                )
+
+            time.sleep(sleep_time)
 
     with BULK_JOBS_LOCK:
         if BULK_JOBS[job_id]["status"] != "cancelled":
             BULK_JOBS[job_id]["status"] = "completed"
         BULK_JOBS[job_id]["current_brand"] = "Done"
+        BULK_JOBS[job_id]["pacing_note"] = "All pitches processed with deliverability protection."
 
 
 def send_batch_emails(
     pitches: List[Dict[str, Any]],
     mode: str = "send",
-    delay_seconds: float = 1.0
+    delay_seconds: float = 1.0,
+    pacing_mode: str = "human_safe"
 ) -> Dict[str, Any]:
-    """Processes a batch of pitches synchronously."""
+    """Processes a batch of pitches synchronously with deliverability protection."""
     results = []
     success_count = 0
     failed_count = 0
@@ -317,8 +369,17 @@ def send_batch_emails(
         else:
             failed_count += 1
         results.append(res)
-        if delay_seconds > 0 and idx < len(pitches) - 1:
-            time.sleep(delay_seconds)
+
+        if idx < len(pitches) - 1:
+            if mode == "draft":
+                sleep_time = max(0.5, delay_seconds)
+            elif pacing_mode == "human_safe":
+                sleep_time = random.uniform(20.0, 35.0)
+            elif pacing_mode == "balanced":
+                sleep_time = random.uniform(8.0, 15.0)
+            else:
+                sleep_time = max(0.5, delay_seconds)
+            time.sleep(sleep_time)
 
     return {
         "total": len(pitches),
@@ -328,8 +389,13 @@ def send_batch_emails(
     }
 
 
-def create_bulk_job(pitches: List[Dict[str, Any]], mode: str = "send", delay_seconds: float = 0.75) -> str:
-    """Initializes and runs real live batch dispatch."""
+def create_bulk_job(
+    pitches: List[Dict[str, Any]],
+    mode: str = "send",
+    delay_seconds: float = 0.75,
+    pacing_mode: str = "human_safe"
+) -> str:
+    """Initializes and runs real live batch dispatch with anti-spam human jitter."""
     job_id = f"job_{uuid.uuid4().hex[:10]}"
     job_info = {
         "job_id": job_id,
@@ -338,9 +404,11 @@ def create_bulk_job(pitches: List[Dict[str, Any]], mode: str = "send", delay_sec
         "success_count": 0,
         "failed_count": 0,
         "mode": mode,
+        "pacing_mode": pacing_mode,
         "status": "pending",
         "current_brand": "Initializing...",
         "current_index": 0,
+        "pacing_note": "Starting deliverability-safe dispatch...",
         "logs": []
     }
     with BULK_JOBS_LOCK:
@@ -348,7 +416,7 @@ def create_bulk_job(pitches: List[Dict[str, Any]], mode: str = "send", delay_sec
 
     worker = threading.Thread(
         target=_run_bulk_job,
-        args=(job_id, pitches, mode, delay_seconds),
+        args=(job_id, pitches, mode, delay_seconds, pacing_mode),
         daemon=True
     )
     worker.start()

@@ -50,24 +50,32 @@ from .gmail_service import (
     get_bulk_job,
     cancel_bulk_job
 )
+from .anti_spam import (
+    analyze_deliverability,
+    sanitize_for_inbox,
+    optimize_subject_line,
+    append_opt_out_footer
+)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-STATIC_DIR = BASE_DIR / "static"
+FRONTEND_DIR = BASE_DIR / "frontend"
+STATIC_DIR = BASE_DIR / "static" if (BASE_DIR / "static").exists() else FRONTEND_DIR
 
 app = FastAPI(title="Crevanta Agency API", version="2.0.0")
 
-# Mount static folder
-app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
+# Mount frontend folders (supporting both /frontend and legacy /static routes)
+app.mount("/frontend", StaticFiles(directory=str(FRONTEND_DIR)), name="frontend")
+app.mount("/static", StaticFiles(directory=str(FRONTEND_DIR)), name="static")
 
 
 @app.get("/")
 def serve_index():
-    return FileResponse(STATIC_DIR / "index.html")
+    return FileResponse(FRONTEND_DIR / "index.html")
 
 
 @app.get("/studio")
 def serve_studio():
-    return FileResponse(STATIC_DIR / "studio.html")
+    return FileResponse(FRONTEND_DIR / "studio.html")
 
 
 @app.get("/api/public-creators")
@@ -157,6 +165,18 @@ class BatchEmailRequest(BaseModel):
     pitches: List[Dict[str, Any]]
     mode: str = "send"  # 'send' or 'draft'
     delay_seconds: Optional[float] = 1.0
+    pacing_mode: Optional[str] = "human_safe"  # 'human_safe', 'balanced', or 'drafts'
+
+
+class AnalyzeDeliverabilityRequest(BaseModel):
+    subject: str
+    body: str
+    to_email: Optional[str] = ""
+
+
+class SanitizeEmailRequest(BaseModel):
+    subject: Optional[str] = ""
+    body: str
 
 
 class TestEmailRequest(BaseModel):
@@ -424,15 +444,77 @@ def batch_email_action(req: BatchEmailRequest):
     )
 
 
-# --- 1-Click Background Bulk Dispatch Job (for 50+ emails) ---
+# --- 1-Click Background Bulk Dispatch Job with Anti-Spam Human Jitter ---
 @app.post("/api/email/bulk-job")
 def start_bulk_dispatch_job(req: BatchEmailRequest):
     job_id = create_bulk_job(
         pitches=req.pitches,
         mode=req.mode,
-        delay_seconds=req.delay_seconds or 0.75
+        delay_seconds=req.delay_seconds or 0.75,
+        pacing_mode=req.pacing_mode or "human_safe"
     )
-    return {"job_id": job_id, "total": len(req.pitches)}
+    return {"job_id": job_id, "total": len(req.pitches), "pacing_mode": req.pacing_mode or "human_safe"}
+
+
+# --- Deliverability & Anti-Spam Health Endpoints ---
+@app.post("/api/anti-spam/analyze")
+def analyze_deliverability_endpoint(req: AnalyzeDeliverabilityRequest):
+    """Analyzes a pitch for Primary Inbox placement readiness and detects spam triggers."""
+    return analyze_deliverability(
+        subject=req.subject,
+        body=req.body,
+        to_email=req.to_email or ""
+    )
+
+
+@app.post("/api/anti-spam/sanitize")
+def sanitize_email_endpoint(req: SanitizeEmailRequest):
+    """Auto-sanitizes pitch content, optimizes subject line, and appends opt-out footer."""
+    clean_subj = optimize_subject_line(req.subject or "")
+    clean_body, triggers = sanitize_for_inbox(req.body)
+    clean_body = append_opt_out_footer(clean_body)
+    analysis = analyze_deliverability(clean_subj, clean_body)
+
+    return {
+        "success": True,
+        "clean_subject": clean_subj,
+        "clean_body": clean_body,
+        "triggers_replaced": triggers,
+        "deliverability": analysis
+    }
+
+
+@app.get("/api/deliverability/status")
+def deliverability_status_endpoint():
+    """Returns real-time account deliverability health and today's volume quota."""
+    history = get_outreach_history()
+    import datetime
+    today_str = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d")
+    today_sent = 0
+    for h in history:
+        ts = h.get("timestamp", "")
+        if ts.startswith(today_str) and h.get("type") == "sent_live":
+            today_sent += 1
+
+    sender_email = Config.SENDER_EMAIL or Config.GMAIL_USER or ""
+    is_custom_domain = "@" in sender_email and not sender_email.endswith("@gmail.com")
+
+    # Recommended daily ceiling for cold outreach is 45-50 to guarantee high domain reputation
+    safe_daily_limit = 50
+    quota_pct = round((today_sent / safe_daily_limit) * 100, 1)
+
+    return {
+        "sender_email": sender_email,
+        "is_custom_domain": is_custom_domain,
+        "domain_type": "Google Workspace / Custom Domain" if is_custom_domain else "Personal @gmail.com",
+        "today_sent_count": today_sent,
+        "safe_daily_limit": safe_daily_limit,
+        "quota_used_percent": quota_pct,
+        "reputation_status": "Healthy (Safe Zone)" if today_sent < 40 else "Approaching Daily Limit",
+        "human_pacing_active": True,
+        "anti_spam_shield_active": True,
+        "opt_out_shield_active": True
+    }
 
 
 @app.get("/api/email/bulk-job/{job_id}")

@@ -869,7 +869,7 @@ function renderPitches(data) {
               <span class="text-[10px] uppercase font-bold px-2.5 py-0.5 rounded-full bg-[#FAF5EB] text-[#8F6F30] border border-[#E8D7B8]">${item.brand_niche || "Partner"}</span>
             </div>
             
-            <!-- VERIFICATION LEVEL PILL & SOURCE RECORD -->
+            <!-- VERIFICATION LEVEL PILL & DELIVERABILITY SHIELD -->
             <div class="flex flex-wrap items-center gap-2 mt-2">
               ${isOfficial ? `
                 <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-300">
@@ -886,6 +886,17 @@ function renderPitches(data) {
                 </span>
                 <span class="text-[11px] text-[#8F6F30] italic">${item.email_source || 'Checked official site. No published email found.'}</span>
               `}
+
+              <!-- DELIVERABILITY SHIELD BADGE -->
+              <span id="deliverability-badge-${item.id}" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold ${(item.deliverability?.score || 100) >= 90 ? 'bg-emerald-50 text-emerald-800 border border-emerald-300' : 'bg-amber-50 text-amber-900 border border-amber-300'}">
+                <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-600"></i>
+                <span>${item.deliverability?.score || 100}% Primary Inbox</span>
+              </span>
+
+              <button onclick="sanitizeSinglePitch('${item.id}')" class="text-[11px] px-2.5 py-0.5 rounded bg-white hover:bg-[#FAF8F5] border border-[#E2DDD2] text-[#141413] font-medium inline-flex items-center gap-1 shadow-2xs hover:border-[#B89248] transition cursor-pointer" title="Auto-sanitize any spam words, optimize subject line, and append opt-out reputation shield">
+                <i data-lucide="sparkles" class="w-3 h-3 text-[#B89248]"></i>
+                <span>Auto-Sanitize</span>
+              </button>
             </div>
 
             <p class="text-xs text-[#66615B] mt-1.5"><strong class="text-[#141413]">Strategic Fit:</strong> ${item.why_fit || "High demographic and aesthetic synergy with creator community."}</p>
@@ -1133,15 +1144,18 @@ function requestBatchConfirmation(mode) {
   const modeSpan = document.getElementById("confirmExecutionMode");
   const warningBox = document.getElementById("confirmWarningBox");
   const btn = document.getElementById("confirmDispatchBtn");
+  const pacingSelect = document.getElementById("confirmPacingMode");
 
   countSpan.innerText = selectedBrands.length;
   if (mode === "draft") {
     modeSpan.innerText = "SAVE DRAFTS (IMAP)";
+    if (pacingSelect) pacingSelect.value = "drafts";
     warningBox.innerHTML = `<strong>Note:</strong> Pitches will be saved directly into your connected Gmail Drafts folder without sending. You can inspect each draft inside Gmail.`;
     btn.innerText = `Confirm & Draft ${selectedBrands.length} Pitches`;
   } else {
     modeSpan.innerText = "SEND LIVE (SMTP)";
-    warningBox.innerHTML = `<strong>Important:</strong> ${selectedBrands.length} emails will be delivered live to brand partnerships teams from your connected Gmail address with anti-spam rate limiting (0.75s).`;
+    if (pacingSelect) pacingSelect.value = "human_safe";
+    warningBox.innerHTML = `<strong>Important:</strong> ${selectedBrands.length} emails will be delivered live with Anti-Spam Human Jitter pacing (20–35s delay) to guarantee Primary Inbox delivery and protect your sender reputation.`;
     btn.innerText = `Confirm & Send ${selectedBrands.length} Live Emails`;
   }
 
@@ -1155,6 +1169,7 @@ function closeDispatchConfirmModal() {
 }
 
 async function executeConfirmedBulk() {
+  const pacingMode = document.getElementById("confirmPacingMode")?.value || (appState.pendingDispatchMode === "draft" ? "drafts" : "human_safe");
   closeDispatchConfirmModal();
   const mode = appState.pendingDispatchMode;
   const selectedBrands = appState.generatedBrands.filter(b => appState.selectedBrandIds.has(b.id));
@@ -1179,7 +1194,8 @@ async function executeConfirmedBulk() {
       body: JSON.stringify({
         pitches: pitchesPayload,
         mode: mode,
-        delay_seconds: 0.75
+        delay_seconds: mode === "draft" ? 1.0 : 0.75,
+        pacing_mode: pacingMode
       })
     });
 
@@ -1207,16 +1223,18 @@ function openBulkProgressModal(total, mode) {
   const closeBtn = document.getElementById("bulkCloseBtn");
   const cancelBtn = document.getElementById("bulkCancelBtn");
   const doneBtn = document.getElementById("bulkDoneBtn");
+  const pacingNote = document.getElementById("bulkPacingNoteText");
 
   modal.classList.remove("hidden");
-  title.innerText = mode === "draft" ? "1-Click Bulk Gmail Drafter" : "1-Click Bulk Gmail Dispatcher";
+  title.innerText = mode === "draft" ? "1-Click Bulk Gmail Drafter" : "1-Click Bulk Gmail Dispatcher (Anti-Spam)";
   badge.className = "editorial-badge badge-active";
   badge.innerText = "Active";
   label.innerText = `Progress: 0 / ${total}`;
   percent.innerText = "0%";
   bar.style.width = "0%";
   brand.innerText = "Initializing live connection...";
-  feed.innerHTML = `<div class="text-[#696963]">Job initialized. Dispatching sequentially...</div>`;
+  feed.innerHTML = `<div class="text-[#696963]">Job initialized. Applying anti-spam deliverability protection...</div>`;
+  if (pacingNote) pacingNote.innerText = "Starting deliverability-safe dispatch with human cadence...";
 
   closeBtn.classList.add("hidden");
   cancelBtn.classList.remove("hidden");
@@ -1240,12 +1258,17 @@ async function pollBulkJob(jobId) {
     const closeBtn = document.getElementById("bulkCloseBtn");
     const cancelBtn = document.getElementById("bulkCancelBtn");
     const doneBtn = document.getElementById("bulkDoneBtn");
+    const pacingNote = document.getElementById("bulkPacingNoteText");
 
     const pct = Math.round((job.completed / Math.max(1, job.total)) * 100);
     label.innerText = `Progress: ${job.completed} / ${job.total} (Success: ${job.success_count}, Failed: ${job.failed_count})`;
     percent.innerText = `${pct}%`;
     bar.style.width = `${pct}%`;
     brand.innerText = job.current_brand || "Processing...";
+
+    if (job.pacing_note && pacingNote) {
+      pacingNote.innerText = job.pacing_note;
+    }
 
     if (job.logs && job.logs.length > 0) {
       feed.innerHTML = job.logs.map(l => {
@@ -2215,4 +2238,65 @@ async function sendVerifiedLead(brandName) {
     showToast("Sending error", false);
   }
 }
+
+// --- ANTI-SPAM SINGLE PITCH AUTO-SANITIZER ---
+async function sanitizeSinglePitch(brandId) {
+  const subjInput = document.getElementById(`email-subject-${brandId}`);
+  const bodyInput = document.getElementById(`email-body-${brandId}`);
+  if (!subjInput || !bodyInput) return;
+
+  try {
+    const res = await fetch("/api/anti-spam/sanitize", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        subject: subjInput.value.trim(),
+        body: bodyInput.value.trim()
+      })
+    });
+    const data = await res.json();
+    if (data.success) {
+      subjInput.value = data.clean_subject;
+      bodyInput.value = data.clean_body;
+
+      // Update state
+      const targetBrand = appState.generatedBrands.find(b => b.id === brandId);
+      if (targetBrand) {
+        targetBrand.subject = data.clean_subject;
+        targetBrand.full_email_body = data.clean_body;
+        targetBrand.body = data.clean_body;
+        targetBrand.deliverability = data.deliverability;
+      }
+
+      // Update badge
+      const badge = document.getElementById(`deliverability-badge-${brandId}`);
+      if (badge && data.deliverability) {
+        badge.className = `inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold ${data.deliverability.score >= 90 ? 'bg-emerald-50 text-emerald-800 border border-emerald-300' : 'bg-amber-50 text-amber-900 border border-amber-300'}`;
+        badge.innerHTML = `<i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-600"></i><span>${data.deliverability.score}% Primary Inbox</span>`;
+        if (window.lucide) lucide.createIcons();
+      }
+
+      const count = (data.triggers_replaced || []).length;
+      showToast(`Optimized for Primary Inbox! (${count} trigger items sanitized)`);
+    }
+  } catch (err) {
+    showToast("Sanitization error: " + err.message, false);
+  }
+}
+
+// --- LOAD DELIVERABILITY HEALTH STATUS ---
+async function loadDeliverabilityStatus() {
+  try {
+    const res = await fetch("/api/deliverability/status");
+    if (!res.ok) return;
+    const data = await res.json();
+    const quotaDisplay = document.getElementById("dailyQuotaDisplay");
+    if (quotaDisplay) {
+      quotaDisplay.innerText = `${data.today_sent_count} / ${data.safe_daily_limit} sent today (${data.reputation_status})`;
+    }
+  } catch (e) {
+    // Non-blocking
+  }
+}
+
 

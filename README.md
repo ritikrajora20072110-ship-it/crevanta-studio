@@ -39,7 +39,7 @@ codexfile/
 │   ├── lead_verifier.py    # Official website contact scanner & 2-layer rule engine
 │   ├── ollama_client.py    # 50-brand chunked inference & 4-part creative strategist
 │   └── storage.py          # Persistent JSON storage (creators, talks, commands, history)
-├── static/
+├── frontend/
 │   ├── index.html          # Public editorial agency website
 │   ├── studio.html         # Crevanta Studio automation portal (Alabaster/Gold/Obsidian)
 │   ├── app.js              # Client-side state manager, verification & batch dispatch
