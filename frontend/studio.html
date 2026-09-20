@@ -359,10 +359,6 @@
           <i data-lucide="sparkles" class="w-4 h-4 text-[#A68A5B]"></i>
           <span>Campaign Studio</span>
         </button>
-        <button onclick="switchTab('verifier')" id="tab-verifier" class="studio-tab-btn flex items-center gap-2">
-          <i data-lucide="shield-check" class="w-4 h-4 text-[#B89248]"></i>
-          <span>Brand Research & Verifier</span>
-        </button>
         <button onclick="switchTab('creators')" id="tab-creators" class="studio-tab-btn flex items-center gap-2">
           <i data-lucide="users" class="w-4 h-4"></i>
           <span>Creators Roster (<span id="creatorCount">5</span>)</span>
@@ -550,19 +546,28 @@
           <textarea id="campaignPrompt" rows="3" placeholder="e.g. Discover 50 emerging performance apparel and hydration brands in the US and Europe that collaborate with creators. Retrieve their verified partnership emails." class="w-full editorial-input p-3.5 rounded-lg text-sm leading-relaxed font-medium"></textarea>
         </div>
 
-        <!-- STRICT OFFICIAL-ONLY VERIFICATION FILTER TOGGLE -->
-        <div class="flex items-center justify-between p-3.5 bg-[#FAF8F5] rounded-lg border border-[#E2DDD2]">
+        <!-- STRICT VERIFICATION & INDIAN BRAND FILTERS -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 p-3.5 bg-[#FAF8F5] rounded-lg border border-[#E2DDD2]">
           <div class="flex items-start gap-2.5">
-            <input type="checkbox" id="strictOfficialFilter" class="w-4 h-4 mt-0.5 rounded border-[#E2DDD2] text-[#141413] focus:ring-0 cursor-pointer">
+            <input type="checkbox" id="indianOnlyFilter" checked class="w-4 h-4 mt-0.5 rounded border-[#E2DDD2] text-[#141413] focus:ring-0 cursor-pointer">
             <div>
-              <label for="strictOfficialFilter" class="text-xs font-bold text-[#141413] cursor-pointer flex items-center gap-1.5">
-                <span>Strict Official-Only Verification Filter</span>
-                <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">Brand Skipping Active</span>
+              <label for="indianOnlyFilter" class="text-xs font-bold text-[#141413] cursor-pointer flex items-center gap-1.5">
+                <span>🇮🇳 Indian Brands Only — Strict Filter</span>
+                <span class="text-[10px] uppercase font-bold px-1.5 py-0.2 rounded-full bg-amber-100 text-amber-800 border border-amber-300">Indian Entity</span>
               </label>
-              <p class="text-[11px] text-[#66615B] mt-0.5">Enforce Crevanta's Brand Skipping Rule: Accept ONLY explicitly published official emails from the brand's website or official profile. Discard unverified leads (No third-party, zero guessing).</p>
+              <p class="text-[11px] text-[#66615B] mt-0.5">Discovers only Indian D2C brands & enterprises (.in, .co.in, Indian operations). Discards non-Indian companies.</p>
             </div>
           </div>
-          <span class="text-[10px] font-bold text-[#8F6F30] uppercase tracking-wider hidden sm:inline-block px-2.5 py-1 rounded bg-[#FAF5EB] border border-[#E8D7B8]">Official Only</span>
+          <div class="flex items-start gap-2.5 sm:border-l sm:border-[#E2DDD2] sm:pl-3.5">
+            <input type="checkbox" id="strictOfficialFilter" checked class="w-4 h-4 mt-0.5 rounded border-[#E2DDD2] text-[#141413] focus:ring-0 cursor-pointer">
+            <div>
+              <label for="strictOfficialFilter" class="text-xs font-bold text-[#141413] cursor-pointer flex items-center gap-1.5">
+                <span>🛡️ Strict Verification Gate</span>
+                <span class="text-[10px] uppercase font-bold px-1.5 py-0.2 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">Brand Skipping</span>
+              </label>
+              <p class="text-[11px] text-[#66615B] mt-0.5">Self-hosted multi-stage verification: Syntax → Disposable Blocklist → DNS → MX → Rate-Limited SMTP 250 OK. Discards unverified.</p>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -652,6 +657,29 @@
           <span>Formulating verified partnerships, contact emails, and bespoke 3-part pitches...</span>
           <span class="font-mono text-[11px] font-semibold text-[#141413]" id="progressBatchStep">Batch 1 of 5</span>
         </p>
+        <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-[#E2DDD2] text-[11px] text-[#66615B]">
+          <span class="font-bold text-[#141413]">Active Checks:</span>
+          <span class="px-2 py-0.5 rounded bg-white border border-[#E2DDD2] flex items-center gap-1 font-medium">
+            <span class="text-emerald-600 font-bold">✓</span>
+            <span>Indian Brand Entity</span>
+          </span>
+          <span class="px-2 py-0.5 rounded bg-white border border-[#E2DDD2] flex items-center gap-1 font-medium">
+            <span class="text-emerald-600 font-bold">✓</span>
+            <span>Official Domain Crawl</span>
+          </span>
+          <span class="px-2 py-0.5 rounded bg-white border border-[#E2DDD2] flex items-center gap-1 font-medium">
+            <span class="text-emerald-600 font-bold">✓</span>
+            <span>DNS A/AAAA & MX Records</span>
+          </span>
+          <span class="px-2 py-0.5 rounded bg-white border border-[#E2DDD2] flex items-center gap-1 font-medium">
+            <span class="text-emerald-600 font-bold">✓</span>
+            <span>SMTP Handshake & Catch-All</span>
+          </span>
+          <span class="px-2 py-0.5 rounded bg-white border border-[#E2DDD2] flex items-center gap-1 font-medium">
+            <span class="text-emerald-600 font-bold">✓</span>
+            <span>Anti-Spam Hygiene</span>
+          </span>
+        </div>
       </div>
 
       <!-- ===================================================================== -->
@@ -703,6 +731,30 @@
           </p>
         </div>
 
+        <!-- INTEGRATED VERIFICATION & DELIVERABILITY SUMMARY STRIP -->
+        <div id="verificationSummaryStrip" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 p-4 bg-white rounded-xl border border-[#E2DDD2] shadow-2xs">
+          <div class="p-2.5 bg-[#FAF8F5] rounded-lg border border-[#E2DDD2] text-center">
+            <span class="text-[10px] uppercase font-bold text-[#66615B] tracking-wider block">Discovered Leads</span>
+            <span class="text-base sm:text-lg font-bold font-serif text-[#141413]" id="summaryTotalBrands">0</span>
+          </div>
+          <div class="p-2.5 bg-emerald-50/70 rounded-lg border border-emerald-200 text-center">
+            <span class="text-[10px] uppercase font-bold text-emerald-800 tracking-wider block">Valid Mailboxes</span>
+            <span class="text-base sm:text-lg font-bold font-serif text-emerald-700" id="summaryValidMailboxes">0</span>
+          </div>
+          <div class="p-2.5 bg-amber-50/70 rounded-lg border border-amber-200 text-center">
+            <span class="text-[10px] uppercase font-bold text-amber-800 tracking-wider block">Catch-All Domains</span>
+            <span class="text-base sm:text-lg font-bold font-serif text-amber-700" id="summaryCatchAll">0</span>
+          </div>
+          <div class="p-2.5 bg-[#FAF5EB] rounded-lg border border-[#E8D7B8] text-center">
+            <span class="text-[10px] uppercase font-bold text-[#8F6F30] tracking-wider block">Indian Entities 🇮🇳</span>
+            <span class="text-base sm:text-lg font-bold font-serif text-[#8F6F30]" id="summaryIndianEntities">0</span>
+          </div>
+          <div class="col-span-2 sm:col-span-1 p-2.5 bg-blue-50/70 rounded-lg border border-blue-200 text-center">
+            <span class="text-[10px] uppercase font-bold text-blue-800 tracking-wider block">Avg Deliverability</span>
+            <span class="text-base sm:text-lg font-bold font-serif text-blue-700" id="summaryAvgDeliverability">100%</span>
+          </div>
+        </div>
+
         <!-- CARDS CONTAINER -->
         <div id="pitchesList" class="space-y-6">
           <!-- Populated dynamically -->
@@ -710,244 +762,6 @@
 
       </div>
 
-    </section>
-
-    <!-- ======================================================================= -->
-    <!-- TAB: BRAND RESEARCH & OFFICIAL CONTACT VERIFIER                         -->
-    <!-- ======================================================================= -->
-    <section id="view-verifier" class="hidden space-y-6">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#D9D6CE]">
-        <div>
-          <span class="text-[10px] uppercase font-bold tracking-[0.2em] text-[#A68A5B]">STRICT PROTOCOL · ZERO GUESSING</span>
-          <h2 class="font-serif text-3xl text-[#171717] font-medium">Brand Research & Contact Verification</h2>
-          <p class="text-xs text-[#696963] mt-1">Directly inspect any brand's official website for explicitly published partnership contacts, record the source URL, and generate a bespoke 4-part video concept.</p>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="editorial-badge badge-active text-xs">
-            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-            <span>Official Sources Only</span>
-          </span>
-        </div>
-      </div>
-
-      <!-- INPUT FORM CONTAINER -->
-      <div class="studio-module-card p-6 space-y-5">
-        <div class="flex items-center gap-3 pb-3 border-b border-[#E2DDD2]">
-          <span class="studio-step-badge gold">🔍</span>
-          <div>
-            <h3 class="font-serif text-lg font-bold text-[#141413]">Inspect Brand Official Domain</h3>
-            <p class="text-xs text-[#66615B]">Enter the brand's name and official website URL. The engine crawls official contact/about/partnerships pages in real time.</p>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div>
-            <label class="block text-[11px] font-bold uppercase tracking-wider text-[#66615B] mb-1.5">Brand Name *</label>
-            <input type="text" id="verifierBrandName" placeholder="e.g. Andamen" class="w-full editorial-input px-3.5 py-2.5 rounded-lg text-sm font-medium">
-          </div>
-          <div>
-            <label class="block text-[11px] font-bold uppercase tracking-wider text-[#66615B] mb-1.5">Official Website URL / Domain *</label>
-            <input type="text" id="verifierWebsite" placeholder="e.g. andamen.com" class="w-full editorial-input px-3.5 py-2.5 rounded-lg text-sm font-medium">
-          </div>
-          <div>
-            <label class="block text-[11px] font-bold uppercase tracking-wider text-[#66615B] mb-1.5">Attach Creator Pitch Profile</label>
-            <select id="verifierCreatorSelect" class="w-full editorial-input px-3.5 py-2.5 rounded-lg text-sm font-semibold bg-[#FAF8F5]">
-              <!-- Populated dynamically -->
-            </select>
-          </div>
-        </div>
-
-        <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-[#E2DDD2]">
-          <div class="flex items-center gap-4">
-            <label class="flex items-center gap-2 cursor-pointer text-xs font-bold text-[#141413]">
-              <input type="checkbox" id="verifierIndianOnly" checked class="w-4 h-4 rounded border-[#D9D6CE] text-[#B89248] focus:ring-[#B89248]">
-              <span class="inline-flex items-center gap-1">🇮🇳 <span>Indian Brands Only — Strict Filter</span></span>
-            </label>
-            <span class="text-xs text-[#66615B] hidden sm:inline">| Zero pattern-guessing · Two-Layer Protection</span>
-          </div>
-          <button id="runVerifierBtn" onclick="runBrandLeadVerification()" class="btn-editorial-dark px-6 py-2.5 rounded-lg text-xs font-bold flex items-center gap-2 shadow-md hover:shadow-lg transition">
-            <i data-lucide="search" class="w-4 h-4 text-[#B89248]"></i>
-            <span id="runVerifierBtnText">Verify Contact & Generate Concept</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- RESULTS CONTAINER (HIDDEN UNTIL RUN) -->
-      <div id="verifierResultsArea" class="hidden space-y-6">
-        <!-- Rendered dynamically -->
-      </div>
-
-      <!-- ======================================================================= -->
-      <!-- SELF-HOSTED EMAIL VERIFICATION PIPELINE & AUDIT STATION                -->
-      <!-- ======================================================================= -->
-      <div class="studio-module-card p-6 space-y-6 border border-[#E2DDD2] bg-[#FCFBF9]">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#E2DDD2]">
-          <div>
-            <div class="flex items-center gap-2">
-              <span class="studio-step-badge gold">⚡</span>
-              <h3 class="font-serif text-xl font-bold text-[#141413]">Self-Hosted Email Verification Checker</h3>
-            </div>
-            <p class="text-xs text-[#66615B] mt-1">Multi-stage evaluation in order: Indian Brand Filter → Syntax → Disposable Blocklist → DNS A/AAAA → dnspython MX → SMTP Handshake with Catch-All Detection & Rate Limiting.</p>
-          </div>
-          <div class="flex items-center gap-2">
-            <button onclick="refreshVerifierStatsAndRecords()" class="text-xs font-semibold px-3 py-1.5 rounded-lg border border-[#E2DDD2] bg-white hover:bg-[#FAF8F5] text-[#141413] flex items-center gap-1.5 transition">
-              <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-[#B89248]"></i>
-              <span>Refresh SQLite Cache</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- STATS BANNER -->
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3" id="evStatsBanner">
-          <div class="p-3 bg-white rounded-lg border border-[#E2DDD2] text-center">
-            <span class="text-[10px] uppercase font-bold text-[#66615B] tracking-wider block">Total Checked</span>
-            <span class="text-lg font-bold font-serif text-[#141413]" id="statTotal">0</span>
-          </div>
-          <div class="p-3 bg-white rounded-lg border border-[#E2DDD2] text-center">
-            <span class="text-[10px] uppercase font-bold text-emerald-700 tracking-wider block">Valid Mailboxes</span>
-            <span class="text-lg font-bold font-serif text-emerald-600" id="statValid">0</span>
-          </div>
-          <div class="p-3 bg-white rounded-lg border border-[#E2DDD2] text-center">
-            <span class="text-[10px] uppercase font-bold text-amber-700 tracking-wider block">Catch-All Flagged</span>
-            <span class="text-lg font-bold font-serif text-amber-600" id="statCatchAll">0</span>
-          </div>
-          <div class="p-3 bg-white rounded-lg border border-[#E2DDD2] text-center">
-            <span class="text-[10px] uppercase font-bold text-purple-700 tracking-wider block">Disposable Blocked</span>
-            <span class="text-lg font-bold font-serif text-purple-600" id="statDisposable">0</span>
-          </div>
-          <div class="p-3 bg-white rounded-lg border border-[#E2DDD2] text-center">
-            <span class="text-[10px] uppercase font-bold text-rose-700 tracking-wider block">Invalid / Dropped</span>
-            <span class="text-lg font-bold font-serif text-rose-600" id="statInvalid">0</span>
-          </div>
-          <div class="p-3 bg-white rounded-lg border border-[#E2DDD2] text-center">
-            <span class="text-[10px] uppercase font-bold text-[#B89248] tracking-wider block">Indian Brands 🇮🇳</span>
-            <span class="text-lg font-bold font-serif text-[#B89248]" id="statIndian">0</span>
-          </div>
-        </div>
-
-        <!-- TWO COLUMN INPUT: SINGLE VERIFIER & BATCH/CSV -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <!-- CARD 1: SINGLE EMAIL/DOMAIN VERIFIER -->
-          <div class="p-5 bg-white rounded-xl border border-[#E2DDD2] space-y-4">
-            <div class="flex items-center justify-between">
-              <h4 class="font-serif font-bold text-sm text-[#141413] flex items-center gap-2">
-                <i data-lucide="mail-check" class="w-4 h-4 text-[#B89248]"></i>
-                <span>Direct Email / Domain Test</span>
-              </h4>
-              <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-[#FAF5EB] text-[#8F6F30]">Live Handshake</span>
-            </div>
-
-            <div class="space-y-3">
-              <div>
-                <label class="block text-[11px] font-bold uppercase tracking-wider text-[#66615B] mb-1">Target Email or Domain</label>
-                <div class="flex gap-2">
-                  <input type="text" id="evSingleInput" placeholder="e.g. collab@boat-lifestyle.com or mamaearth.in" class="flex-1 editorial-input px-3 py-2 text-xs rounded-lg font-medium">
-                  <button onclick="runSingleEmailVerification()" id="evSingleBtn" class="btn-editorial-dark text-xs px-4 py-2 rounded-lg font-bold flex items-center gap-1.5">
-                    <span>Verify Live</span>
-                  </button>
-                </div>
-              </div>
-
-              <div class="flex items-center gap-4 text-xs text-[#66615B]">
-                <label class="flex items-center gap-1.5 cursor-pointer">
-                  <input type="checkbox" id="evSingleIndianFilter" checked class="w-3.5 h-3.5 rounded border-[#D9D6CE] text-[#B89248]">
-                  <span>Indian Only Filter</span>
-                </label>
-                <label class="flex items-center gap-1.5 cursor-pointer">
-                  <input type="checkbox" id="evSingleForce" class="w-3.5 h-3.5 rounded border-[#D9D6CE] text-[#B89248]">
-                  <span>Bypass Cache</span>
-                </label>
-              </div>
-            </div>
-
-            <!-- SINGLE RESULT DISPLAY -->
-            <div id="evSingleResultCard" class="hidden p-4 rounded-lg border text-xs space-y-3">
-              <!-- Rendered dynamically -->
-            </div>
-          </div>
-
-          <!-- CARD 2: BATCH LIST & CSV UPLOADER -->
-          <div class="p-5 bg-white rounded-xl border border-[#E2DDD2] space-y-4">
-            <div class="flex items-center justify-between">
-              <h4 class="font-serif font-bold text-sm text-[#141413] flex items-center gap-2">
-                <i data-lucide="file-spreadsheet" class="w-4 h-4 text-[#B89248]"></i>
-                <span>CSV Upload & Batch Pipeline</span>
-              </h4>
-              <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-blue-50 text-blue-700">Batch Runner</span>
-            </div>
-
-            <div class="space-y-3">
-              <div>
-                <label class="block text-[11px] font-bold uppercase tracking-wider text-[#66615B] mb-1">Upload CSV File or Paste Emails (one per line)</label>
-                <textarea id="evBatchInput" rows="3" placeholder="collab@boat-lifestyle.com&#10;care@mamaearth.in&#10;support@snitch.co.in" class="w-full editorial-input p-2.5 text-xs rounded-lg font-mono"></textarea>
-              </div>
-
-              <div class="flex flex-wrap items-center justify-between gap-3">
-                <div class="flex items-center gap-2">
-                  <label class="cursor-pointer text-xs font-semibold px-3 py-1.5 rounded border border-[#E2DDD2] bg-[#FAF8F5] hover:bg-white text-[#141413] flex items-center gap-1.5">
-                    <i data-lucide="upload" class="w-3.5 h-3.5 text-[#B89248]"></i>
-                    <span>Choose CSV File</span>
-                    <input type="file" id="evCsvFileInput" accept=".csv" class="hidden" onchange="handleCsvFileSelected(event)">
-                  </label>
-                  <span id="evSelectedCsvName" class="text-xs text-[#66615B] italic truncate max-w-[160px]"></span>
-                </div>
-
-                <button onclick="runBatchEmailVerification()" id="evBatchBtn" class="btn-editorial-dark text-xs px-4 py-2 rounded-lg font-bold flex items-center gap-1.5">
-                  <i data-lucide="play" class="w-3.5 h-3.5 text-[#B89248]"></i>
-                  <span>Process Batch</span>
-                </button>
-              </div>
-            </div>
-
-            <!-- BATCH PROGRESS / RESULTS -->
-            <div id="evBatchResultArea" class="hidden p-3 rounded-lg border border-[#E2DDD2] bg-[#FAF8F5] text-xs space-y-2">
-              <!-- Rendered dynamically -->
-            </div>
-          </div>
-        </div>
-
-        <!-- SQLITE AUDIT TABLE -->
-        <div class="p-5 bg-white rounded-xl border border-[#E2DDD2] space-y-4">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#E2DDD2]">
-            <div>
-              <h4 class="font-serif font-bold text-base text-[#141413]">Recent SQLite Verification Records</h4>
-              <p class="text-xs text-[#66615B]">Persistent verification cache (<code class="text-[11px] text-[#B89248]">data/email_verifications.db</code>) with 30-day TTL.</p>
-            </div>
-            <div class="flex items-center gap-2">
-              <select id="evTableFilter" onchange="loadEmailVerificationHistory()" class="editorial-input px-2.5 py-1 text-xs rounded font-medium bg-[#FAF8F5]">
-                <option value="">All Statuses</option>
-                <option value="valid">Valid Only</option>
-                <option value="catch-all">Catch-All Only</option>
-                <option value="disposable">Disposable Only</option>
-                <option value="invalid">Invalid Only</option>
-              </select>
-              <button onclick="downloadVerificationHistoryCsv()" class="btn-editorial-dark text-xs px-3 py-1.5 rounded font-semibold flex items-center gap-1.5">
-                <i data-lucide="download" class="w-3.5 h-3.5 text-[#B89248]"></i>
-                <span>Export CSV</span>
-              </button>
-            </div>
-          </div>
-
-          <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs">
-              <thead>
-                <tr class="border-b border-[#E2DDD2] text-[10px] uppercase font-bold text-[#66615B] tracking-wider">
-                  <th class="py-2.5 px-3">Email / Domain</th>
-                  <th class="py-2.5 px-3">Status</th>
-                  <th class="py-2.5 px-3">Indian Entity 🇮🇳</th>
-                  <th class="py-2.5 px-3">MX Mail Server</th>
-                  <th class="py-2.5 px-3">SMTP Code</th>
-                  <th class="py-2.5 px-3">Reason / Details</th>
-                  <th class="py-2.5 px-3">Checked</th>
-                </tr>
-              </thead>
-              <tbody id="evHistoryTbody">
-                <!-- Populated dynamically -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
     </section>
 
     <!-- ======================================================================= -->

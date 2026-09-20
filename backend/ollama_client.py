@@ -834,12 +834,60 @@ def generate_brand_pitches_ollama(
     # Clamp to target_count
     final_brands = all_brands[:target_count]
 
+    # Seamlessly attach multi-stage email verification to every single returned brand
+    from .email_verifier import verify_email
+    for b in final_brands:
+        email = b.get("recipient_email", "")
+        if "email_verification" not in b or not b["email_verification"].get("stages"):
+            if email and email != "Not publicly available" and "@" in email:
+                b["email_verification"] = verify_email(
+                    email,
+                    brand_name=b.get("brand_name"),
+                    check_indian_only=indian_only
+                )
+            else:
+                b["email_verification"] = {
+                    "email": email or "Not publicly available",
+                    "domain": b.get("website", ""),
+                    "status": "unverified",
+                    "reason": b.get("email_source") or "No official email published on website",
+                    "is_indian": b.get("is_indian", True),
+                    "is_catch_all": False,
+                    "mx_host": "",
+                    "smtp_code": 0,
+                    "stages": {"source": "missing_or_unverified"},
+                    "approved": False
+                }
+
+        # Synchronize verification flags
+        ev = b.get("email_verification", {})
+        if ev.get("approved"):
+            b["verification"] = "official"
+            b["is_official"] = True
+        elif ev.get("status") == "catch-all":
+            b["verification"] = "catch-all"
+            b["is_official"] = False
+        elif ev.get("status") == "disposable":
+            b["verification"] = "disposable"
+            b["is_official"] = False
+
+    valid_count = sum(1 for b in final_brands if b.get("email_verification", {}).get("status") == "valid")
+    catch_all_count = sum(1 for b in final_brands if b.get("email_verification", {}).get("status") == "catch-all")
+    indian_count = sum(1 for b in final_brands if b.get("is_indian", True) or b.get("email_verification", {}).get("is_indian", True))
+
     return {
         "success": True,
         "provider": "ollama",
         "model": target_model,
         "strict_official_only": strict_official_only,
-        "summary": f"Discovered and formulated 3-part pitches for {len(final_brands)} brands via local {target_model} with strict contact verification rules.",
+        "indian_only": indian_only,
+        "summary": f"Discovered and formulated 3-part pitches for {len(final_brands)} brands via local {target_model} with real-time official verification ({valid_count} valid, {catch_all_count} catch-all).",
+        "verification_summary": {
+            "total": len(final_brands),
+            "valid": valid_count,
+            "catch_all": catch_all_count,
+            "indian": indian_count
+        },
         "brands": final_brands
     }
 

@@ -69,7 +69,7 @@ function showToast(msg, isSuccess = true) {
 
 // --- TAB SWITCHING ---
 function switchTab(tabName) {
-  const tabs = ["studio", "verifier", "creators", "chat", "playbook", "history"];
+  const tabs = ["studio", "creators", "chat", "playbook", "history"];
   tabs.forEach(t => {
     const view = document.getElementById(`view-${t}`);
     const btn = document.getElementById(`tab-${t}`);
@@ -83,9 +83,6 @@ function switchTab(tabName) {
       }
     }
   });
-  if (tabName === "verifier") {
-    refreshVerifierStatsAndRecords();
-  }
   if (window.lucide) lucide.createIcons();
 }
 
@@ -735,7 +732,9 @@ async function generatePitches() {
 
   // Construct request payload
   const strictFilter = document.getElementById("strictOfficialFilter");
-  const strictOfficial = strictFilter ? strictFilter.checked : false;
+  const strictOfficial = strictFilter ? strictFilter.checked : true;
+  const indianFilter = document.getElementById("indianOnlyFilter");
+  const indianOnly = indianFilter ? indianFilter.checked : true;
 
   let payload = {
     prompt: prompt,
@@ -745,7 +744,8 @@ async function generatePitches() {
     campaign_15day_notes: part3Notes,
     custom_instructions: part1Notes ? `About the Creator context:\n${part1Notes}` : "",
     ollama_model: appState.ollamaModel,
-    strict_official_only: strictOfficial
+    strict_official_only: strictOfficial,
+    indian_only: indianOnly
   };
 
   if (appState.creatorMode === "custom") {
@@ -874,7 +874,7 @@ async function generatePitches() {
   }
 }
 
-// --- RENDER GENERATED PITCH CARDS (WITH 3-PART BREAKDOWN) ---
+// --- RENDER GENERATED PITCH CARDS (WITH 3-PART BREAKDOWN & INTEGRATED VERIFICATION) ---
 function renderPitches(data) {
   const section = document.getElementById("resultsSection");
   const list = document.getElementById("pitchesList");
@@ -885,9 +885,10 @@ function renderPitches(data) {
 
   section.classList.remove("hidden");
   countBadge.innerText = `${appState.generatedBrands.length} Brands`;
-  summaryText.innerText = data.summary || "Review your bespoke pitches below. Each pitch is structured with Crevanta's 3-part formula.";
+  summaryText.innerText = data.summary || "Review your bespoke pitches below. Each pitch is structured with Crevanta's 3-part formula and verified against official Indian company records.";
 
   updateSelectedCountBadge();
+  updateVerificationSummaryStrip();
 
   list.innerHTML = "";
   appState.generatedBrands.forEach((item, index) => {
@@ -900,8 +901,9 @@ function renderPitches(data) {
 
     const isChecked = appState.selectedBrandIds.has(item.id);
     const bodyContent = item.full_email_body || item.body || "";
-    const isOfficial = item.verification === "official" && item.recipient_email && item.recipient_email !== "Not publicly available";
-    const emailVal = isOfficial ? item.recipient_email : "Not publicly available";
+    const ev = item.email_verification || {};
+    const isOfficial = (ev.status === "valid" || item.verification === "official") && item.recipient_email && item.recipient_email !== "Not publicly available";
+    const emailVal = isOfficial ? item.recipient_email : (item.recipient_email || "Not publicly available");
 
     card.innerHTML = `
       <!-- TOP HEADER -->
@@ -921,21 +923,9 @@ function renderPitches(data) {
             
             <!-- VERIFICATION LEVEL PILL & DELIVERABILITY SHIELD -->
             <div class="flex flex-wrap items-center gap-2 mt-2">
-              ${isOfficial ? `
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-300">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                  <span>🟢 Officially Published</span>
-                </span>
-                <span class="text-[11px] text-[#66615B]">
-                  Source: <a href="${(item.email_source || '').startsWith('http') ? item.email_source : 'https://' + item.website}" target="_blank" class="text-[#B89248] hover:underline font-semibold">${item.email_source || 'Brand Official Website'}</a>
-                </span>
-              ` : `
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-50 text-amber-900 border border-amber-300">
-                  <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
-                  <span>🔴 Not Publicly Available</span>
-                </span>
-                <span class="text-[11px] text-[#8F6F30] italic">${item.email_source || 'Checked official site. No published email found.'}</span>
-              `}
+              <div id="status-badge-container-${item.id}" class="inline-flex flex-wrap items-center gap-2">
+                ${renderCardVerificationBadge(ev, item)}
+              </div>
 
               <!-- DELIVERABILITY SHIELD BADGE -->
               <span id="deliverability-badge-${item.id}" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold ${(item.deliverability?.score || 100) >= 90 ? 'bg-emerald-50 text-emerald-800 border border-emerald-300' : 'bg-amber-50 text-amber-900 border border-amber-300'}">
@@ -949,7 +939,12 @@ function renderPitches(data) {
               </button>
             </div>
 
-            <p class="text-xs text-[#66615B] mt-1.5"><strong class="text-[#141413]">Strategic Fit:</strong> ${item.why_fit || "High demographic and aesthetic synergy with creator community."}</p>
+            <!-- MULTI-STAGE VERIFICATION AUDIT PILLS -->
+            <div id="stage-audit-container-${item.id}">
+              ${renderStageAuditChecklist(ev, item)}
+            </div>
+
+            <p class="text-xs text-[#66615B] mt-2"><strong class="text-[#141413]">Strategic Fit:</strong> ${item.why_fit || "High demographic and aesthetic synergy with creator community."}</p>
           </div>
         </div>
 
@@ -960,12 +955,12 @@ function renderPitches(data) {
             <span>Draft</span>
           </button>
           ${isOfficial ? `
-            <button onclick="actionPitch('${item.id}', 'send')" class="btn-editorial-dark text-xs px-4 py-1.5 rounded-md flex items-center gap-1.5 font-bold shadow-md" title="Send email live via Gmail">
+            <button onclick="actionPitch('${item.id}', 'send')" id="send-btn-${item.id}" class="btn-editorial-dark text-xs px-4 py-1.5 rounded-md flex items-center gap-1.5 font-bold shadow-md" title="Send email live via Gmail">
               <i data-lucide="send" class="w-3.5 h-3.5 text-[#B89248]"></i>
               <span>Send Live</span>
             </button>
           ` : `
-            <button onclick="showToast('Cannot send: No verified official email published by brand. Crevanta never sends to unverified or guessed addresses.', false)" class="opacity-40 cursor-not-allowed bg-[#E2DDD2] text-[#66615B] text-xs px-4 py-1.5 rounded-md flex items-center gap-1.5 font-bold shadow-sm" title="Send locked: No verified official email published by brand.">
+            <button onclick="showToast('Cannot send: No verified official email published by brand. Crevanta never sends to unverified or guessed addresses.', false)" id="send-btn-${item.id}" class="opacity-40 cursor-not-allowed bg-[#E2DDD2] text-[#66615B] text-xs px-4 py-1.5 rounded-md flex items-center gap-1.5 font-bold shadow-sm" title="Send locked: No verified official email published by brand.">
               <i data-lucide="lock" class="w-3.5 h-3.5"></i>
               <span>Send Locked</span>
             </button>
@@ -979,12 +974,21 @@ function renderPitches(data) {
       <!-- RECIPIENT & SUBJECT -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label class="block text-[11px] font-bold uppercase tracking-wider text-[#66615B] mb-1">Brand Official Email (Zero Guessing):</label>
-          <div class="relative">
-            <input type="text" id="email-to-${item.id}" value="${emailVal}" ${!isOfficial ? 'readonly' : ''} class="w-full editorial-input px-3 py-2 rounded text-xs font-mono font-medium ${!isOfficial ? 'bg-amber-50/70 border-amber-300 text-amber-900 cursor-not-allowed' : ''}">
-            ${!isOfficial ? `
-              <span class="absolute right-2.5 top-1.5 text-[10px] uppercase font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded border border-amber-200">Unverified</span>
-            ` : ''}
+          <div class="flex items-center justify-between mb-1">
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-[#66615B]">Brand Contact Email (Zero Guessing):</label>
+            <span class="text-[10px] text-[#8F6F30] font-semibold">Live SMTP Verification</span>
+          </div>
+          <div class="flex gap-2 items-center">
+            <div class="relative flex-1">
+              <input type="text" id="email-to-${item.id}" value="${emailVal}" class="w-full editorial-input px-3 py-2 rounded text-xs font-mono font-medium ${!isOfficial ? 'bg-amber-50/70 border-amber-300 text-amber-900' : ''}">
+              ${!isOfficial ? `
+                <span class="absolute right-2.5 top-1.5 text-[10px] uppercase font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded border border-amber-200">Unverified</span>
+              ` : ''}
+            </div>
+            <button onclick="verifySingleCardEmail('${item.id}')" id="verify-btn-${item.id}" class="btn-editorial-light text-xs px-3.5 py-2 rounded-lg font-bold flex items-center gap-1.5 shrink-0 shadow-2xs hover:border-[#B89248] transition" title="Run DNS, MX, and SMTP 250 handshake on this email live">
+              <i data-lucide="shield-check" class="w-3.5 h-3.5 text-[#B89248]"></i>
+              <span>Verify</span>
+            </button>
           </div>
         </div>
         <div>
@@ -1051,6 +1055,197 @@ function renderPitches(data) {
   });
 
   if (window.lucide) lucide.createIcons();
+}
+
+// --- VERIFICATION HELPER RENDERING FUNCTIONS ---
+function renderCardVerificationBadge(ev, item) {
+  const isOfficial = (ev?.status === "valid" || item.verification === "official") && item.recipient_email && item.recipient_email !== "Not publicly available";
+  if (ev?.status === "valid" || isOfficial) {
+    return `
+      <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-300">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span>🟢 Official Email Verified · SMTP 250 OK</span>
+      </span>
+      <span class="text-[11px] text-[#66615B]">
+        Source: <a href="${(item.email_source || '').startsWith('http') ? item.email_source : 'https://' + item.website}" target="_blank" class="text-[#B89248] hover:underline font-semibold">${item.email_source || 'Brand Official Website'}</a>
+      </span>
+    `;
+  } else if (ev?.status === "catch-all") {
+    return `
+      <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-50 text-amber-900 border border-amber-300">
+        <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+        <span>⚠️ Catch-All Mailbox · Unverifiable</span>
+      </span>
+      <span class="text-[11px] text-[#8F6F30] italic">${ev.reason || 'Server accepts all addresses indiscriminately.'}</span>
+    `;
+  } else if (ev?.status === "disposable") {
+    return `
+      <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-purple-50 text-purple-900 border border-purple-300">
+        <span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
+        <span>🟣 Disposable Domain Blocked</span>
+      </span>
+    `;
+  } else {
+    return `
+      <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-50 text-rose-900 border border-rose-300">
+        <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+        <span>🔴 Not Publicly Listed</span>
+      </span>
+      <span class="text-[11px] text-[#8F6F30] italic">${item.email_source || 'Checked official site. No published email found.'}</span>
+    `;
+  }
+}
+
+function renderStageAuditChecklist(ev, item) {
+  const isIndian = ev?.is_indian !== false && item?.is_indian !== false;
+  const isDnsOk = ev?.stages?.dns_existence?.passed !== false;
+  const mxHost = ev?.mx_host ? (ev.mx_host.length > 22 ? ev.mx_host.substring(0, 20) + '...' : ev.mx_host) : 'Verified';
+  const isSmtpOk = ev?.status === "valid" || (item?.verification === "official" && ev?.status !== "catch-all");
+  const isCatchAll = ev?.status === "catch-all" || ev?.is_catch_all;
+
+  return `
+    <div class="flex flex-wrap items-center gap-1.5 mt-2 text-[10px] font-medium text-[#66615B]">
+      <span class="px-2 py-0.5 rounded bg-white border border-[#E2DDD2] flex items-center gap-1 ${isIndian ? 'text-emerald-800' : 'text-rose-800'}">
+        <i data-lucide="${isIndian ? 'check-circle' : 'x-circle'}" class="w-3 h-3 ${isIndian ? 'text-emerald-600' : 'text-rose-600'}"></i>
+        <span>Indian Entity 🇮🇳</span>
+      </span>
+      <span class="px-2 py-0.5 rounded bg-white border border-[#E2DDD2] flex items-center gap-1 ${isDnsOk ? 'text-emerald-800' : 'text-rose-800'}">
+        <i data-lucide="${isDnsOk ? 'check-circle' : 'x-circle'}" class="w-3 h-3 ${isDnsOk ? 'text-emerald-600' : 'text-rose-600'}"></i>
+        <span>DNS A/AAAA</span>
+      </span>
+      <span class="px-2 py-0.5 rounded bg-white border border-[#E2DDD2] flex items-center gap-1 text-emerald-800">
+        <i data-lucide="check-circle" class="w-3 h-3 text-emerald-600"></i>
+        <span>MX: ${mxHost}</span>
+      </span>
+      <span class="px-2 py-0.5 rounded bg-white border border-[#E2DDD2] flex items-center gap-1 ${isSmtpOk ? 'text-emerald-800' : (isCatchAll ? 'text-amber-800' : 'text-rose-800')}">
+        <i data-lucide="${isSmtpOk ? 'check-circle' : (isCatchAll ? 'alert-triangle' : 'x-circle')}" class="w-3 h-3 ${isSmtpOk ? 'text-emerald-600' : (isCatchAll ? 'text-amber-600' : 'text-rose-600')}"></i>
+        <span>${isSmtpOk ? 'SMTP 250 Handshake OK' : (isCatchAll ? 'Catch-All Mailbox' : 'Unverified SMTP')}</span>
+      </span>
+      <span class="px-2 py-0.5 rounded bg-white border border-[#E2DDD2] flex items-center gap-1 text-emerald-800">
+        <i data-lucide="check-circle" class="w-3 h-3 text-emerald-600"></i>
+        <span>Anti-Spam Shield</span>
+      </span>
+    </div>
+  `;
+}
+
+function updateVerificationSummaryStrip() {
+  const totalEl = document.getElementById("summaryTotalBrands");
+  const validEl = document.getElementById("summaryValidMailboxes");
+  const catchAllEl = document.getElementById("summaryCatchAll");
+  const indianEl = document.getElementById("summaryIndianEntities");
+  const delivEl = document.getElementById("summaryAvgDeliverability");
+
+  if (!totalEl) return;
+
+  const brands = appState.generatedBrands || [];
+  const total = brands.length;
+  let validCount = 0;
+  let catchAllCount = 0;
+  let indianCount = 0;
+  let totalScore = 0;
+
+  brands.forEach(b => {
+    const ev = b.email_verification || {};
+    const isValid = ev.status === "valid" || (b.verification === "official" && b.recipient_email && b.recipient_email !== "Not publicly available");
+    if (isValid) validCount++;
+    if (ev.status === "catch-all" || ev.is_catch_all) catchAllCount++;
+    if (b.is_indian !== false && ev.is_indian !== false) indianCount++;
+    totalScore += (b.deliverability?.score || 100);
+  });
+
+  const avgScore = total > 0 ? Math.round(totalScore / total) : 100;
+
+  totalEl.innerText = total;
+  if (validEl) validEl.innerText = validCount;
+  if (catchAllEl) catchAllEl.innerText = catchAllCount;
+  if (indianEl) indianEl.innerText = indianCount;
+  if (delivEl) delivEl.innerText = `${avgScore}%`;
+}
+
+// --- LIVE INLINE CARD EMAIL VERIFICATION ---
+async function verifySingleCardEmail(brandId) {
+  const brand = appState.generatedBrands.find(b => b.id === brandId);
+  if (!brand) return;
+
+  const emailInput = document.getElementById(`email-to-${brandId}`);
+  const targetEmail = emailInput ? emailInput.value.trim() : (brand.recipient_email || "");
+  const btn = document.getElementById(`verify-btn-${brandId}`);
+  const statusContainer = document.getElementById(`status-badge-container-${brandId}`);
+  const stageAuditContainer = document.getElementById(`stage-audit-container-${brandId}`);
+  const sendBtn = document.getElementById(`send-btn-${brandId}`);
+
+  if (!targetEmail || targetEmail === "Not publicly available") {
+    showToast("Please enter an email address to verify", false);
+    return;
+  }
+
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = `<span class="animate-spin mr-1">⏳</span> Checking...`;
+  }
+
+  try {
+    const res = await fetch("/api/email-verifier/verify", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email_or_domain: targetEmail,
+        brand_name: brand.brand_name,
+        check_indian_only: true,
+        force_recheck: true
+      })
+    });
+
+    const data = await res.json();
+    brand.email_verification = data;
+    brand.recipient_email = targetEmail;
+
+    if (data.approved && data.status === "valid") {
+      brand.verification = "official";
+      if (statusContainer) statusContainer.innerHTML = renderCardVerificationBadge(data, brand);
+      if (stageAuditContainer) stageAuditContainer.innerHTML = renderStageAuditChecklist(data, brand);
+      if (emailInput) {
+        emailInput.className = "w-full editorial-input px-3 py-2 rounded text-xs font-mono font-medium";
+      }
+      if (sendBtn) {
+        sendBtn.disabled = false;
+        sendBtn.className = "btn-editorial-dark text-xs px-4 py-1.5 rounded-md flex items-center gap-1.5 font-bold shadow-md";
+        sendBtn.title = "Send email live via Gmail";
+        sendBtn.onclick = () => actionPitch(brandId, "send");
+        sendBtn.innerHTML = `<i data-lucide="send" class="w-3.5 h-3.5 text-[#B89248]"></i><span>Send Live</span>`;
+      }
+      showToast(`✓ Verified! Mailbox for ${brand.brand_name} exists & passed SMTP 250 handshake.`);
+    } else if (data.status === "catch-all") {
+      brand.verification = "catch-all";
+      if (statusContainer) statusContainer.innerHTML = renderCardVerificationBadge(data, brand);
+      if (stageAuditContainer) stageAuditContainer.innerHTML = renderStageAuditChecklist(data, brand);
+      showToast(`Notice: ${brand.brand_name} is a Catch-All mailbox (unverifiable).`, false);
+    } else {
+      brand.verification = "unverified";
+      if (statusContainer) statusContainer.innerHTML = renderCardVerificationBadge(data, brand);
+      if (stageAuditContainer) stageAuditContainer.innerHTML = renderStageAuditChecklist(data, brand);
+      if (sendBtn) {
+        sendBtn.disabled = true;
+        sendBtn.className = "opacity-40 cursor-not-allowed bg-[#E2DDD2] text-[#66615B] text-xs px-4 py-1.5 rounded-md flex items-center gap-1.5 font-bold shadow-sm";
+        sendBtn.title = `Send locked: ${data.reason || 'Email not verified'}`;
+        sendBtn.onclick = () => showToast(`Cannot send: ${data.reason || 'Email not verified'}`, false);
+        sendBtn.innerHTML = `<i data-lucide="lock" class="w-3.5 h-3.5"></i><span>Send Locked</span>`;
+      }
+      showToast(`Verification issue: ${data.reason || data.status}`, false);
+    }
+
+    updateVerificationSummaryStrip();
+    if (window.lucide) lucide.createIcons();
+  } catch (err) {
+    showToast("Verification check failed: " + err.message, false);
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = `<i data-lucide="shield-check" class="w-3.5 h-3.5 text-[#B89248]"></i><span>Verify</span>`;
+      if (window.lucide) lucide.createIcons();
+    }
+  }
 }
 
 function switchPitchSubTab(pitchId, subtab) {

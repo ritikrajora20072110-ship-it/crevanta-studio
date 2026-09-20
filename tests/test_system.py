@@ -422,6 +422,31 @@ class TestCrevantaSystem(unittest.TestCase):
                 self.assertEqual(api_res.status_code, 200)
                 api_data = api_res.json()
                 self.assertEqual(len(api_data["brands"]), 10)
+                self.assertIn("verification_summary", api_data)
+                self.assertTrue(all("email_verification" in b for b in api_data["brands"]))
+                self.assertTrue(all(b["email_verification"]["status"] in ("valid", "catch-all", "unverified") for b in api_data["brands"]))
+
+    def test_integrated_pitch_cards_email_verification_payload(self):
+        """Verifies that every generated brand payload contains email_verification stages and delivers summary metrics."""
+        with patch("backend.ollama_client.check_ollama_status", return_value={"running": True, "models": ["llama3.2:1b"]}):
+            api_res = client.post("/api/generate-pitches", json={
+                "creator_id": "creator_1",
+                "prompt": "Indian D2C brands for audio and lifestyle",
+                "count": 5,
+                "strict_official_only": True,
+                "indian_only": True
+            })
+            self.assertEqual(api_res.status_code, 200)
+            data = api_res.json()
+            self.assertTrue(data["success"])
+            self.assertIn("verification_summary", data)
+            self.assertGreaterEqual(data["verification_summary"]["total"], 5)
+            self.assertGreaterEqual(data["verification_summary"]["valid"], 1)
+            for brand in data["brands"]:
+                self.assertIn("email_verification", brand)
+                self.assertIn("status", brand["email_verification"])
+                self.assertIn("is_indian", brand["email_verification"])
+                self.assertIn("stages", brand["email_verification"])
 
 
 if __name__ == "__main__":
