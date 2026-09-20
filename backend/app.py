@@ -67,7 +67,6 @@ from .email_verifier import (
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 FRONTEND_DIR = BASE_DIR / "frontend"
-STATIC_DIR = BASE_DIR / "static" if (BASE_DIR / "static").exists() else FRONTEND_DIR
 
 app = FastAPI(title="Crevanta Agency API", version="2.0.0")
 
