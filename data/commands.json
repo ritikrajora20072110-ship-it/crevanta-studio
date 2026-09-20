@@ -1,0 +1,42 @@
+[
+  {
+    "id": "cmd_1",
+    "title": "Clean Skincare Barrier Collab",
+    "creator_id": "creator_maya",
+    "prompt": "Find 5 direct-to-consumer clean skincare brands that focus on barrier repair and sensitive skin. Draft short, punchy pitches highlighting Maya's 6.8% engagement rate and offer an honest 14-day routine test.",
+    "email_style": "punchy",
+    "created_at": "2026-09-20T10:00:00Z"
+  },
+  {
+    "id": "cmd_2",
+    "title": "Contemporary Menswear & Culture",
+    "creator_id": "creator_mayank",
+    "prompt": "Find 5 urban menswear, artisanal fragrance, and boutique travel brands for Mayank Tanwar. Highlight his 29K+ Instagram and 15K+ YouTube following with a focus on editorial storytelling.",
+    "email_style": "storytelling",
+    "created_at": "2026-09-20T10:10:00Z"
+  },
+  {
+    "id": "cmd_3",
+    "title": "Plant-Based Athletics & Recovery",
+    "creator_id": "creator_aarav",
+    "prompt": "Find 4 emerging plant-based protein or hydration brands for Aarav Patel. Pitch a dedicated 60-second high-energy Reel workout integration with a 30-day challenge angle.",
+    "email_style": "value_first",
+    "created_at": "2026-09-20T10:15:00Z"
+  },
+  {
+    "id": "cmd_4",
+    "title": "Aesthetic Workspace & Tactile Tech",
+    "creator_id": "creator_liam",
+    "prompt": "Find 4 premium workspace brands (mechanical keyboards, desk accessories, audio gear) for Liam Chen. Emphasize cinematic 4K B-roll visuals and high developer/designer demographic engagement (7.4%).",
+    "email_style": "storytelling",
+    "created_at": "2026-09-20T10:30:00Z"
+  },
+  {
+    "id": "cmd_5",
+    "title": "Sustainable Capsule Wardrobe Inquiry",
+    "creator_id": "creator_chloe",
+    "prompt": "Find 4 ethical apparel or handbag brands for Chloe Dubois. Propose a '1 Piece Styled 5 Ways' styling concept to introduce her Parisian aesthetic audience to their collection.",
+    "email_style": "collab_offer",
+    "created_at": "2026-09-20T10:45:00Z"
+  }
+]

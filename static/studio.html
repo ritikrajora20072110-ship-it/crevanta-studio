@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CREVANTA STUDIO — AI Creator Outreach & 1-Click Brand Deal Automation</title>
+  <meta name="description" content="Crevanta Campaign Studio — Real-time AI brand discovery, 3-part pitch formulation, and 1-click Gmail outreach automation.">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Cormorant Garamond, Playfair Display, Plus Jakarta Sans, Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Crevanta Luxury Editorial CSS -->
+  <link rel="stylesheet" href="/static/css/editorial.css">
+
+  <style>
+    :root {
+      --cream: #FAF8F5;
+      --cream-card: #FFFFFF;
+      --cream-alt: #F5F1E8;
+      --charcoal: #141413;
+      --charcoal-soft: #262523;
+      --gold: #B89248;
+      --gold-dark: #8F6F30;
+      --gold-surface: #FAF5EB;
+      --gold-border: #E8D7B8;
+      --border-color: #E2DDD2;
+      --border-subtle: #EDE8DE;
+      --muted-text: #66615B;
+      --emerald-dark: #166534;
+      --emerald-surface: #F0FDF4;
+    }
+
+    body {
+      background-color: var(--cream);
+      color: var(--charcoal);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    .font-serif {
+      font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+    }
+
+    .font-garamond {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+    }
+
+    /* Structured Module Cards */
+    .studio-module-card {
+      background-color: #FFFFFF;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      box-shadow: 0 4px 20px -2px rgba(20, 20, 19, 0.03), 0 2px 6px -1px rgba(20, 20, 19, 0.02);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+    }
+
+    .studio-module-card:hover {
+      border-color: #CDC7BA;
+      box-shadow: 0 10px 30px -4px rgba(20, 20, 19, 0.06);
+    }
+
+    .editorial-input {
+      background-color: #FFFFFF;
+      border: 1px solid var(--border-color);
+      color: var(--charcoal);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .editorial-input:focus {
+      outline: none;
+      border-color: var(--charcoal);
+      box-shadow: 0 0 0 1.5px var(--charcoal);
+    }
+
+    .btn-editorial-dark {
+      background-color: var(--charcoal);
+      color: #FAF8F5;
+      border: 1px solid var(--charcoal);
+      transition: all 0.25s ease;
+      cursor: pointer;
+    }
+
+    .btn-editorial-dark:hover {
+      background-color: #2b2b29;
+      border-color: #2b2b29;
+      transform: translateY(-1px);
+    }
+
+    .btn-editorial-light {
+      background-color: #FFFFFF;
+      color: var(--charcoal);
+      border: 1px solid var(--border-color);
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .btn-editorial-light:hover {
+      background-color: var(--cream-alt);
+      border-color: var(--charcoal);
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, #C4A15A 0%, #B89248 100%);
+      color: #FFFFFF;
+      border: 1px solid #B89248;
+      transition: all 0.25s ease;
+      cursor: pointer;
+    }
+
+    .btn-gold:hover {
+      background: linear-gradient(135deg, #B89248 0%, #9E7B35 100%);
+      box-shadow: 0 4px 15px rgba(184, 146, 72, 0.3);
+      transform: translateY(-1px);
+    }
+
+    /* Numbered Module Step Badges */
+    .studio-step-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.85rem;
+      height: 1.85rem;
+      border-radius: 9999px;
+      background-color: var(--charcoal);
+      color: #FAF8F5;
+      font-family: 'Playfair Display', serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12);
+    }
+
+    .studio-step-badge.gold {
+      background: linear-gradient(135deg, #C4A15A 0%, #B89248 100%);
+      color: #FFFFFF;
+    }
+
+    /* Metric Pills with Gold/Bronze accents */
+    .studio-metric-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.3rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background-color: var(--gold-surface);
+      color: var(--gold-dark);
+      border: 1px solid var(--gold-border);
+    }
+
+    /* Clean Quick Chips */
+    .studio-chip-btn {
+      padding: 0.4rem 0.85rem;
+      border-radius: 9999px;
+      border: 1px solid var(--border-color);
+      background-color: #FFFFFF;
+      color: #383531;
+      font-size: 0.75rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .studio-chip-btn:hover {
+      border-color: var(--charcoal);
+      background-color: var(--cream-alt);
+      color: var(--charcoal);
+      transform: translateY(-1px);
+    }
+
+    /* 3-Part Outreach Formula Cards */
+    .outreach-formula-box {
+      background-color: #FAF8F5;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.25rem;
+      transition: all 0.2s ease;
+    }
+
+    .outreach-formula-box:focus-within {
+      background-color: #FFFFFF;
+      border-color: var(--charcoal);
+      box-shadow: 0 4px 15px rgba(20, 20, 19, 0.05);
+    }
+
+    /* Animated Progress Bar */
+    .progress-bar-fill {
+      transition: width 0.4s ease;
+      background: linear-gradient(90deg, #141413 0%, #B89248 100%);
+    }
+
+    /* Custom pill badges */
+    .editorial-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.3rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+
+    .badge-active {
+      background-color: #ECFDF5;
+      color: #065F46;
+      border: 1px solid #A7F3D0;
+    }
+
+    .badge-warning {
+      background-color: #FFFBEB;
+      color: #92400E;
+      border: 1px solid #FDE68A;
+    }
+
+    .badge-gold {
+      background-color: var(--gold-surface);
+      color: var(--gold-dark);
+      border: 1px solid var(--gold-border);
+    }
+
+    /* Tab navigation underline styling */
+    .studio-tab-btn {
+      position: relative;
+      padding: 0.85rem 1.25rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted-text);
+      transition: color 0.2s ease;
+      cursor: pointer;
+    }
+
+    .studio-tab-btn:hover {
+      color: var(--charcoal);
+    }
+
+    .studio-tab-btn.active {
+      color: var(--charcoal);
+    }
+
+    .studio-tab-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 100%;
+      height: 2.5px;
+      background-color: var(--charcoal);
+    }
+
+    /* 3-Part Email tab selector inside pitch card */
+    .email-part-pill {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.4rem 0.85rem;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background-color: #FFFFFF;
+      color: var(--muted-text);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .email-part-pill.active {
+      background-color: var(--charcoal);
+      color: #FFFFFF;
+      border-color: var(--charcoal);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased">
+
+  <!-- ========================================================================= -->
+  <!-- TOP EDITORIAL HEADER                                                      -->
+  <!-- ========================================================================= -->
+  <header class="bg-[#FFFFFF] border-b border-[#D9D6CE] sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- BRAND & LOGO -->
+      <div class="flex items-center space-x-4">
+        <a href="/" class="group flex items-center gap-3 text-decoration-none">
+          <img src="/static/images/logo.png" alt="Crevanta Logo" class="h-10 w-auto rounded object-contain border border-[#D9D6CE]">
+          <div class="flex flex-col">
+            <div class="flex items-center gap-2">
+              <span class="font-serif text-2xl font-bold tracking-tight text-[#171717]">CREVANTA</span>
+              <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-[#171717] text-[#F7F5F0] tracking-widest">Studio</span>
+            </div>
+            <span class="text-[9px] uppercase tracking-[0.24em] text-[#A68A5B] font-semibold">CREATORS × ADVANTAGE</span>
+          </div>
+        </a>
+
+        <div class="hidden md:block h-6 w-px bg-[#D9D6CE] mx-1"></div>
+
+        <a href="/" class="hidden md:flex items-center gap-1.5 text-xs font-semibold text-[#696963] hover:text-[#171717] uppercase tracking-wider transition">
+          <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+          <span>Agency Site</span>
+        </a>
+      </div>
+
+      <!-- STATUS BADGES & ACTIONS -->
+      <div class="flex items-center space-x-3">
+        <!-- Dedicated Ollama Local AI Status Pill -->
+        <button onclick="handleAiBadgeClick()" id="aiStatusBadge" class="editorial-badge badge-active cursor-pointer transition hover:opacity-90" title="Click to view Ollama local AI status and speed settings">
+          <span class="w-2 h-2 rounded-full bg-emerald-500" id="aiStatusDot"></span>
+          <span id="aiStatusText">Ollama: Ready</span>
+        </button>
+
+        <!-- Interactive Gmail Status Pill -->
+        <button onclick="openGmailSettingsModal()" id="gmailStatusBadge" class="editorial-badge badge-warning cursor-pointer transition hover:opacity-90" title="Click to connect and test your Gmail account">
+          <span class="w-2 h-2 rounded-full bg-amber-500" id="gmailStatusDot"></span>
+          <span id="gmailStatusText">Gmail: Not Connected</span>
+        </button>
+
+        <!-- Live Gmail Verify Button -->
+        <button onclick="runGmailLiveVerification()" class="hidden sm:inline-flex btn-editorial-light text-xs py-2 px-3.5 rounded flex items-center gap-1.5 font-medium shadow-sm">
+          <i data-lucide="shield-check" class="w-3.5 h-3.5 text-[#A68A5B]"></i>
+          <span>Verify Gmail Live</span>
+        </button>
+
+        <!-- Test Email Trigger -->
+        <button onclick="openTestEmailModal()" class="hidden lg:inline-flex btn-editorial-light text-xs py-2 px-3.5 rounded flex items-center gap-1.5 font-medium shadow-sm">
+          <i data-lucide="send" class="w-3.5 h-3.5 text-[#171717]"></i>
+          <span>Send Test Email</span>
+        </button>
+
+        <!-- Settings Trigger -->
+        <button onclick="openSettingsModal()" class="btn-editorial-dark text-xs py-2 px-4 rounded flex items-center gap-1.5 font-semibold shadow-sm">
+          <i data-lucide="sliders" class="w-3.5 h-3.5"></i>
+          <span>Settings</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- NAVIGATION BAR                                                            -->
+  <!-- ========================================================================= -->
+  <div class="bg-[#FFFFFF] border-b border-[#D9D6CE]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav class="flex space-x-1 sm:space-x-8 overflow-x-auto">
+        <button onclick="switchTab('studio')" id="tab-studio" class="studio-tab-btn active flex items-center gap-2">
+          <i data-lucide="sparkles" class="w-4 h-4 text-[#A68A5B]"></i>
+          <span>Campaign Studio</span>
+        </button>
+        <button onclick="switchTab('verifier')" id="tab-verifier" class="studio-tab-btn flex items-center gap-2">
+          <i data-lucide="shield-check" class="w-4 h-4 text-[#B89248]"></i>
+          <span>Brand Research & Verifier</span>
+        </button>
+        <button onclick="switchTab('creators')" id="tab-creators" class="studio-tab-btn flex items-center gap-2">
+          <i data-lucide="users" class="w-4 h-4"></i>
+          <span>Creators Roster (<span id="creatorCount">5</span>)</span>
+        </button>
+        <button onclick="switchTab('chat')" id="tab-chat" class="studio-tab-btn flex items-center gap-2">
+          <i data-lucide="bot" class="w-4 h-4"></i>
+          <span>Ollama AI Strategist & Talks</span>
+        </button>
+        <button onclick="switchTab('playbook')" id="tab-playbook" class="studio-tab-btn flex items-center gap-2">
+          <i data-lucide="bookmark" class="w-4 h-4"></i>
+          <span>Saved Playbooks</span>
+        </button>
+        <button onclick="switchTab('history')" id="tab-history" class="studio-tab-btn flex items-center gap-2">
+          <i data-lucide="clock" class="w-4 h-4"></i>
+          <span>Outreach Audit Log</span>
+        </button>
+      </nav>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MAIN WORKSPACE                                                            -->
+  <!-- ========================================================================= -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- ======================================================================= -->
+    <!-- TAB 1: CAMPAIGN STUDIO                                                  -->
+    <!-- ======================================================================= -->
+    <section id="view-studio" class="space-y-8">
+
+      <!-- BANNER / TITLE -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-[#E2DDD2]">
+        <div>
+          <div class="flex items-center gap-2 mb-1">
+            <span class="text-[10px] uppercase font-bold tracking-[0.25em] text-[#B89248] bg-[#FAF5EB] px-2.5 py-0.5 rounded border border-[#E8D7B8]">CREVANTA STUDIO AUTOMATION</span>
+            <span class="text-[10px] uppercase font-semibold text-[#66615B] tracking-wider">• 100% Native Local AI</span>
+          </div>
+          <h1 class="font-serif text-3xl sm:text-4xl text-[#141413] font-bold mt-1">Campaign Studio & Dispatch Engine</h1>
+          <p class="text-xs sm:text-sm text-[#66615B] mt-1.5 max-w-2xl leading-relaxed">
+            Discover up to 50 verified brands in real-time via local Ollama. Formulate bespoke 3-part pitch emails (About Creator, Video Concept, 15-Day Campaign), and execute 1-click batch delivery via Gmail.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2.5 bg-white p-2 rounded-lg border border-[#E2DDD2] shadow-sm">
+          <div class="flex items-center gap-1.5">
+            <i data-lucide="layers" class="w-3.5 h-3.5 text-[#B89248]"></i>
+            <span class="text-xs text-[#66615B] font-semibold">Scale:</span>
+            <select id="brandCountSelect" class="editorial-input text-xs font-bold px-3 py-1.5 rounded bg-[#FAF8F5] cursor-pointer">
+              <option value="5">5 Brands (Quick)</option>
+              <option value="10">10 Brands (Standard)</option>
+              <option value="25">25 Brands (Growth)</option>
+              <option value="50" selected>50 Brands (1-Click Scale)</option>
+            </select>
+          </div>
+
+          <div class="h-5 w-px bg-[#E2DDD2]"></div>
+
+          <div class="flex items-center gap-1.5">
+            <i data-lucide="feather" class="w-3.5 h-3.5 text-[#B89248]"></i>
+            <select id="emailStyleSelect" class="editorial-input text-xs font-semibold px-3 py-1.5 rounded bg-[#FAF8F5] cursor-pointer">
+              <option value="punchy">Style: Punchy & Direct</option>
+              <option value="value_first">Style: Value & ROI First</option>
+              <option value="storytelling">Style: Editorial Narrative</option>
+              <option value="collab_offer">Style: 15-Day Structured Collab</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODULE 01: TALENT PROFILE & AUDIENCE METRICS -->
+      <div class="studio-module-card p-6 space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#E2DDD2]">
+          <div class="flex items-center gap-3">
+            <span class="studio-step-badge">01</span>
+            <div>
+              <h2 class="font-serif text-xl text-[#141413] font-bold">Talent Profile & Audience Metrics</h2>
+              <p class="text-xs text-[#66615B]">Select a talent from Crevanta's roster or toggle to specify dynamic custom creator attributes.</p>
+            </div>
+          </div>
+
+          <!-- Mode Toggle: Roster vs Custom Dynamic -->
+          <div class="inline-flex rounded-lg border border-[#E2DDD2] p-1 bg-[#FAF8F5]">
+            <button id="toggleRosterBtn" onclick="setCreatorMode('roster')" class="px-3.5 py-1.5 text-xs font-bold rounded bg-[#141413] text-[#FAF8F5] transition shadow-sm">
+              Curated Roster
+            </button>
+            <button id="toggleCustomBtn" onclick="setCreatorMode('custom')" class="px-3.5 py-1.5 text-xs font-semibold rounded text-[#66615B] hover:text-[#141413] transition">
+              Custom Dynamic Profile
+            </button>
+          </div>
+        </div>
+
+        <!-- STATION 1: CURATED ROSTER SELECTOR -->
+        <div id="rosterSelectionBox" class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+            <div class="md:col-span-4">
+              <label class="block text-[11px] font-bold uppercase tracking-wider text-[#66615B] mb-1.5">Select Creator Profile</label>
+              <select id="studioCreatorSelect" onchange="onCreatorChange()" class="w-full editorial-input px-3.5 py-2.5 rounded-lg text-sm font-semibold bg-[#FAF8F5]">
+                <!-- Populated dynamically via JS -->
+              </select>
+            </div>
+
+            <!-- LIVE PREVIEW CARD FOR CHOSEN CREATOR -->
+            <div class="md:col-span-8 bg-[#FAF8F5] rounded-lg border border-[#E2DDD2] p-4 flex flex-col lg:flex-row lg:items-center justify-between gap-4" id="creatorPreviewCard">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+        </div>
+
+        <!-- STATION 2: CUSTOM DYNAMIC CREATOR INPUTS -->
+        <div id="customCreatorBox" class="hidden space-y-4 bg-[#FAF8F5] p-5 rounded-lg border border-[#E2DDD2]">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+            <div>
+              <label class="block text-[11px] font-bold uppercase tracking-wider text-[#66615B] mb-1">Creator Name *</label>
+              <input type="text" id="customCreatorName" placeholder="e.g. Elena Rostova" class="w-full editorial-input px-3.5 py-2 rounded text-xs font-medium">
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold uppercase tracking-wider text-[#66615B] mb-1">Instagram Handle *</label>
+              <input type="text" id="customCreatorHandle" placeholder="e.g. @elena.style" class="w-full editorial-input px-3.5 py-2 rounded text-xs font-medium">
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold uppercase tracking-wider text-[#66615B] mb-1">Niche / Category *</label>
+              <input type="text" id="customCreatorNiche" placeholder="e.g. Sustainable Luxury Fashion" class="w-full editorial-input px-3.5 py-2 rounded text-xs font-medium">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+            <div>
+              <label class="block text-[11px] font-bold uppercase tracking-wider text-[#66615B] mb-1">Follower Count</label>
+              <input type="text" id="customCreatorFollowers" placeholder="e.g. 85K" class="w-full editorial-input px-3.5 py-2 rounded text-xs font-medium">
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold uppercase tracking-wider text-[#66615B] mb-1">Engagement Rate</label>
+              <input type="text" id="customCreatorEngagement" placeholder="e.g. 6.8%" class="w-full editorial-input px-3.5 py-2 rounded text-xs font-medium">
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold uppercase tracking-wider text-[#66615B] mb-1">Average Reel Views</label>
+              <input type="text" id="customCreatorViews" placeholder="e.g. 50K" class="w-full editorial-input px-3.5 py-2 rounded text-xs font-medium">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-[#66615B] mb-1">Creator Bio & Community Demographics</label>
+            <textarea id="customCreatorBio" rows="2" placeholder="e.g. High-end Parisian street style with 75% women aged 22-35 in US & Europe." class="w-full editorial-input p-3 rounded text-xs resize-none"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODULE 02: TARGETING BRIEF & SCALE COMMAND -->
+      <div class="studio-module-card p-6 space-y-5">
+        <div class="flex items-center gap-3 pb-3 border-b border-[#E2DDD2]">
+          <span class="studio-step-badge">02</span>
+          <div>
+            <h2 class="font-serif text-xl text-[#141413] font-bold">Targeting Brief & Brand Discovery Criteria</h2>
+            <p class="text-xs text-[#66615B]">Command Ollama AI in real time to locate authentic brand partners matching your campaign criteria.</p>
+          </div>
+        </div>
+
+        <!-- QUICK PRESET CHIPS -->
+        <div class="flex flex-wrap items-center gap-2 pt-1">
+          <span class="text-xs text-[#66615B] font-bold uppercase tracking-wider mr-1">Suggested Briefs:</span>
+          <button onclick="insertPreset('Find 50 high-growth activewear, running footwear, and clean electrolyte recovery brands.')" class="studio-chip-btn flex items-center gap-1.5">
+            <i data-lucide="zap" class="w-3 h-3 text-[#B89248]"></i>
+            <span>Activewear & Hydration</span>
+          </button>
+          <button onclick="insertPreset('Discover 50 luxury clean skincare, botanical barrier repair, and peptide wellness brands.')" class="studio-chip-btn flex items-center gap-1.5">
+            <i data-lucide="sparkle" class="w-3 h-3 text-[#B89248]"></i>
+            <span>Clean Luxury Skincare</span>
+          </button>
+          <button onclick="insertPreset('Target 50 minimalist mechanical keyboards, acoustic desk accessories, and design-led workspace hardware brands.')" class="studio-chip-btn flex items-center gap-1.5">
+            <i data-lucide="monitor" class="w-3 h-3 text-[#B89248]"></i>
+            <span>Minimalist Workspaces</span>
+          </button>
+          <button onclick="insertPreset('Identify 50 European slow fashion, timeless tailoring, and heritage leather atelier brands.')" class="studio-chip-btn flex items-center gap-1.5">
+            <i data-lucide="tag" class="w-3 h-3 text-[#B89248]"></i>
+            <span>Heritage Slow Fashion</span>
+          </button>
+        </div>
+
+        <!-- BRAND TARGETING CRITERIA TEXTAREA -->
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-[#141413] mb-1.5 flex items-center justify-between">
+            <span>Campaign Targeting Command *</span>
+            <span class="text-[11px] font-normal text-[#66615B]">Processed dynamically by local Ollama model</span>
+          </label>
+          <textarea id="campaignPrompt" rows="3" placeholder="e.g. Discover 50 emerging performance apparel and hydration brands in the US and Europe that collaborate with creators. Retrieve their verified partnership emails." class="w-full editorial-input p-3.5 rounded-lg text-sm leading-relaxed font-medium"></textarea>
+        </div>
+
+        <!-- STRICT OFFICIAL-ONLY VERIFICATION FILTER TOGGLE -->
+        <div class="flex items-center justify-between p-3.5 bg-[#FAF8F5] rounded-lg border border-[#E2DDD2]">
+          <div class="flex items-start gap-2.5">
+            <input type="checkbox" id="strictOfficialFilter" class="w-4 h-4 mt-0.5 rounded border-[#E2DDD2] text-[#141413] focus:ring-0 cursor-pointer">
+            <div>
+              <label for="strictOfficialFilter" class="text-xs font-bold text-[#141413] cursor-pointer flex items-center gap-1.5">
+                <span>Strict Official-Only Verification Filter</span>
+                <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">Brand Skipping Active</span>
+              </label>
+              <p class="text-[11px] text-[#66615B] mt-0.5">Enforce Crevanta's Brand Skipping Rule: Accept ONLY explicitly published official emails from the brand's website or official profile. Discard unverified leads (No third-party, zero guessing).</p>
+            </div>
+          </div>
+          <span class="text-[10px] font-bold text-[#8F6F30] uppercase tracking-wider hidden sm:inline-block px-2.5 py-1 rounded bg-[#FAF5EB] border border-[#E8D7B8]">Official Only</span>
+        </div>
+      </div>
+
+      <!-- MODULE 03: SIGNATURE 3-PART OUTREACH FORMULA -->
+      <div class="studio-module-card p-6 space-y-5">
+        <div class="flex items-center gap-3 pb-3 border-b border-[#E2DDD2]">
+          <span class="studio-step-badge gold">03</span>
+          <div>
+            <h2 class="font-serif text-xl text-[#141413] font-bold">Signature 3-Part Outreach Formula</h2>
+            <p class="text-xs text-[#66615B]">Every single pitch email is crafted with these 3 distinct sections for maximum brand response.</p>
+          </div>
+        </div>
+
+        <!-- 3-PART GRID -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          
+          <!-- PART 1: ABOUT CREATOR -->
+          <div class="outreach-formula-box space-y-2.5">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="w-5 h-5 rounded-full bg-[#B89248] text-white flex items-center justify-center text-xs font-bold">1</span>
+                <label class="text-xs font-bold uppercase tracking-wider text-[#141413]">About The Creator</label>
+              </div>
+              <span class="text-[10px] text-[#B89248] font-bold uppercase">Audience Trust</span>
+            </div>
+            <p class="text-[11px] text-[#66615B] leading-snug">Introduces creator metrics, demographic authority, and why their audience converts.</p>
+            <textarea id="part1Notes" rows="3" placeholder="Auto-populated from creator bio. Add any specific brand-fit angles here..." class="w-full editorial-input p-2.5 rounded text-xs leading-relaxed"></textarea>
+          </div>
+
+          <!-- PART 2: UNIQUE VIDEO IDEA (4-PART CREATIVE FORMULA) -->
+          <div class="outreach-formula-box space-y-2.5">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="w-5 h-5 rounded-full bg-[#141413] text-[#FAF8F5] flex items-center justify-center text-xs font-bold">2</span>
+                <label class="text-xs font-bold uppercase tracking-wider text-[#141413]">Unique Video Idea</label>
+              </div>
+              <span class="text-[10px] text-[#B89248] font-bold uppercase">4-Part Formula</span>
+            </div>
+            <p class="text-[11px] text-[#66615B] leading-snug">Brand Insight → Creative Opportunity → Concept Title → How It Works (10 Archetypes: Transformation, Versatility, Challenge, Experiment, etc.).</p>
+            <textarea id="part2Notes" rows="3" placeholder="e.g. Concept: 'One Wardrobe, Three Occasions'. Styling one hero piece from 9 AM workspace to 8 PM dinner." class="w-full editorial-input p-2.5 rounded text-xs leading-relaxed"></textarea>
+          </div>
+
+          <!-- PART 3: 15-DAY CAMPAIGN -->
+          <div class="outreach-formula-box space-y-2.5">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="w-5 h-5 rounded-full bg-[#8F6F30] text-white flex items-center justify-center text-xs font-bold">3</span>
+                <label class="text-xs font-bold uppercase tracking-wider text-[#141413]">15-Day Campaign</label>
+              </div>
+              <span class="text-[10px] text-[#B89248] font-bold uppercase">Milestone Roadmap</span>
+            </div>
+            <p class="text-[11px] text-[#66615B] leading-snug">Structured 15-day timeline: Day 1 Launch, Day 4 Hero Reel, Day 8 Story AMA, Day 15 Analytics.</p>
+            <textarea id="part3Notes" rows="3" placeholder="e.g. Crevanta 15-Day Framework: Day 1 Kickoff, Day 4 Hero Reel Drop, Day 8 Interactive Q&A Stories, Day 12 Retargeting, Day 15 Analytics Report." class="w-full editorial-input p-2.5 rounded text-xs leading-relaxed"></textarea>
+          </div>
+
+        </div>
+
+        <!-- MODULE 04: COMMAND ACTION BAR -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-[#E2DDD2]">
+          <div class="flex items-center gap-2">
+            <button onclick="saveCurrentCommand()" class="text-xs text-[#66615B] hover:text-[#141413] font-semibold flex items-center gap-1.5 transition">
+              <i data-lucide="bookmark" class="w-4 h-4"></i>
+              <span>Save Brief to Playbook</span>
+            </button>
+          </div>
+
+          <button id="generateBtn" onclick="generatePitches()" class="btn-editorial-dark px-8 py-3.5 rounded-lg text-sm font-bold flex items-center justify-center gap-2.5 shadow-xl hover:shadow-2xl transition">
+            <i data-lucide="sparkles" class="w-4 h-4 text-[#B89248]"></i>
+            <span id="generateBtnText">Discover & Pitch 50 Brands with Ollama (Local)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- LIVE GENERATION PROGRESS CARD -->
+      <div id="generationProgressCard" class="hidden studio-module-card p-5 border-l-4 border-[#B89248] space-y-3 bg-[#FAF8F5]">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <div class="w-3 h-3 rounded-full bg-[#B89248] animate-ping"></div>
+            <span class="text-xs font-bold uppercase tracking-wider text-[#141413]" id="progressTitle">Ollama AI Discovering 50 Brands...</span>
+          </div>
+          <span class="text-xs font-mono font-bold text-[#B89248]" id="progressPercent">0%</span>
+        </div>
+        <div class="w-full bg-[#E2DDD2] rounded-full h-2.5 overflow-hidden shadow-inner">
+          <div id="progressBarFill" class="progress-bar-fill h-full w-0 transition-all duration-300"></div>
+        </div>
+        <p class="text-xs text-[#66615B] flex items-center justify-between" id="progressSubtext">
+          <span>Formulating verified partnerships, contact emails, and bespoke 3-part pitches...</span>
+          <span class="font-mono text-[11px] font-semibold text-[#141413]" id="progressBatchStep">Batch 1 of 5</span>
+        </p>
+      </div>
+
+      <!-- ===================================================================== -->
+      <!-- SECTION: PITCH RESULTS & DISPATCH STATION                             -->
+      <!-- ===================================================================== -->
+      <div id="resultsSection" class="hidden space-y-6">
+        
+        <!-- CONTROL BAR -->
+        <div class="editorial-card rounded-lg p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="flex items-center gap-4">
+            <div class="flex items-center gap-2">
+              <input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAllBrands(this.checked)" checked class="w-4 h-4 rounded border-[#D9D6CE] text-[#171717] focus:ring-0 cursor-pointer">
+              <label for="selectAllCheckbox" class="text-xs font-bold uppercase tracking-wider text-[#171717] cursor-pointer">Select All</label>
+            </div>
+            <span class="text-xs font-bold px-2.5 py-1 rounded bg-[#F7F5F0] text-[#171717] border border-[#D9D6CE]" id="brandResultCount">
+              0 Brands
+            </span>
+            <span class="text-xs text-[#696963]">
+              Selected: <b class="text-[#171717]" id="selectedCountBadge">0</b>
+            </span>
+          </div>
+
+          <!-- SEARCH FILTER -->
+          <div class="flex-1 max-w-xs">
+            <div class="relative">
+              <i data-lucide="search" class="w-3.5 h-3.5 absolute left-3 top-3 text-[#696963]"></i>
+              <input type="text" id="brandSearchInput" oninput="filterBrandCards()" placeholder="Filter brands, niche, domain..." class="w-full editorial-input pl-9 pr-3 py-2 rounded text-xs">
+            </div>
+          </div>
+
+          <!-- BATCH DISPATCH ACTIONS -->
+          <div class="flex items-center gap-2.5">
+            <button onclick="requestBatchConfirmation('draft')" class="btn-editorial-light text-xs font-semibold px-4 py-2.5 rounded flex items-center gap-1.5 shadow-sm" id="btnDraftAll">
+              <i data-lucide="file-down" class="w-3.5 h-3.5 text-[#A68A5B]"></i>
+              <span id="btnDraftAllText">1-Click Draft All (0)</span>
+            </button>
+            <button onclick="requestBatchConfirmation('send')" class="btn-editorial-dark text-xs font-bold px-5 py-2.5 rounded flex items-center gap-1.5 shadow-md" id="btnSendAll">
+              <i data-lucide="send" class="w-3.5 h-3.5 text-[#A68A5B]"></i>
+              <span id="btnSendAllText">1-Click Send All (0)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- STRATEGIC SUMMARY CALLOUT -->
+        <div class="bg-[#F7F5F0] border-l-2 border-[#A68A5B] p-4 rounded-r border border-[#D9D6CE]">
+          <span class="text-[10px] uppercase font-bold tracking-widest text-[#A68A5B] block">OLLAMA AI STRATEGY OVERVIEW</span>
+          <p id="resultsSummaryText" class="text-xs text-[#171717] mt-1 leading-relaxed">
+            Review your generated brand pitches below. Every pitch includes the 3-part formula and real recipient emails.
+          </p>
+        </div>
+
+        <!-- CARDS CONTAINER -->
+        <div id="pitchesList" class="space-y-6">
+          <!-- Populated dynamically -->
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ======================================================================= -->
+    <!-- TAB: BRAND RESEARCH & OFFICIAL CONTACT VERIFIER                         -->
+    <!-- ======================================================================= -->
+    <section id="view-verifier" class="hidden space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#D9D6CE]">
+        <div>
+          <span class="text-[10px] uppercase font-bold tracking-[0.2em] text-[#A68A5B]">STRICT PROTOCOL · ZERO GUESSING</span>
+          <h2 class="font-serif text-3xl text-[#171717] font-medium">Brand Research & Contact Verification</h2>
+          <p class="text-xs text-[#696963] mt-1">Directly inspect any brand's official website for explicitly published partnership contacts, record the source URL, and generate a bespoke 4-part video concept.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="editorial-badge badge-active text-xs">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span>Official Sources Only</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- INPUT FORM CONTAINER -->
+      <div class="studio-module-card p-6 space-y-5">
+        <div class="flex items-center gap-3 pb-3 border-b border-[#E2DDD2]">
+          <span class="studio-step-badge gold">🔍</span>
+          <div>
+            <h3 class="font-serif text-lg font-bold text-[#141413]">Inspect Brand Official Domain</h3>
+            <p class="text-xs text-[#66615B]">Enter the brand's name and official website URL. The engine crawls official contact/about/partnerships pages in real time.</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-[#66615B] mb-1.5">Brand Name *</label>
+            <input type="text" id="verifierBrandName" placeholder="e.g. Andamen" class="w-full editorial-input px-3.5 py-2.5 rounded-lg text-sm font-medium">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-[#66615B] mb-1.5">Official Website URL / Domain *</label>
+            <input type="text" id="verifierWebsite" placeholder="e.g. andamen.com" class="w-full editorial-input px-3.5 py-2.5 rounded-lg text-sm font-medium">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-[#66615B] mb-1.5">Attach Creator Pitch Profile</label>
+            <select id="verifierCreatorSelect" class="w-full editorial-input px-3.5 py-2.5 rounded-lg text-sm font-semibold bg-[#FAF8F5]">
+              <!-- Populated dynamically -->
+            </select>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-3 border-t border-[#E2DDD2]">
+          <div class="text-xs text-[#66615B] flex items-center gap-2">
+            <i data-lucide="shield" class="w-4 h-4 text-[#B89248]"></i>
+            <span>Two-Layer Protection: Never invents pattern addresses. No source = no email.</span>
+          </div>
+          <button id="runVerifierBtn" onclick="runBrandLeadVerification()" class="btn-editorial-dark px-6 py-2.5 rounded-lg text-xs font-bold flex items-center gap-2 shadow-md hover:shadow-lg transition">
+            <i data-lucide="search" class="w-4 h-4 text-[#B89248]"></i>
+            <span id="runVerifierBtnText">Verify Contact & Generate Concept</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- RESULTS CONTAINER (HIDDEN UNTIL RUN) -->
+      <div id="verifierResultsArea" class="hidden space-y-6">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- ======================================================================= -->
+    <!-- TAB 2: CREATORS ROSTER                                                  -->
+    <!-- ======================================================================= -->
+    <section id="view-creators" class="hidden space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#D9D6CE]">
+        <div>
+          <span class="text-[10px] uppercase font-bold tracking-[0.2em] text-[#A68A5B]">TALENT MANAGEMENT</span>
+          <h2 class="font-serif text-3xl text-[#171717] font-medium">Crevanta Creators Roster</h2>
+          <p class="text-xs text-[#696963] mt-1">Manage active exclusive creators, audience metrics, verified rates, and portfolio media kits.</p>
+        </div>
+        <button onclick="openAddCreatorModal()" class="btn-editorial-dark text-xs font-semibold px-4 py-2.5 rounded flex items-center gap-2">
+          <i data-lucide="user-plus" class="w-4 h-4"></i>
+          <span>Add New Creator</span>
+        </button>
+      </div>
+
+      <div id="creatorsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- ======================================================================= -->
+    <!-- TAB 3: OLLAMA AI STRATEGIST & SAVED TALKS RECORDS                       -->
+    <!-- ======================================================================= -->
+    <section id="view-chat" class="hidden space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#D9D6CE]">
+        <div>
+          <span class="text-[10px] uppercase font-bold tracking-[0.2em] text-[#A68A5B]">LOCAL AI STRATEGIST · ZERO API FEES</span>
+          <h2 class="font-serif text-3xl text-[#171717] font-medium">Ollama AI Strategist & Talks</h2>
+          <p class="text-xs text-[#696963] mt-1">Brainstorm collaboration angles, test pitch hooks, and automatically maintain a persistent record of all conversations.</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <button onclick="startNewTalk()" class="btn-editorial-dark text-xs px-4 py-2.5 rounded flex items-center gap-1.5 font-semibold shadow-sm">
+            <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+            <span>+ New Talk</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 h-[680px]">
+        <!-- LEFT: SAVED TALKS SIDEBAR (4 cols) -->
+        <div class="lg:col-span-4 editorial-card rounded-lg flex flex-col overflow-hidden">
+          <div class="p-3.5 bg-[#F7F5F0] border-b border-[#D9D6CE] flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <i data-lucide="history" class="w-4 h-4 text-[#A68A5B]"></i>
+              <span class="font-serif text-sm font-bold text-[#171717]">Talk Records</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span id="talksCountBadge" class="text-[10px] font-mono px-2 py-0.5 rounded bg-white border border-[#D9D6CE] text-[#696963]">0 talks</span>
+              <button onclick="clearAllTalksAction()" class="text-[#696963] hover:text-red-600 transition" title="Clear All Talk History">
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+
+          <div id="talksList" class="flex-1 overflow-y-auto divide-y divide-[#D9D6CE]/60">
+            <!-- Talks list rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- RIGHT: ACTIVE CONVERSATION CHAT WINDOW (8 cols) -->
+        <div class="lg:col-span-8 editorial-card rounded-lg flex flex-col overflow-hidden">
+          <!-- Active Talk Header -->
+          <div class="p-3.5 bg-white border-b border-[#D9D6CE] flex items-center justify-between">
+            <div>
+              <h4 id="activeTalkTitle" class="font-serif text-base font-bold text-[#171717]">New Strategic Session</h4>
+              <p id="activeTalkMeta" class="text-[11px] text-[#696963] mt-0.5">Powered by local Ollama AI · Private & Free</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <span id="activeTalkCreatorBadge" class="text-[11px] px-2.5 py-1 rounded bg-[#F7F5F0] border border-[#D9D6CE] text-[#171717] font-semibold">General Strategy</span>
+            </div>
+          </div>
+
+          <!-- Chat Messages Stream -->
+          <div id="chatStream" class="flex-1 p-6 overflow-y-auto space-y-4 bg-[#FAF9F5]">
+            <!-- Messages rendered dynamically -->
+          </div>
+
+          <!-- Input Bar -->
+          <div class="p-3.5 border-t border-[#D9D6CE] bg-[#FFFFFF] flex items-center gap-3">
+            <input type="text" id="chatInput" onkeydown="if(event.key==='Enter') sendChatMessage()" placeholder="Ask Ollama about collaboration angles, rate cards, or custom brands..." class="flex-1 editorial-input px-4 py-2.5 rounded text-xs sm:text-sm">
+            <button onclick="sendChatMessage()" id="chatSendBtn" class="btn-editorial-dark px-5 py-2.5 rounded text-xs font-semibold flex items-center gap-1.5 shadow-sm">
+              <span>Send</span>
+              <i data-lucide="send" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================= -->
+    <!-- TAB 4: SAVED PLAYBOOKS                                                  -->
+    <!-- ======================================================================= -->
+    <section id="view-playbook" class="hidden space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#D9D6CE]">
+        <div>
+          <span class="text-[10px] uppercase font-bold tracking-[0.2em] text-[#A68A5B]">SAVED PROMPTS & TEMPLATES</span>
+          <h2 class="font-serif text-3xl text-[#171717] font-medium">Campaign Playbooks</h2>
+          <p class="text-xs text-[#696963] mt-1">Store proven commands for quick 1-click execution across creator profiles.</p>
+        </div>
+      </div>
+
+      <div id="playbookGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Playbook items rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- ======================================================================= -->
+    <!-- TAB 5: OUTREACH AUDIT LOG                                               -->
+    <!-- ======================================================================= -->
+    <section id="view-history" class="hidden space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#D9D6CE]">
+        <div>
+          <span class="text-[10px] uppercase font-bold tracking-[0.2em] text-[#A68A5B]">COMPLIANCE & AUDIT TRAIL</span>
+          <h2 class="font-serif text-3xl text-[#171717] font-medium">Outreach Audit Log</h2>
+          <p class="text-xs text-[#696963] mt-1">Complete log of all emails sent via Gmail SMTP or saved into Gmail Drafts.</p>
+        </div>
+        <button onclick="clearHistoryAction()" class="btn-editorial-light text-xs font-semibold px-4 py-2 rounded text-red-600 border-red-200 hover:bg-red-50">
+          Clear Audit Trail
+        </button>
+      </div>
+
+      <div class="editorial-card rounded-lg overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead class="bg-[#F7F5F0] border-b border-[#D9D6CE] text-[#696963] uppercase tracking-wider font-semibold">
+              <tr>
+                <th class="p-4">Timestamp</th>
+                <th class="p-4">Brand</th>
+                <th class="p-4">Creator</th>
+                <th class="p-4">Recipient</th>
+                <th class="p-4">Mode</th>
+                <th class="p-4">Status</th>
+              </tr>
+            </thead>
+            <tbody id="historyTableBody" class="divide-y divide-[#E8E5DC]">
+              <!-- History rows rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: EXPLICIT USER DISPATCH CONFIRMATION (NO UNINTENDED EMAILS)         -->
+  <!-- ========================================================================= -->
+  <div id="dispatchConfirmModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-white border border-[#D9D6CE] rounded-lg w-full max-w-lg p-6 shadow-2xl space-y-5">
+      <div class="flex items-center justify-between pb-3 border-b border-[#D9D6CE]">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded bg-[#171717] text-white flex items-center justify-center">
+            <i data-lucide="shield-alert" class="w-5 h-5 text-[#A68A5B]"></i>
+          </div>
+          <div>
+            <h3 class="font-serif text-xl font-bold text-[#171717]">Confirm Outreach Dispatch</h3>
+            <p class="text-xs text-[#696963]" id="confirmModalSubtitle">Verify parameters before executing live batch.</p>
+          </div>
+        </div>
+        <button onclick="closeDispatchConfirmModal()" class="text-[#696963] hover:text-[#171717]">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="space-y-3 text-xs bg-[#F7F5F0] p-4 rounded border border-[#D9D6CE]">
+        <div class="flex justify-between py-1 border-b border-[#D9D6CE]">
+          <span class="text-[#696963] font-semibold">Total Selected Brands:</span>
+          <span class="font-bold text-[#171717]" id="confirmSelectedCount">0</span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-[#D9D6CE]">
+          <span class="text-[#696963] font-semibold">Execution Mode:</span>
+          <span class="font-bold uppercase tracking-wider text-[#A68A5B]" id="confirmExecutionMode">SEND LIVE (SMTP)</span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-[#D9D6CE]">
+          <span class="text-[#696963] font-semibold">Sender Account:</span>
+          <span class="font-mono text-[#171717]" id="confirmSenderAccount">user@gmail.com</span>
+        </div>
+        <div class="flex justify-between py-1">
+          <span class="text-[#696963] font-semibold">Anti-Spam Pacing:</span>
+          <span class="text-[#171717]">0.75s between dispatches</span>
+        </div>
+      </div>
+
+      <div id="confirmWarningBox" class="p-3 rounded bg-amber-50 border border-amber-200 text-amber-800 text-xs leading-relaxed">
+        <strong>Important:</strong> Emails will be delivered live to brand partnerships teams via your connected Gmail. Ensure all pitch subject lines and video ideas have been reviewed.
+      </div>
+
+      <div class="flex items-center justify-end gap-3 pt-2">
+        <button onclick="closeDispatchConfirmModal()" class="btn-editorial-light text-xs px-4 py-2.5 rounded font-medium">Cancel</button>
+        <button onclick="executeConfirmedBulk()" id="confirmDispatchBtn" class="btn-editorial-dark text-xs font-bold px-5 py-2.5 rounded flex items-center gap-2">
+          <span>Confirm & Begin 1-Click Dispatch</span>
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: LIVE GMAIL VERIFICATION DIAGNOSTIC                                  -->
+  <!-- ========================================================================= -->
+  <div id="gmailVerifyModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-white border border-[#D9D6CE] rounded-lg w-full max-w-md p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-[#D9D6CE]">
+        <h3 class="font-serif text-lg font-bold text-[#171717] flex items-center gap-2">
+          <i data-lucide="shield-check" class="w-5 h-5 text-[#A68A5B]"></i>
+          Gmail Connection Diagnostic
+        </h3>
+        <button onclick="closeGmailVerifyModal()" class="text-[#696963] hover:text-[#171717]">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div id="gmailVerifyContent" class="space-y-3 text-xs">
+        <div class="p-4 rounded bg-[#F7F5F0] border border-[#D9D6CE] text-center" id="gmailVerifySpinner">
+          <i data-lucide="loader-2" class="w-6 h-6 animate-spin mx-auto text-[#A68A5B]"></i>
+          <p class="text-xs text-[#696963] mt-2 font-medium">Testing live authentication against Gmail SMTP & IMAP...</p>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-2 pt-2 border-t border-[#D9D6CE]">
+        <button onclick="openSettingsModal(); closeGmailVerifyModal();" class="btn-editorial-light text-xs px-4 py-2 rounded">Settings</button>
+        <button onclick="closeGmailVerifyModal()" class="btn-editorial-dark text-xs px-4 py-2 rounded">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: 1-CLICK BULK OUTREACH DISPATCH PROGRESS                            -->
+  <!-- ========================================================================= -->
+  <div id="bulkProgressModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-white border border-[#D9D6CE] rounded-lg w-full max-w-lg p-6 shadow-2xl space-y-5">
+      <div class="flex items-center justify-between pb-3 border-b border-[#D9D6CE]">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded bg-[#171717] text-white flex items-center justify-center font-bold">
+            <i data-lucide="send" class="w-5 h-5 text-[#A68A5B] animate-pulse"></i>
+          </div>
+          <div>
+            <h3 class="font-serif text-xl font-bold text-[#171717] flex items-center gap-2">
+              <span id="bulkModalTitle">1-Click Bulk Dispatcher</span>
+              <span id="bulkStatusBadge" class="editorial-badge badge-active">Active</span>
+            </h3>
+            <p class="text-xs text-[#696963]" id="bulkJobSubtitle">Sending pitches sequentially via Gmail...</p>
+          </div>
+        </div>
+        <button onclick="closeBulkProgressModal()" id="bulkCloseBtn" class="hidden text-[#696963] hover:text-[#171717] text-xs px-2.5 py-1 rounded border border-[#D9D6CE]">Close</button>
+      </div>
+
+      <!-- PROGRESS BAR -->
+      <div class="space-y-2">
+        <div class="flex items-center justify-between text-xs">
+          <span class="text-[#171717] font-semibold" id="bulkProgressLabel">Progress: 0 / 50</span>
+          <span class="text-[#A68A5B] font-bold text-sm" id="bulkProgressPercent">0%</span>
+        </div>
+        <div class="w-full bg-[#F7F5F0] rounded h-3 overflow-hidden border border-[#D9D6CE]">
+          <div id="bulkProgressBar" class="bg-[#171717] h-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+        <div class="flex items-center justify-between text-[11px] text-[#696963] pt-1">
+          <span>Target: <b class="text-[#171717]" id="bulkCurrentBrand">Initializing...</b></span>
+          <span>Throttling: <span class="text-[#A68A5B] font-semibold">0.75s</span></span>
+        </div>
+      </div>
+
+      <!-- LIVE LOG FEED -->
+      <div class="bg-[#F7F5F0] rounded p-3 border border-[#D9D6CE] max-h-48 overflow-y-auto space-y-1.5 font-mono text-[11px]" id="bulkActivityFeed">
+        <!-- Live log entries -->
+      </div>
+
+      <div class="flex items-center justify-between pt-2 border-t border-[#D9D6CE]">
+        <button onclick="cancelBulkJobAction()" id="bulkCancelBtn" class="btn-editorial-light text-xs font-semibold px-4 py-2 rounded text-red-600 border-red-200 hover:bg-red-50">
+          Stop Dispatch
+        </button>
+        <button onclick="finishBulkJob()" id="bulkDoneBtn" class="hidden btn-editorial-dark text-xs font-bold px-5 py-2.5 rounded flex items-center gap-1.5">
+          <span>View in Outreach Audit Log</span>
+          <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- ========================================================================= -->
+  <!-- MODAL: SYSTEM SETTINGS                                                    -->
+  <!-- ========================================================================= -->
+  <div id="settingsModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-white border border-[#D9D6CE] rounded-lg w-full max-w-xl p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-[#D9D6CE]">
+        <div>
+          <h3 class="font-serif text-2xl font-medium text-[#171717]">Crevanta Settings</h3>
+          <p class="text-xs text-[#696963]">Configure Local Ollama AI, Speed Profile, and Gmail SMTP credentials.</p>
+        </div>
+        <button onclick="closeSettingsModal()" class="text-[#696963] hover:text-[#171717]">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="space-y-4 max-h-[68vh] overflow-y-auto pr-1 text-xs">
+        
+        <!-- OLLAMA LOCAL AI CONFIG & SPEED PROFILE -->
+        <div id="settingsOllamaBox" class="p-4 bg-[#F7F5F0] rounded border border-[#D9D6CE] space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-sm text-[#171717] flex items-center gap-2">
+              <i data-lucide="cpu" class="w-4 h-4 text-[#A68A5B]"></i>
+              Ollama Local AI & Speed Profile
+            </span>
+            <button onclick="testOllamaLiveConnection()" type="button" class="btn-editorial-light text-[10px] py-1 px-2.5 rounded flex items-center gap-1 font-semibold">
+              <i data-lucide="refresh-cw" class="w-3 h-3"></i>
+              <span id="btnTestOllamaText">Test Connection</span>
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-[11px] font-semibold text-[#171717] mb-1">Ollama Host URL</label>
+              <input type="text" id="inputOllamaBaseUrl" placeholder="http://127.0.0.1:11434" class="w-full editorial-input px-3 py-2 rounded font-mono">
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-[#171717] mb-1">Active Model</label>
+              <select id="inputOllamaModel" onchange="onModelSelectChange()" class="w-full editorial-input px-3 py-2 rounded font-mono">
+                <option value="llama3.2:1b">⚡ llama3.2:1b (Turbo Speed ~80-120 tok/s)</option>
+                <option value="llama3.2:latest">🎯 llama3.2:latest (Standard Nuance ~3.2B)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="p-3 bg-white rounded border border-[#D9D6CE] text-[11px] space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-[#171717] flex items-center gap-1.5">
+                <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-500"></i>
+                Speed Acceleration Active
+              </span>
+              <span class="text-[10px] text-[#2E7D32] font-semibold bg-[#E8F5E9] px-2 py-0.5 rounded border border-[#C8E6C9]">keep-alive memory pinned</span>
+            </div>
+            <p class="text-[#696963] leading-relaxed">
+              Models stay cached in Apple Silicon unified RAM/GPU to prevent reload delays. Switch to <strong>Turbo Speed (llama3.2:1b)</strong> for near-instant responses!
+            </p>
+          </div>
+        </div>
+
+        <!-- GMAIL CONFIG & LIVE VERIFICATION -->
+        <div class="p-4 bg-[#F7F5F0] rounded border border-[#D9D6CE] space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-sm text-[#171717] flex items-center gap-2">
+              <i data-lucide="mail" class="w-4 h-4 text-[#A68A5B]"></i>
+              Gmail Account Connection
+            </span>
+            <button onclick="testGmailCredentialsLive()" type="button" class="btn-editorial-light text-[10px] py-1 px-2.5 rounded flex items-center gap-1 font-semibold text-[#171717]">
+              <i data-lucide="shield-check" class="w-3 h-3 text-[#A68A5B]"></i>
+              <span id="btnTestGmailText">Test Credentials Live</span>
+            </button>
+          </div>
+
+          <!-- Live feedback alert -->
+          <div id="gmailTestResultAlert" class="hidden p-3 rounded text-[11px] leading-relaxed"></div>
+
+          <div>
+            <label class="block text-[11px] font-semibold text-[#171717] mb-1">Your Gmail Address *</label>
+            <input type="email" id="inputGmailUser" placeholder="yourname@gmail.com" class="w-full editorial-input px-3 py-2 rounded">
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-[#171717] mb-1">Google 16-Character App Password *</label>
+            <div class="relative">
+              <input type="password" id="inputGmailPassword" placeholder="xxxx xxxx xxxx xxxx" class="w-full editorial-input px-3 py-2 rounded font-mono pr-10">
+              <button type="button" onclick="togglePasswordVisibility('inputGmailPassword')" class="absolute right-3 top-2.5 text-[#696963] hover:text-[#171717]">
+                <i data-lucide="eye" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Google App Password Instructions -->
+          <div class="p-3 bg-white rounded border border-[#D9D6CE] text-[11px] space-y-1.5">
+            <div class="font-bold text-[#171717] flex items-center gap-1.5">
+              <i data-lucide="key" class="w-3.5 h-3.5 text-[#A68A5B]"></i>
+              <span>How to generate your 16-Character App Password (Required by Google):</span>
+            </div>
+            <ol class="list-decimal list-inside space-y-1 text-[#696963] pl-1">
+              <li>Enable <strong>2-Step Verification</strong> on your Google Account.</li>
+              <li>Go to <a href="https://myaccount.google.com/apppasswords" target="_blank" class="text-[#A68A5B] font-semibold underline">myaccount.google.com/apppasswords</a>.</li>
+              <li>Enter "Crevanta" as the App Name and click <strong>Create</strong>.</li>
+              <li>Copy the 16-character password and paste it above (spaces are fine).</li>
+            </ol>
+            <p class="text-[10px] text-amber-700 bg-amber-50 p-1.5 rounded border border-amber-200 mt-1">
+              <strong>Note:</strong> Google permanently disabled normal account passwords for SMTP/IMAP in 2022. Only a 16-character App Password will connect.
+            </p>
+          </div>
+        </div>
+
+        <!-- AGENCY DETAILS -->
+        <div class="p-4 bg-[#F7F5F0] rounded border border-[#D9D6CE] space-y-3">
+          <span class="font-bold text-sm text-[#171717] block">Agency Email Signature</span>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-[11px] font-semibold text-[#171717] mb-1">Agency Name</label>
+              <input type="text" id="inputAgencyName" placeholder="Crevanta Agency" class="w-full editorial-input px-3 py-2 rounded">
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-[#171717] mb-1">Sender Name</label>
+              <input type="text" id="inputSenderName" placeholder="Crevanta Partnerships Team" class="w-full editorial-input px-3 py-2 rounded">
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="flex items-center justify-end gap-3 pt-3 border-t border-[#D9D6CE]">
+        <button onclick="closeSettingsModal()" class="btn-editorial-light text-xs px-4 py-2.5 rounded font-medium">Cancel</button>
+        <button onclick="saveSettings()" class="btn-editorial-dark text-xs font-semibold px-5 py-2.5 rounded shadow-sm">Save & Persist Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: SEND TEST EMAIL                                                    -->
+  <!-- ========================================================================= -->
+  <div id="testEmailModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-white border border-[#D9D6CE] rounded-lg w-full max-w-md p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-[#D9D6CE]">
+        <h3 class="font-serif text-lg font-bold text-[#171717] flex items-center gap-2">
+          <i data-lucide="send" class="w-4 h-4 text-[#A68A5B]"></i>
+          Send Live Test Pitch
+        </h3>
+        <button onclick="closeTestEmailModal()" class="text-[#696963] hover:text-[#171717]">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <p class="text-xs text-[#696963]">Verify your live Gmail SMTP delivery by sending a formatted sample pitch directly to your personal email inbox.</p>
+      <div>
+        <label class="block text-xs font-semibold text-[#171717] mb-1">Recipient Email Address</label>
+        <input type="email" id="testEmailRecipient" placeholder="yourname@domain.com" class="w-full editorial-input px-3 py-2 rounded text-xs">
+      </div>
+      <div class="flex items-center justify-end gap-3 pt-2">
+        <button onclick="closeTestEmailModal()" class="btn-editorial-light text-xs px-4 py-2 rounded">Cancel</button>
+        <button onclick="sendTestEmailAction()" id="sendTestBtn" class="btn-editorial-dark text-xs font-semibold px-4 py-2 rounded">Send Live Test Now</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: ADD / EDIT CREATOR                                                 -->
+  <!-- ========================================================================= -->
+  <div id="creatorModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-white border border-[#D9D6CE] rounded-lg w-full max-w-xl p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-[#D9D6CE]">
+        <h3 id="creatorModalTitle" class="font-serif text-2xl font-medium text-[#171717]">Edit Creator Profile</h3>
+        <button onclick="closeCreatorModal()" class="text-[#696963] hover:text-[#171717]">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <input type="hidden" id="creatorFormId">
+
+      <div class="space-y-3 text-xs max-h-[65vh] overflow-y-auto pr-1">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-[#171717] mb-1">Creator Name *</label>
+            <input type="text" id="creatorFormName" class="w-full editorial-input px-3 py-2 rounded">
+          </div>
+          <div>
+            <label class="block font-semibold text-[#171717] mb-1">Instagram Handle *</label>
+            <input type="text" id="creatorFormHandle" placeholder="@handle" class="w-full editorial-input px-3 py-2 rounded">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-[#171717] mb-1">Primary Niche / Category</label>
+          <input type="text" id="creatorFormNiche" placeholder="e.g., Clean Beauty & Barrier Repair" class="w-full editorial-input px-3 py-2 rounded">
+        </div>
+
+        <div class="grid grid-cols-3 gap-3">
+          <div>
+            <label class="block font-semibold text-[#171717] mb-1">Followers</label>
+            <input type="text" id="creatorFormFollowers" placeholder="78.4K" class="w-full editorial-input px-3 py-2 rounded">
+          </div>
+          <div>
+            <label class="block font-semibold text-[#171717] mb-1">Engagement Rate</label>
+            <input type="text" id="creatorFormEngagement" placeholder="5.2%" class="w-full editorial-input px-3 py-2 rounded">
+          </div>
+          <div>
+            <label class="block font-semibold text-[#171717] mb-1">Avg Reel Views</label>
+            <input type="text" id="creatorFormViews" placeholder="45K" class="w-full editorial-input px-3 py-2 rounded">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-[#171717] mb-1">Creator Bio & Positioning</label>
+          <textarea id="creatorFormBio" rows="2" class="w-full editorial-input p-2.5 rounded resize-none"></textarea>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-[#171717] mb-1">Ideal Target Brand Categories</label>
+          <input type="text" id="creatorFormTargetBrands" placeholder="e.g., Activewear, supplements, recovery gear" class="w-full editorial-input px-3 py-2 rounded">
+        </div>
+
+        <div>
+          <label class="block font-semibold text-[#171717] mb-1">High-Converting Collab Angles</label>
+          <input type="text" id="creatorFormCollabAngles" placeholder="e.g., 60s Reel workout integration, 30-day challenge" class="w-full editorial-input px-3 py-2 rounded">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-[#171717] mb-1">Media Kit URL</label>
+            <input type="text" id="creatorFormMediaKit" placeholder="https://..." class="w-full editorial-input px-3 py-2 rounded">
+          </div>
+          <div>
+            <label class="block font-semibold text-[#171717] mb-1">Sample Rates</label>
+            <input type="text" id="creatorFormRates" placeholder="$800 - $1,500" class="w-full editorial-input px-3 py-2 rounded">
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-3 pt-3 border-t border-[#D9D6CE]">
+        <button onclick="closeCreatorModal()" class="btn-editorial-light text-xs px-4 py-2 rounded font-medium">Cancel</button>
+        <button onclick="submitCreatorForm()" class="btn-editorial-dark text-xs font-semibold px-5 py-2 rounded">Save Profile</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: OLLAMA LOCAL AI POWER & CONTROL CENTER                             -->
+  <!-- ========================================================================= -->
+  <div id="ollamaControlModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-white border border-[#D9D6CE] rounded-lg w-full max-w-lg p-6 shadow-2xl space-y-5 animate-in fade-in duration-200">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between pb-3 border-b border-[#D9D6CE]">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded bg-[#171717] text-white flex items-center justify-center shadow-sm">
+            <i data-lucide="power" class="w-4 h-4 text-[#A68A5B]"></i>
+          </div>
+          <div>
+            <h3 class="font-serif text-xl font-bold text-[#171717]">Ollama AI Power & Control</h3>
+            <p class="text-xs text-[#696963]">Turn local AI on/off, free Mac memory & configure speed</p>
+          </div>
+        </div>
+        <button onclick="closeOllamaControlModal()" class="text-[#696963] hover:text-[#171717] transition p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Live Status Card -->
+      <div class="p-4 rounded border transition" id="ollamaStatusBox">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full" id="ollamaModalDot"></span>
+            <span class="text-xs font-bold uppercase tracking-wider" id="ollamaModalStatusTitle">Checking Status...</span>
+          </div>
+          <span class="text-[11px] font-mono text-[#696963]" id="ollamaModalPort">http://127.0.0.1:11434</span>
+        </div>
+        <p class="text-xs text-[#4A4A45]" id="ollamaModalStatusDesc">
+          Loading Ollama background status...
+        </p>
+      </div>
+
+      <!-- Primary 1-Click Power Action (Turn ON / Turn OFF) -->
+      <div class="space-y-2">
+        <label class="text-[11px] font-bold uppercase tracking-wider text-[#696963]">1-Click Power Switch</label>
+        <div id="ollamaPowerActionArea">
+          <!-- Dynamically populated: Big Turn OFF or Big Turn ON button -->
+        </div>
+      </div>
+
+      <!-- Inference Speed & Model Profile -->
+      <div class="space-y-2">
+        <div class="flex items-center justify-between">
+          <label class="text-[11px] font-bold uppercase tracking-wider text-[#696963]">Inference Speed & Model</label>
+          <span class="text-[10px] text-[#8C827A] font-medium" id="ollamaActiveModelBadge">Current: llama3.2:1b</span>
+        </div>
+        <div class="grid grid-cols-2 gap-2.5">
+          <!-- Turbo Option -->
+          <div onclick="switchOllamaModelAction('llama3.2:1b')" id="modelCardTurbo" class="p-3 border rounded cursor-pointer transition hover:border-[#171717] bg-[#F7F5F0]">
+            <div class="flex items-center justify-between mb-1">
+              <span class="font-bold text-xs text-[#171717]">Turbo Mode</span>
+              <span class="text-[9px] bg-emerald-100 text-emerald-800 font-semibold px-1.5 py-0.5 rounded">Fastest</span>
+            </div>
+            <p class="text-[10px] text-[#696963] leading-tight">llama3.2:1b • 80–120 tok/s</p>
+            <p class="text-[9px] text-[#8C827A] mt-1">Lightweight (~1.3 GB RAM)</p>
+          </div>
+          <!-- Standard Option -->
+          <div onclick="switchOllamaModelAction('llama3.2:latest')" id="modelCardStandard" class="p-3 border rounded cursor-pointer transition hover:border-[#171717] bg-[#F7F5F0]">
+            <div class="flex items-center justify-between mb-1">
+              <span class="font-bold text-xs text-[#171717]">Standard</span>
+              <span class="text-[9px] bg-[#E5E0D8] text-[#171717] font-semibold px-1.5 py-0.5 rounded">Detailed</span>
+            </div>
+            <p class="text-[10px] text-[#696963] leading-tight">llama3.2:latest • 35–50 tok/s</p>
+            <p class="text-[9px] text-[#8C827A] mt-1">Richer nuance (~2.2 GB RAM)</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Mac Info Collapsible -->
+      <details class="text-[11px] text-[#696963] bg-[#F7F5F0] p-2.5 rounded border border-[#D9D6CE] cursor-pointer">
+        <summary class="font-semibold text-[#171717] select-none flex items-center justify-between">
+          <span>Manual Mac Terminal Commands (Optional)</span>
+          <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-[#8C827A]"></i>
+        </summary>
+        <div class="mt-2 space-y-1 pt-2 border-t border-[#D9D6CE] font-mono text-[10px]">
+          <div>Start: <code class="bg-[#171717] text-[#F7F5F0] px-1.5 py-0.5 rounded">ollama serve</code> or <code class="bg-[#171717] text-[#F7F5F0] px-1.5 py-0.5 rounded">brew services start ollama</code></div>
+          <div>Stop: <code class="bg-[#171717] text-[#F7F5F0] px-1.5 py-0.5 rounded">pkill -f ollama</code> or <code class="bg-[#171717] text-[#F7F5F0] px-1.5 py-0.5 rounded">brew services stop ollama</code></div>
+        </div>
+      </details>
+
+      <!-- Footer Actions -->
+      <div class="flex items-center justify-between pt-3 border-t border-[#D9D6CE]">
+        <span class="text-[10px] text-[#8C827A]" id="ollamaStatusTimestamp">Synced just now</span>
+        <div class="flex items-center gap-2">
+          <button onclick="closeOllamaControlModal()" class="btn-editorial-light text-xs px-3.5 py-2 rounded font-medium">Close</button>
+          <button onclick="refreshOllamaControlModal(true)" id="btnRefreshOllamaModal" class="btn-editorial-dark text-xs px-4 py-2 rounded font-semibold flex items-center gap-1.5">
+            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+            <span>Refresh Status</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- TOAST NOTIFICATION                                                        -->
+  <!-- ========================================================================= -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform transition-all duration-300 translate-y-20 opacity-0 bg-[#171717] text-[#F7F5F0] text-xs px-5 py-3.5 rounded shadow-2xl flex items-center gap-2.5 border border-[#D9D6CE]">
+    <i id="toastIcon" data-lucide="check-circle" class="w-4 h-4 text-[#A68A5B]"></i>
+    <span id="toastMsg" class="font-medium">Action completed</span>
+  </div>
+
+  <!-- APPLICATION JAVASCRIPT -->
+  <script src="/static/app.js"></script>
+</body>
+</html>

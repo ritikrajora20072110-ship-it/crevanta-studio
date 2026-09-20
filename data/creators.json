@@ -1,0 +1,177 @@
+[
+  {
+    "id": "creator_mayank",
+    "name": "Mayank Tanwar",
+    "handle": "@mayank.tanwar",
+    "category": "lifestyle",
+    "niche": "Lifestyle · Fashion · Entertainment",
+    "location": "New Delhi / Mumbai",
+    "followers": "29K+",
+    "platform_stats": "29K+ Instagram · 15K+ YouTube",
+    "engagement_rate": "6.4%",
+    "avg_views": "42K",
+    "image": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1000&auto=format&fit=crop",
+    "editorial_image": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1200&auto=format&fit=crop",
+    "bio": "Curating modern Indian contemporary menswear, cultural storytelling, and cinematic travel memoirs for discerning urban youth.",
+    "audience": {
+      "demographics": "64% Men / 36% Women",
+      "age": "21–34 years",
+      "locations": "Delhi NCR, Mumbai, Bengaluru, Dubai",
+      "interests": "Contemporary menswear, grooming, boutique hotels, sneaker culture"
+    },
+    "content_pillars": [
+      "Editorial Lookbooks & Styling Essentials",
+      "Cinematic City Walkthroughs & Culture Vlogs",
+      "Everyday Grooming & Heritage Fragrances"
+    ],
+    "collab_angles": "Editorial Lookbook Reels, 3-part Weekend Getaway Series, Dedicated Product Placement with Link in Bio",
+    "past_brands": [
+      "Nicobar",
+      "Bombay Shirt Company",
+      "Forest Essentials",
+      "H&M Man"
+    ],
+    "media_kit_url": "https://crevanta.agency/creators/mayank",
+    "sample_rate": "$900 - $1,600"
+  },
+  {
+    "id": "creator_liam",
+    "name": "Liam Chen",
+    "handle": "@liamminimaldesk",
+    "category": "tech",
+    "niche": "Minimalist Workspaces & Tactile Tech",
+    "location": "San Francisco / Vancouver",
+    "followers": "49.2K",
+    "platform_stats": "49K+ Instagram · 38K+ YouTube",
+    "engagement_rate": "7.4%",
+    "avg_views": "60K",
+    "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1000&auto=format&fit=crop",
+    "editorial_image": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1200&auto=format&fit=crop",
+    "bio": "Architect and interior designer curating acoustic workspace aesthetics, tactile mechanical hardware, and ergonomic ergonomics.",
+    "audience": {
+      "demographics": "74% Men / 26% Women",
+      "age": "22–38 years",
+      "locations": "San Francisco, Seattle, London, Berlin",
+      "interests": "Industrial design, mechanical keyboards, audiophile gear, productivity tools"
+    },
+    "content_pillars": [
+      "Cinematic 4K Desk Makeover Documentaries",
+      "Sound Design & Tactile Switch Typing Tests",
+      "Architectural Lighting & Studio Tours"
+    ],
+    "collab_angles": "4K Cinematic Desk Tour Feature, Custom Sound Test Reel, Long-Form YouTube Setup Integration",
+    "past_brands": [
+      "Grovemade",
+      "Keychron",
+      "BenQ",
+      "Ugmonk"
+    ],
+    "media_kit_url": "https://crevanta.agency/creators/liam",
+    "sample_rate": "$850 - $1,500"
+  },
+  {
+    "id": "creator_chloe",
+    "name": "Chloe Dubois",
+    "handle": "@chloedubois.style",
+    "category": "fashion",
+    "niche": "Slow Fashion & Capsule Wardrobes",
+    "location": "Paris / New York",
+    "followers": "94.0K",
+    "platform_stats": "94K+ Instagram · 52K+ Pinterest",
+    "engagement_rate": "6.1%",
+    "avg_views": "70K",
+    "image": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1000&auto=format&fit=crop",
+    "editorial_image": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=1200&auto=format&fit=crop",
+    "bio": "Styling sustainable European textiles, artisanal leather craft, and transitional capsule wardrobes with Parisian timelessness.",
+    "audience": {
+      "demographics": "88% Women / 12% Men",
+      "age": "23–36 years",
+      "locations": "Paris, New York, Milan, Stockholm",
+      "interests": "Conscious luxury, vintage tailoring, capsule wardrobes, architectural jewelry"
+    },
+    "content_pillars": [
+      "'1 Hero Item Styled 5 Ways' Editorial",
+      "Transitional Capsule Wardrobe Curation",
+      "Artisanal Atelier Visits & Fabric Origin Tours"
+    ],
+    "collab_angles": "Lookbook Reel Styling Series, Capsule Wardrobe Highlight, Editorial Carousel with Direct Links",
+    "past_brands": [
+      "Sézane",
+      "Everlane",
+      "Cuyana",
+      "Polène Paris"
+    ],
+    "media_kit_url": "https://crevanta.agency/creators/chloe",
+    "sample_rate": "$1,100 - $2,000"
+  },
+  {
+    "id": "creator_aarav",
+    "name": "Aarav Patel",
+    "handle": "@aarav.fitness",
+    "category": "fitness",
+    "niche": "Functional Athletics & Sustainable Nutrition",
+    "location": "Bengaluru / Austin",
+    "followers": "78.4K",
+    "platform_stats": "78K+ Instagram · 22K+ Strava",
+    "engagement_rate": "5.2%",
+    "avg_views": "45K",
+    "image": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1000&auto=format&fit=crop",
+    "editorial_image": "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?q=80&w=1200&auto=format&fit=crop",
+    "bio": "Certified strength coach & endurance athlete sharing functional training protocols, clean plant nutrition, and biometric recovery.",
+    "audience": {
+      "demographics": "62% Men / 38% Women",
+      "age": "22–35 years",
+      "locations": "Bengaluru, Austin, London, Singapore",
+      "interests": "Functional strength, marathons, performance wear, smart wearables, hydration"
+    },
+    "content_pillars": [
+      "Hybrid Athlete Morning Routine & Biometrics",
+      "Functional Strength Movements for Longevity",
+      "Whole-Food Plant Fuel & Recovery Protocols"
+    ],
+    "collab_angles": "60s High-Energy Workout Integration, 30-Day Biometric Recovery Test, Story Swipe-up Series",
+    "past_brands": [
+      "Vuori",
+      "WHOOP",
+      "AG1",
+      "Ten Thousand"
+    ],
+    "media_kit_url": "https://crevanta.agency/creators/aarav",
+    "sample_rate": "$900 - $1,700"
+  },
+  {
+    "id": "creator_maya",
+    "name": "Maya Sen",
+    "handle": "@mayasen.travels",
+    "category": "travel",
+    "niche": "Boutique Hospitality & Solo Architectural Travel",
+    "location": "Mumbai / London",
+    "followers": "62.5K",
+    "platform_stats": "62K+ Instagram · 18K+ Substack",
+    "engagement_rate": "6.8%",
+    "avg_views": "55K",
+    "image": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1000&auto=format&fit=crop",
+    "editorial_image": "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=1200&auto=format&fit=crop",
+    "bio": "Documenting heritage properties, slow train journeys across Southern Europe, and intimate design-led sanctuaries for conscious travelers.",
+    "audience": {
+      "demographics": "70% Women / 30% Men",
+      "age": "24–38 years",
+      "locations": "Mumbai, London, Singapore, New York",
+      "interests": "Boutique stays, bespoke luggage, slow living, architectural photography"
+    },
+    "content_pillars": [
+      "Visual Essays on Heritage Hotels & Hidden Sanctuaries",
+      "Solo Female Travel Logistics & Safety Guides",
+      "Packing Curations & Functional Travel Gear"
+    ],
+    "collab_angles": "Property Visual Feature, Luggage Durability Review, 4-Part Carousel Destination Itinerary",
+    "past_brands": [
+      "Rimowa",
+      "Aman Resorts",
+      "Aesop",
+      "Away Luggage"
+    ],
+    "media_kit_url": "https://crevanta.agency/creators/maya",
+    "sample_rate": "$1,200 - $2,200"
+  }
+]
