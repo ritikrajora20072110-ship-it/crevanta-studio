@@ -163,18 +163,65 @@ function updateAiBadge() {
   const badge = document.getElementById("aiStatusBadge");
   const text = document.getElementById("aiStatusText");
   const dot = document.getElementById("aiStatusDot");
+  const hint = document.getElementById("aiActionHint");
   if (!badge || !text) return;
 
   if (appState.ollamaRunning) {
-    badge.className = "editorial-badge badge-active cursor-pointer transition hover:opacity-90";
-    text.innerText = `Ollama: Online (${appState.ollamaModel})`;
+    badge.className = "editorial-badge badge-active cursor-pointer transition hover:opacity-90 flex items-center gap-2";
+    text.innerText = `Ollama: ON (${appState.ollamaModel || '1b'})`;
     if (dot) dot.className = "w-2 h-2 rounded-full bg-emerald-500 shadow-sm";
+    if (hint) {
+      hint.innerText = "Click to Turn OFF";
+      hint.className = "text-[10px] text-[#A68A5B] font-normal border-l border-[#D9D6CE] pl-2 hidden sm:inline";
+    }
   } else {
-    badge.className = "editorial-badge badge-warning cursor-pointer transition hover:opacity-90";
-    text.innerText = "Ollama: Offline (Click to Turn ON)";
+    badge.className = "editorial-badge badge-warning cursor-pointer transition hover:opacity-90 flex items-center gap-2";
+    text.innerText = "Ollama: OFF";
     if (dot) dot.className = "w-2 h-2 rounded-full bg-amber-500 animate-pulse";
+    if (hint) {
+      hint.innerText = "Click to Turn ON";
+      hint.className = "text-[10px] text-amber-700 font-bold border-l border-amber-200 pl-2 hidden sm:inline";
+    }
   }
   updateGenerateButtonText();
+}
+
+async function toggleOllamaOneClick() {
+  const badge = document.getElementById("aiStatusBadge");
+  const text = document.getElementById("aiStatusText");
+  const dot = document.getElementById("aiStatusDot");
+  const hint = document.getElementById("aiActionHint");
+
+  if (badge) badge.disabled = true;
+  if (text) text.innerText = appState.ollamaRunning ? "Stopping..." : "Starting...";
+  if (dot) dot.className = "w-2 h-2 rounded-full bg-amber-500 animate-spin";
+  if (hint) hint.innerText = "Processing...";
+
+  try {
+    const res = await fetch("/api/ollama/toggle", { method: "POST" });
+    const data = await res.json();
+    if (data.success) {
+      appState.ollamaRunning = !!data.running;
+      if (data.models && data.models.length) {
+        appState.ollamaModels = data.models;
+      }
+      if (data.running) {
+        showToast("🟢 Ollama turned ON & ready! Models loaded.", true);
+      } else {
+        showToast("⚡ Ollama turned OFF. RAM & CPU freed.", true);
+      }
+    } else {
+      showToast(data.message || "Failed to toggle Ollama", false);
+    }
+  } catch (err) {
+    showToast("Error toggling Ollama: " + err.message, false);
+  } finally {
+    await checkOllamaStatus();
+    updateAiBadge();
+    renderOllamaControlStatus();
+    if (badge) badge.disabled = false;
+    if (window.lucide) lucide.createIcons();
+  }
 }
 
 function updateGenerateButtonText() {

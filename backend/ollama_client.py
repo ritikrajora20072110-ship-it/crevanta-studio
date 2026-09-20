@@ -4,6 +4,7 @@ import json
 import time
 import shutil
 import subprocess
+import signal
 import urllib.request
 import urllib.error
 from typing import List, Dict, Any, Optional
@@ -99,17 +100,43 @@ def stop_ollama_service() -> Dict[str, Any]:
     except Exception:
         pass
 
-    # 2. Stop any remaining processes
+    # 2. Stop any remaining processes directly by PID
     try:
-        subprocess.run(["pkill", "-f", "ollama"], check=False, timeout=5, capture_output=True)
+        out = subprocess.check_output(["pgrep", "-f", "ollama"]).decode().strip()
+        pids = [int(p) for p in out.splitlines() if p.strip()]
+        for p in pids:
+            try:
+                os.kill(p, signal.SIGTERM)
+            except Exception:
+                pass
+        time.sleep(0.4)
+        out2 = subprocess.check_output(["pgrep", "-f", "ollama"]).decode().strip()
+        for p in [int(p) for p in out2.splitlines() if p.strip()]:
+            try:
+                os.kill(p, signal.SIGKILL)
+            except Exception:
+                pass
     except Exception:
         pass
 
-    time.sleep(0.8)
+    time.sleep(0.5)
     st = check_ollama_status()
     if not st.get("running"):
-        return {"success": True, "running": False, "message": "Ollama service stopped successfully. RAM & CPU freed."}
-    return {"success": False, "running": True, "message": "Attempted to stop Ollama, but the daemon is still active."}
+        return {"success": True, "running": False, "action": "stopped", "message": "Ollama service stopped successfully. RAM & CPU freed."}
+    return {"success": False, "running": True, "action": "error", "message": "Attempted to stop Ollama, but the daemon is still active."}
+
+
+def toggle_ollama_service() -> Dict[str, Any]:
+    """1-Click Instant Toggle: Turns Ollama OFF if running to free RAM, or ON if stopped."""
+    st = check_ollama_status()
+    if st.get("running"):
+        res = stop_ollama_service()
+        res["action"] = "stopped"
+        return res
+    else:
+        res = start_ollama_service()
+        res["action"] = "started"
+        return res
 
 
 def check_ollama_status(base_url: Optional[str] = None) -> Dict[str, Any]:

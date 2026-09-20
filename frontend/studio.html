@@ -309,11 +309,17 @@
 
       <!-- STATUS BADGES & ACTIONS -->
       <div class="flex items-center space-x-3">
-        <!-- Dedicated Ollama Local AI Status Pill -->
-        <button onclick="handleAiBadgeClick()" id="aiStatusBadge" class="editorial-badge badge-active cursor-pointer transition hover:opacity-90" title="Click to view Ollama local AI status and speed settings">
-          <span class="w-2 h-2 rounded-full bg-emerald-500" id="aiStatusDot"></span>
-          <span id="aiStatusText">Ollama: Ready</span>
-        </button>
+        <!-- 1-Click Instant Ollama Power Switch & Status -->
+        <div class="flex items-center rounded-full border border-[#D9D6CE] bg-[#FAF8F5] p-0.5 shadow-sm transition hover:border-[#A68A5B]">
+          <button onclick="toggleOllamaOneClick()" id="aiStatusBadge" class="editorial-badge badge-active cursor-pointer transition hover:opacity-90 flex items-center gap-2" title="1-Click Power Toggle: Click to turn Ollama ON or OFF">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 shadow-sm" id="aiStatusDot"></span>
+            <span id="aiStatusText">Ollama: ON</span>
+            <span id="aiActionHint" class="text-[10px] text-[#A68A5B] font-normal border-l border-[#D9D6CE] pl-2 hidden sm:inline">Click to Turn OFF</span>
+          </button>
+          <button onclick="handleAiBadgeClick()" class="p-1.5 text-[#696963] hover:text-[#171717] rounded-full transition" title="Ollama Model & Speed Settings (Turbo / Standard)">
+            <i data-lucide="sliders" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
 
         <!-- Interactive Gmail Status Pill -->
         <button onclick="openGmailSettingsModal()" id="gmailStatusBadge" class="editorial-badge badge-warning cursor-pointer transition hover:opacity-90" title="Click to connect and test your Gmail account">

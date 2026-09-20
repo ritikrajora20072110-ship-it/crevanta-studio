@@ -35,6 +35,7 @@ from .ollama_client import (
     pull_ollama_model,
     start_ollama_service,
     stop_ollama_service,
+    toggle_ollama_service,
     _synthesize_brand_pitch
 )
 from .lead_verifier import (
@@ -286,6 +287,11 @@ def start_ollama():
 @app.post("/api/ollama/stop")
 def stop_ollama():
     return stop_ollama_service()
+
+
+@app.post("/api/ollama/toggle")
+def toggle_ollama():
+    return toggle_ollama_service()
 
 
 @app.post("/api/ollama/pull")
