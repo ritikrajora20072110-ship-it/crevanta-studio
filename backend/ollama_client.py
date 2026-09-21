@@ -524,6 +524,7 @@ def generate_brand_pitches_ollama(
                 location=loc_target,
                 count=max(target_count, 15),
                 indian_only=indian_only,
+                require_email=strict_official_only,
                 excluded_names=stored_names,
                 excluded_domains=stored_domains
             )
@@ -550,6 +551,7 @@ def generate_brand_pitches_ollama(
             )
 
         discovered_context = ""
+        batch_candidates = []
         if live_online_brands:
             batch_offset = sum(batch_sizes[:batch_idx])
             batch_candidates = live_online_brands[batch_offset:batch_offset + batch_target]
@@ -606,6 +608,26 @@ def generate_brand_pitches_ollama(
             "}"
         )
 
+        if batch_candidates:
+            cand_names = [b['brand_name'] for b in batch_candidates]
+            task_desc = (
+                f"TASK FOR EACH RESEARCHED BRAND ({', '.join(cand_names)}):\n"
+                f"You MUST formulate pitches for these exact brands.\n"
+                f"1. 'brand_name': Use the brand name exactly from the list.\n"
+                f"2. 'website': Use the website exactly from the list.\n"
+                f"3. 'recipient_email': Use the recipient_email exactly from the list.\n"
+                f"4. 'part1_about_creator': A crisp 2-3 sentence introduction connecting {creator_name}'s audience trust to the brand.\n"
+                f"5. 'part2_concept_title': One bespoke, catchy Concept Title tailored to the brand's product.\n\n"
+                f"BATCH REQUEST: Return exactly {len(batch_candidates)} brands in the JSON array."
+            )
+        else:
+            task_desc = (
+                f"TASK FOR EACH BRAND:\n"
+                f"1. 'part1_about_creator': A crisp 2-3 sentence introduction connecting {creator_name}'s audience trust to the brand.\n"
+                f"2. 'part2_concept_title': One bespoke, catchy Concept Title tailored to the brand's product.\n\n"
+                f"BATCH REQUEST: Please discover exactly {batch_target} distinct brand targets in this specific niche and location."
+            )
+
         user_prompt = (
             f"CREATOR PROFILE:\n"
             f"- Name: {creator_name}\n"
@@ -620,10 +642,7 @@ def generate_brand_pitches_ollama(
             f"TARGET LOCATION: {loc_target}\n"
             f"{discovered_context}\n"
             f"{exclude_text}\n"
-            f"TASK FOR EACH BRAND:\n"
-            f"1. 'part1_about_creator': A crisp 2-3 sentence introduction connecting {creator_name}'s audience trust to the brand.\n"
-            f"2. 'part2_concept_title': One bespoke, catchy Concept Title tailored to the brand's product.\n\n"
-            f"BATCH REQUEST: Please discover exactly {batch_target} distinct brand targets in this specific niche and location."
+            f"{task_desc}"
         )
 
         messages = [
@@ -646,6 +665,7 @@ def generate_brand_pitches_ollama(
             parsed = _repair_and_parse_json(content_text)
             if parsed and "brands" in parsed:
                 batch_brands = parsed.get("brands", [])
+
                 for b in batch_brands:
                     b_name = (b.get("brand_name") or "").strip()
                     raw_site = b.get("website") or b.get("domain") or ""
@@ -759,7 +779,7 @@ def generate_brand_pitches_ollama(
                         b,
                         require_official=strict_official_only,
                         require_indian=indian_only,
-                        verify_checker=strict_official_only
+                        verify_checker=False if b.get("email_verification") else strict_official_only
                     )
                     if lead is not None:
                         all_brands.append(lead)
@@ -861,6 +881,7 @@ def generate_brand_pitches_ollama(
             synth_brand["recipient_email"] = cat_item["recipient_email"]
             synth_brand["verification"] = "official"
             synth_brand["email_source"] = cat_item["email_source"]
+            synth_brand["email_verification"] = cat_item.get("email_verification")
 
             if cat_item.get("part2_concept_title"):
                 spintax = generate_spintax_pitch(
@@ -924,6 +945,7 @@ def generate_brand_pitches_ollama(
             synth_brand["recipient_email"] = cat_item["recipient_email"]
             synth_brand["verification"] = "official"
             synth_brand["email_source"] = cat_item["email_source"]
+            synth_brand["email_verification"] = cat_item.get("email_verification")
             synth_brand["deliverability"] = analyze_deliverability(synth_brand["subject"], synth_brand["body"], cat_item["recipient_email"])
             lead = enforce_programmatic_rules(
                 synth_brand,

@@ -96,7 +96,7 @@ class AutonomousCampaignAgent:
         count: int = 10,
         location: str = "All India",
         indian_only: bool = True,
-        strict_official_only: bool = False,
+        strict_official_only: bool = True,
         model: Optional[str] = None,
         on_event: Optional[Callable[[Dict[str, Any]], None]] = None
     ) -> Dict[str, Any]:
@@ -156,11 +156,12 @@ class AutonomousCampaignAgent:
                 location=loc_target,
                 count=max(target_count, 15),
                 indian_only=indian_only,
+                require_email=strict_official_only,
                 excluded_names=stored_names,
                 excluded_domains=stored_domains,
                 on_event=web_search_event
             )
-            emit("internet_search", "🌐 Internet Search Completed", f"Located {len(live_online_brands)} genuine brand candidates online.", True, 45)
+            emit("internet_search", "🌐 Internet Search Completed", f"Located {len(live_online_brands)} genuine brand candidates with verified published emails.", True, 45)
         except Exception as e:
             live_online_brands = []
             emit("internet_search", "Search Fallback", f"Web search adjusted: {str(e)}", False, 45)

@@ -80,6 +80,10 @@ KNOWN_INDIAN_DOMAINS = {
     "dailyobjects.com", "wforwoman.com", "aurelia.com", "manyavar.com", "raymond.in",
     "bata.in", "metroshoes.net", "mochishoes.com", "woodlandworldwide.com", "da-milano.com",
     "titan.co.in", "fastrack.in", "skinn.in", "tanishq.co.in", "voylla.com",
+    "ogaan.com", "azafashions.com", "carma.co.in", "rawmango.com", "perona.com", "doodlage.in",
+    "kalkifashion.com", "shantanunikhil.com", "taruntahiliani.com", "ampm.in", "pero.co.in",
+    "korra.in", "bhaane.com", "bodice.co.in", "11-11.in", "quaclothing.com", "anitadongre.com",
+    "biba.in", "ritukumar.com",
 
     # Food, Beverage & Wellness
     "licious.in", "fresh2home.com", "countrydelight.in", "epigamia.com", "trueelements.com",
@@ -144,6 +148,10 @@ KNOWN_INDIAN_BRAND_NAMES = {
     "xiaomi", "xiaomi india", "redmi", "samsung", "samsung india", "realme",
     "vivo", "vivo india", "oppo", "oppo india", "nothing", "nothing phone",
     "iqoo", "poco", "motorola", "motorola india",
+    "ogaan", "ogaan india", "aza", "aza fashions", "carma", "raw mango", "perona", "doodlage",
+    "kalki", "kalki fashion", "shantnu & nikhil", "shantnu nikhil", "tarun tahiliani", "ampm",
+    "ampm fashion", "péro", "pero", "korra", "korra jeans", "bhaane", "bodice", "11.11",
+    "eleven eleven", "qua", "qua clothing", "anita dongre", "biba", "biba india", "w for woman", "ritu kumar",
     "cred", "zerodha", "groww", "paytm", "phonepe", "razorpay", "zoho"
 }
 

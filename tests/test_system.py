@@ -39,6 +39,20 @@ client = TestClient(app)
 
 class TestCrevantaSystem(unittest.TestCase):
 
+    def setUp(self):
+        import os
+        self.pitched_backup = None
+        if os.path.exists("data/pitched_brands.json"):
+            with open("data/pitched_brands.json", "r") as f:
+                self.pitched_backup = f.read()
+        with open("data/pitched_brands.json", "w") as f:
+            f.write("[]")
+
+    def tearDown(self):
+        if self.pitched_backup is not None:
+            with open("data/pitched_brands.json", "w") as f:
+                f.write(self.pitched_backup)
+
     def test_api_status(self):
         response = client.get("/api/status")
         self.assertEqual(response.status_code, 200)
