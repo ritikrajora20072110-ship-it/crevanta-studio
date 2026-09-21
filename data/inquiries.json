@@ -7,6 +7,17 @@
     "campaign_objective": "Autumn Product Launch",
     "budget_range": "$15,000 - $35,000",
     "message": "We would like to book Mayank and Maya.",
+    "id": "inq_cdea4fe6",
+    "timestamp": "2026-09-21T09:10:41.748115+00:00"
+  },
+  {
+    "brand_name": "Test Luxe Brand",
+    "website": "luxebrand.com",
+    "contact_name": "Eleanor Vance",
+    "email": "eleanor@luxebrand.com",
+    "campaign_objective": "Autumn Product Launch",
+    "budget_range": "$15,000 - $35,000",
+    "message": "We would like to book Mayank and Maya.",
     "id": "inq_23d0eb9c",
     "timestamp": "2026-09-21T08:17:21.644906+00:00"
   },

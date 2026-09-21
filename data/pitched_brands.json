@@ -1,18 +1,6 @@
 [
   {
-    "id": "brand_be11e738",
-    "brand_name": "Verve Lifestyle",
-    "domain": "vervelifestyle.com",
-    "website": "vervelifestyle.com",
-    "recipient_email": "Not publicly available",
-    "verification": "unverified",
-    "brand_niche": "Performance Apparel",
-    "creator_name": "Mayank Tanwar",
-    "campaign_prompt": "sustainable slow fashion, artisanal handloom ateliers, organic cotton basics, and heritage accessories",
-    "recorded_at": "2026-09-21T08:18:45.231841+00:00"
-  },
-  {
-    "id": "brand_c325e4ee",
+    "id": "brand_e21f0e2d",
     "brand_name": "Aura Lifestyle",
     "domain": "auralifestyle.com",
     "website": "auralifestyle.com",
@@ -21,10 +9,562 @@
     "brand_niche": "Wellness & Skincare",
     "creator_name": "Mayank Tanwar",
     "campaign_prompt": "sustainable slow fashion, artisanal handloom ateliers, organic cotton basics, and heritage accessories",
-    "recorded_at": "2026-09-21T08:18:45.231841+00:00"
+    "recorded_at": "2026-09-21T09:17:01.286244+00:00"
   },
   {
-    "id": "brand_ec3e69f2",
+    "id": "brand_c7d001c7",
+    "brand_name": "Crafted Roots",
+    "domain": "craftedroots.in",
+    "website": "craftedroots.in",
+    "recipient_email": "partnerships@craftedroots.in",
+    "verification": "official",
+    "brand_niche": "Sustainable slow fashion",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "sustainable slow fashion, artisanal handloom ateliers, organic cotton basics, and heritage accessories",
+    "recorded_at": "2026-09-21T09:17:01.286244+00:00"
+  },
+  {
+    "id": "brand_4ea2de2e",
+    "brand_name": "POCO India",
+    "domain": "poco.in",
+    "website": "poco.in",
+    "recipient_email": "service.in@poco.net",
+    "verification": "official",
+    "brand_niche": "Budget Flagship Smartphones",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_5fe67be3",
+    "brand_name": "iQOO India",
+    "domain": "iqoo.com",
+    "website": "iqoo.com/in",
+    "recipient_email": "care@iqoo.com",
+    "verification": "official",
+    "brand_niche": "Flagship Mobile Gaming & Performance",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_57bc5ab7",
+    "brand_name": "Vivo India",
+    "domain": "vivo.com",
+    "website": "vivo.com/in",
+    "recipient_email": "vcare@vivo.com",
+    "verification": "official",
+    "brand_niche": "Cinematic Portrait Smartphones",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_dbed81b0",
+    "brand_name": "Realme India",
+    "domain": "realme.com",
+    "website": "realme.com/in",
+    "recipient_email": "service.in@realme.com",
+    "verification": "official",
+    "brand_niche": "High-Performance Youth Smartphones",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_01e128df",
+    "brand_name": "Samsung India",
+    "domain": "samsung.com",
+    "website": "samsung.com/in",
+    "recipient_email": "support.india@samsung.com",
+    "verification": "official",
+    "brand_niche": "Premium Mobile & Foldable Ecosystem",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_c263104e",
+    "brand_name": "Xiaomi India",
+    "domain": "mi.com",
+    "website": "mi.com/in",
+    "recipient_email": "service.in@xiaomi.com",
+    "verification": "official",
+    "brand_niche": "Smartphones & Smart Ecosystem",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_e0b31502",
+    "brand_name": "Lava International",
+    "domain": "lavamobiles.com",
+    "website": "lavamobiles.com",
+    "recipient_email": "customercare@lavainternational.in",
+    "verification": "official",
+    "brand_niche": "Indian Homegrown Smartphones & Electronics",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_4e68a328",
+    "brand_name": "OnePlus India",
+    "domain": "oneplus.in",
+    "website": "oneplus.in",
+    "recipient_email": "partnerships@oneplus.in",
+    "verification": "official",
+    "brand_niche": "Flagship Smartphones & Mobile Audio",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_2084ffad",
+    "brand_name": "Viva Fitness",
+    "domain": "vivafitness.net",
+    "website": "vivafitness.net",
+    "recipient_email": "sales@vivafitness.net",
+    "verification": "official",
+    "brand_niche": "Commercial & Home Gym Equipment",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_cfaa9adf",
+    "brand_name": "Atmana Wellness",
+    "domain": "atmanawellness.com",
+    "website": "atmanawellness.com",
+    "recipient_email": "info@atmanawellness.com",
+    "verification": "official",
+    "brand_niche": "Athletic Training & Wellness Studio",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_8c1ceb78",
+    "brand_name": "Waves Gym",
+    "domain": "wavesgym.com",
+    "website": "wavesgym.com",
+    "recipient_email": "info@wavesgym.com",
+    "verification": "official",
+    "brand_niche": "Fitness Club & Athletic Performance Center",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_4982aeae",
+    "brand_name": "Jerai Fitness",
+    "domain": "jeraifitness.com",
+    "website": "jeraifitness.com",
+    "recipient_email": "info@jeraifitness.com",
+    "verification": "official",
+    "brand_niche": "Gym Equipment & Biomechanics Manufacturer",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_df29a780",
+    "brand_name": "Nitrro Wellness",
+    "domain": "nitrro.in",
+    "website": "nitrro.in",
+    "recipient_email": "info@nitrro.in",
+    "verification": "official",
+    "brand_niche": "Luxury Gym & Celebrity Fitness Club",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_005380a7",
+    "brand_name": "Swiggy",
+    "domain": "swiggy.in",
+    "website": "swiggy.in",
+    "recipient_email": "support@swiggy.in",
+    "verification": "official",
+    "brand_niche": "Hyperlocal Food & Instamart Delivery",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_c16ff78e",
+    "brand_name": "Cult.fit",
+    "domain": "cult.fit",
+    "website": "cult.fit",
+    "recipient_email": "hello@cult.fit",
+    "verification": "official",
+    "brand_niche": "Holistic Fitness & HIIT Centers",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_540b0ca8",
+    "brand_name": "Ola Electric",
+    "domain": "olaelectric.com",
+    "website": "olaelectric.com",
+    "recipient_email": "support@olaelectric.com",
+    "verification": "official",
+    "brand_niche": "Next-Generation Electric Mobility",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_b1177f5f",
+    "brand_name": "Pepperfry",
+    "domain": "pepperfry.com",
+    "website": "pepperfry.com",
+    "recipient_email": "talk@pepperfry.com",
+    "verification": "official",
+    "brand_niche": "Curated Modern Home Furniture",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_6f7be626",
+    "brand_name": "SleepyCat",
+    "domain": "sleepycat.in",
+    "website": "sleepycat.in",
+    "recipient_email": "info@sleepycat.in",
+    "verification": "official",
+    "brand_niche": "Orthopedic Box Mattresses & Bedding",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_391f5189",
+    "brand_name": "The Sleep Company",
+    "domain": "thesleepcompany.in",
+    "website": "thesleepcompany.in",
+    "recipient_email": "care@thesleepcompany.in",
+    "verification": "official",
+    "brand_niche": "Patented SmartGRID Sleep Tech",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_c8f132b7",
+    "brand_name": "Nicobar",
+    "domain": "nicobar.com",
+    "website": "nicobar.com",
+    "recipient_email": "care@nicobar.com",
+    "verification": "official",
+    "brand_niche": "Modern Coastal Lifestyle & Home",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_c8f1d518",
+    "brand_name": "GIVA",
+    "domain": "giva.co",
+    "website": "giva.co",
+    "recipient_email": "care@giva.co",
+    "verification": "official",
+    "brand_niche": "Minimalist Pure 925 Silver Jewelry",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_30527c6e",
+    "brand_name": "Minimalist",
+    "domain": "beminimalist.co",
+    "website": "beminimalist.co",
+    "recipient_email": "help@beminimalist.co",
+    "verification": "official",
+    "brand_niche": "Transparent Active Science Skincare",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_e0db5d11",
+    "brand_name": "Aqualogica",
+    "domain": "aqualogica.in",
+    "website": "aqualogica.in",
+    "recipient_email": "care@aqualogica.in",
+    "verification": "official",
+    "brand_niche": "Hydration-Focused Sun Protection",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_0c774933",
+    "brand_name": "Foxtale",
+    "domain": "foxtale.in",
+    "website": "foxtale.in",
+    "recipient_email": "contact@foxtale.in",
+    "verification": "official",
+    "brand_niche": "Efficacy-Driven Targeted Skincare",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_38d0984b",
+    "brand_name": "Headphone Zone",
+    "domain": "headphonezone.in",
+    "website": "headphonezone.in",
+    "recipient_email": "crew@headphonezone.in",
+    "verification": "official",
+    "brand_niche": "Audiophile Sound & DAC Equipment",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_5c1cd636",
+    "brand_name": "Wings Lifestyle",
+    "domain": "wingslifestyle.com",
+    "website": "wingslifestyle.com",
+    "recipient_email": "support@wingslifestyle.com",
+    "verification": "official",
+    "brand_niche": "Ultra-Low Latency Gaming Audio",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_45d70745",
+    "brand_name": "pTron",
+    "domain": "ptron.in",
+    "website": "ptron.in",
+    "recipient_email": "support@ptron.in",
+    "verification": "official",
+    "brand_niche": "Accessible Smart Wearables",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_66e33c12",
+    "brand_name": "Mivi",
+    "domain": "mivi.in",
+    "website": "mivi.in",
+    "recipient_email": "support@mivi.in",
+    "verification": "official",
+    "brand_niche": "Proudly Made in India Sound Equipment",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_260f6b4d",
+    "brand_name": "Crossbeats",
+    "domain": "crossbeats.com",
+    "website": "crossbeats.com",
+    "recipient_email": "support@crossbeats.com",
+    "verification": "official",
+    "brand_niche": "Active Smartwatches & Fitness Tech",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_6cd2dc30",
+    "brand_name": "Boult Audio",
+    "domain": "boultaudio.com",
+    "website": "boultaudio.com",
+    "recipient_email": "info@boultaudio.com",
+    "verification": "official",
+    "brand_niche": "Bass-Forward TWS Audio & Wearables",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_0881df67",
+    "brand_name": "Zebronics",
+    "domain": "zebronics.com",
+    "website": "zebronics.com",
+    "recipient_email": "enquiry@zebronics.com",
+    "verification": "official",
+    "brand_niche": "Gaming Peripherals & Soundbars",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_4922b0a0",
+    "brand_name": "Fire-Boltt",
+    "domain": "fireboltt.com",
+    "website": "fireboltt.com",
+    "recipient_email": "infocare@boltt.com",
+    "verification": "official",
+    "brand_niche": "Connected Smartwatches & Audio",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_7c0b045a",
+    "brand_name": "Lenskart",
+    "domain": "lenskart.com",
+    "website": "lenskart.com",
+    "recipient_email": "support@lenskart.com",
+    "verification": "official",
+    "brand_niche": "Eyewear & Blue-Light Protection",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_f0436489",
+    "brand_name": "Ather Energy",
+    "domain": "atherenergy.com",
+    "website": "atherenergy.com",
+    "recipient_email": "contact@atherenergy.com",
+    "verification": "official",
+    "brand_niche": "Smart Electric Performance Scooters",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_a85af82a",
+    "brand_name": "Kapiva",
+    "domain": "kapiva.in",
+    "website": "kapiva.in",
+    "recipient_email": "info@kapiva.in",
+    "verification": "official",
+    "brand_niche": "Modern Ayurvedic Nutrition & Wellness",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_d9a8eeaf",
+    "brand_name": "True Elements",
+    "domain": "trueelements.com",
+    "website": "trueelements.com",
+    "recipient_email": "care@trueelements.com",
+    "verification": "official",
+    "brand_niche": "100% Whole Grain Breakfasts & Seeds",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_1fc8524d",
+    "brand_name": "Epigamia",
+    "domain": "epigamia.com",
+    "website": "epigamia.com",
+    "recipient_email": "dp@epigamia.com",
+    "verification": "official",
+    "brand_niche": "High-Protein Greek Yogurt & Snacks",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_6be0278b",
+    "brand_name": "Country Delight",
+    "domain": "countrydelight.in",
+    "website": "countrydelight.in",
+    "recipient_email": "info@countrydelight.in",
+    "verification": "official",
+    "brand_niche": "Natural Unadulterated Dairy & Produce",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_95179d1e",
+    "brand_name": "Blue Tokai Coffee",
+    "domain": "bluetokaicoffee.com",
+    "website": "bluetokaicoffee.com",
+    "recipient_email": "getcoffee@bluetokaicoffee.com",
+    "verification": "official",
+    "brand_niche": "Estate-Grown Specialty Coffee",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_a3a1bf33",
+    "brand_name": "Chaayos",
+    "domain": "chaayos.com",
+    "website": "chaayos.com",
+    "recipient_email": "contact@chaayos.com",
+    "verification": "official",
+    "brand_niche": "Personalized Fresh Chai & Snacks",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_559dff58",
+    "brand_name": "Bira 91",
+    "domain": "bira91.com",
+    "website": "bira91.com",
+    "recipient_email": "cheers@bira91.com",
+    "verification": "official",
+    "brand_niche": "Craft Beer & Modern Refreshment",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_1abd2a74",
+    "brand_name": "Paper Boat",
+    "domain": "paperboatdrinks.com",
+    "website": "paperboatdrinks.com",
+    "recipient_email": "paperboat@hectorbeverages.com",
+    "verification": "official",
+    "brand_niche": "Nostalgic Traditional Indian Drinks",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_222af14a",
+    "brand_name": "Sleepy Owl Coffee",
+    "domain": "sleepyowl.co",
+    "website": "sleepyowl.co",
+    "recipient_email": "hello@sleepyowl.co",
+    "verification": "official",
+    "brand_niche": "Artisan Cold Brew & Specialty Coffee",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_1e3ab963",
+    "brand_name": "Noise",
+    "domain": "gonoise.com",
+    "website": "gonoise.com",
+    "recipient_email": "support@nexxbase.com",
+    "verification": "official",
+    "brand_niche": "Connected Smartwatches & Audio",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_3372da13",
+    "brand_name": "Rare Rabbit",
+    "domain": "thehouseofrare.com",
+    "website": "thehouseofrare.com",
+    "recipient_email": "support@thehouseofrare.com",
+    "verification": "official",
+    "brand_niche": "Contemporary Elevated Menswear",
+    "creator_name": "Mayank Tanwar",
+    "campaign_prompt": "Identify 5 European slow fashion, timeless tailoring, and heritage leather atelier brands.",
+    "recorded_at": "2026-09-21T09:15:12.772390+00:00"
+  },
+  {
+    "id": "brand_e3a02caf",
     "brand_name": "Kin Hydration",
     "domain": "kinhydration.com",
     "website": "kinhydration.com",
@@ -33,10 +573,10 @@
     "brand_niche": "Clean Electrolytes",
     "creator_name": "Aarav Patel",
     "campaign_prompt": "Find hydration supplements",
-    "recorded_at": "2026-09-21T08:17:21.589857+00:00"
+    "recorded_at": "2026-09-21T09:10:41.692060+00:00"
   },
   {
-    "id": "brand_093ee353",
+    "id": "brand_2194bd13",
     "brand_name": "Mokobara",
     "domain": "mokobara.com",
     "website": "mokobara.com",
@@ -45,10 +585,10 @@
     "brand_niche": "Elevated Travel & Daily Luggage",
     "creator_name": "Aarav Patel",
     "campaign_prompt": "Indian D2C brands for audio and lifestyle",
-    "recorded_at": "2026-09-21T08:17:21.578243+00:00"
+    "recorded_at": "2026-09-21T09:10:41.678976+00:00"
   },
   {
-    "id": "brand_9774a5eb",
+    "id": "brand_7da3380b",
     "brand_name": "Chumbak",
     "domain": "chumbak.com",
     "website": "chumbak.com",
@@ -57,10 +597,10 @@
     "brand_niche": "Eclectic Indian Design & Home Decor",
     "creator_name": "Aarav Patel",
     "campaign_prompt": "Indian D2C brands for audio and lifestyle",
-    "recorded_at": "2026-09-21T08:17:21.578243+00:00"
+    "recorded_at": "2026-09-21T09:10:41.678976+00:00"
   },
   {
-    "id": "brand_b95ead84",
+    "id": "brand_d6526b83",
     "brand_name": "CaratLane",
     "domain": "caratlane.com",
     "website": "caratlane.com",
@@ -69,10 +609,10 @@
     "brand_niche": "Affordable Modern Diamond Jewelry",
     "creator_name": "Aarav Patel",
     "campaign_prompt": "Indian D2C brands for audio and lifestyle",
-    "recorded_at": "2026-09-21T08:17:21.578243+00:00"
+    "recorded_at": "2026-09-21T09:10:41.678976+00:00"
   },
   {
-    "id": "brand_93d490e5",
+    "id": "brand_43721246",
     "brand_name": "BlueStone",
     "domain": "bluestone.com",
     "website": "bluestone.com",
@@ -81,10 +621,10 @@
     "brand_niche": "Contemporary Fine Jewelry",
     "creator_name": "Aarav Patel",
     "campaign_prompt": "Indian D2C brands for audio and lifestyle",
-    "recorded_at": "2026-09-21T08:17:21.578243+00:00"
+    "recorded_at": "2026-09-21T09:10:41.678976+00:00"
   },
   {
-    "id": "brand_36a3d75b",
+    "id": "brand_d5b5e379",
     "brand_name": "Dot & Key",
     "domain": "dotandkey.com",
     "website": "dotandkey.com",
@@ -93,10 +633,10 @@
     "brand_niche": "Fruit-Infused Active Skincare",
     "creator_name": "Aarav Patel",
     "campaign_prompt": "Indian D2C brands for audio and lifestyle",
-    "recorded_at": "2026-09-21T08:17:21.578243+00:00"
+    "recorded_at": "2026-09-21T09:10:41.678976+00:00"
   },
   {
-    "id": "brand_91c6db95",
+    "id": "brand_87579ec7",
     "brand_name": "Plum Goodness",
     "domain": "plumgoodness.com",
     "website": "plumgoodness.com",
@@ -105,10 +645,10 @@
     "brand_niche": "100% Vegan Ethical Skincare",
     "creator_name": "Aarav Patel",
     "campaign_prompt": "Desk accessories",
-    "recorded_at": "2026-09-21T08:17:21.384937+00:00"
+    "recorded_at": "2026-09-21T09:10:41.471252+00:00"
   },
   {
-    "id": "brand_b647a816",
+    "id": "brand_c407253e",
     "brand_name": "mCaffeine",
     "domain": "mcaffeine.com",
     "website": "mcaffeine.com",
@@ -117,10 +657,10 @@
     "brand_niche": "Caffeinated Personal Care",
     "creator_name": "Aarav Patel",
     "campaign_prompt": "Desk accessories",
-    "recorded_at": "2026-09-21T08:17:21.384937+00:00"
+    "recorded_at": "2026-09-21T09:10:41.471252+00:00"
   },
   {
-    "id": "brand_36083e9e",
+    "id": "brand_64759ffb",
     "brand_name": "Bombay Shaving Company",
     "domain": "bombayshavingcompany.com",
     "website": "bombayshavingcompany.com",
@@ -129,10 +669,10 @@
     "brand_niche": "Men's Premium Grooming & Shaving",
     "creator_name": "Aarav Patel",
     "campaign_prompt": "Desk accessories",
-    "recorded_at": "2026-09-21T08:17:21.384937+00:00"
+    "recorded_at": "2026-09-21T09:10:41.471252+00:00"
   },
   {
-    "id": "brand_b0b98c2a",
+    "id": "brand_4d594e5c",
     "brand_name": "Licious",
     "domain": "licious.in",
     "website": "licious.in",
@@ -141,10 +681,10 @@
     "brand_niche": "Gourmet Fresh Meats & Seafood",
     "creator_name": "Aarav Patel",
     "campaign_prompt": "Desk accessories",
-    "recorded_at": "2026-09-21T08:17:21.384937+00:00"
+    "recorded_at": "2026-09-21T09:10:41.471252+00:00"
   },
   {
-    "id": "brand_7b39a8e4",
+    "id": "brand_3d014607",
     "brand_name": "Bewakoof",
     "domain": "bewakoof.com",
     "website": "bewakoof.com",
@@ -153,10 +693,10 @@
     "brand_niche": "Youth Casualwear & Color Block",
     "creator_name": "Aarav Patel",
     "campaign_prompt": "Desk accessories",
-    "recorded_at": "2026-09-21T08:17:21.384937+00:00"
+    "recorded_at": "2026-09-21T09:10:41.471252+00:00"
   },
   {
-    "id": "brand_d24b8210",
+    "id": "brand_49e79521",
     "brand_name": "Snitch",
     "domain": "snitch.co.in",
     "website": "snitch.co.in",
@@ -165,10 +705,10 @@
     "brand_niche": "Fast-Paced Men's Trendwear",
     "creator_name": "Aarav Patel",
     "campaign_prompt": "Desk accessories",
-    "recorded_at": "2026-09-21T08:17:21.384937+00:00"
+    "recorded_at": "2026-09-21T09:10:41.471252+00:00"
   },
   {
-    "id": "brand_12130969",
+    "id": "brand_b6d447e0",
     "brand_name": "SUGAR Cosmetics",
     "domain": "sugarcosmetics.com",
     "website": "sugarcosmetics.com",
@@ -177,10 +717,10 @@
     "brand_niche": "High-Performance Color Cosmetics",
     "creator_name": "Aarav Patel",
     "campaign_prompt": "Desk accessories",
-    "recorded_at": "2026-09-21T08:17:21.384937+00:00"
+    "recorded_at": "2026-09-21T09:10:41.471252+00:00"
   },
   {
-    "id": "brand_edb800f2",
+    "id": "brand_85e8c6c3",
     "brand_name": "Mamaearth",
     "domain": "mamaearth.in",
     "website": "mamaearth.in",
@@ -189,10 +729,10 @@
     "brand_niche": "Toxin-Free Personal Care & Beauty",
     "creator_name": "Aarav Patel",
     "campaign_prompt": "Desk accessories",
-    "recorded_at": "2026-09-21T08:17:21.384937+00:00"
+    "recorded_at": "2026-09-21T09:10:41.471252+00:00"
   },
   {
-    "id": "brand_6aa6dd0f",
+    "id": "brand_d19972d1",
     "brand_name": "boAt Lifestyle",
     "domain": "boat-lifestyle.com",
     "website": "boat-lifestyle.com",
@@ -201,10 +741,10 @@
     "brand_niche": "Consumer Audio & Wearables",
     "creator_name": "Aarav Patel",
     "campaign_prompt": "Desk accessories",
-    "recorded_at": "2026-09-21T08:17:21.384937+00:00"
+    "recorded_at": "2026-09-21T09:10:41.471252+00:00"
   },
   {
-    "id": "brand_5eea3b04",
+    "id": "brand_4585c515",
     "brand_name": "Ambrane",
     "domain": "ambraneindia.com",
     "website": "ambraneindia.com",
@@ -213,10 +753,10 @@
     "brand_niche": "Power Delivery & Mobile Accessories",
     "creator_name": "Aarav Patel",
     "campaign_prompt": "Desk accessories",
-    "recorded_at": "2026-09-21T08:17:21.384937+00:00"
+    "recorded_at": "2026-09-21T09:10:41.471252+00:00"
   },
   {
-    "id": "brand_5e419057",
+    "id": "brand_451fd804",
     "brand_name": "Chamberlain Coffee",
     "domain": "chamberlaincoffee.com",
     "website": "chamberlaincoffee.com",
@@ -225,10 +765,10 @@
     "brand_niche": "Organic Specialty Coffee",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_a9167f43",
+    "id": "brand_1a10788d",
     "brand_name": "Poppi",
     "domain": "drinkpoppi.com",
     "website": "drinkpoppi.com",
@@ -237,10 +777,10 @@
     "brand_niche": "Sparkling Prebiotic Soda",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_d8e2a918",
+    "id": "brand_e5c2d714",
     "brand_name": "Olipop",
     "domain": "drinkolipop.com",
     "website": "drinkolipop.com",
@@ -249,10 +789,10 @@
     "brand_niche": "Prebiotic Digestive Soda",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_bf30d983",
+    "id": "brand_60c201b9",
     "brand_name": "Fly By Jing",
     "domain": "flybyjing.com",
     "website": "flybyjing.com",
@@ -261,10 +801,10 @@
     "brand_niche": "Artisanal Sichuan Chili Crisp",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_0259a25b",
+    "id": "brand_256545a8",
     "brand_name": "Huel",
     "domain": "huel.com",
     "website": "huel.com",
@@ -273,10 +813,10 @@
     "brand_niche": "Complete Nutritionally Balanced Meals",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_ad28806a",
+    "id": "brand_930abecd",
     "brand_name": "Ritual",
     "domain": "ritual.com",
     "website": "ritual.com",
@@ -285,10 +825,10 @@
     "brand_niche": "Traceable Clean Multivitamins",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_4c0fd58f",
+    "id": "brand_4ebe0466",
     "brand_name": "LMNT",
     "domain": "drinklmnt.com",
     "website": "drinklmnt.com",
@@ -297,10 +837,10 @@
     "brand_niche": "Zero-Sugar Electrolyte Fuel",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_a8c8fee5",
+    "id": "brand_16ab3c44",
     "brand_name": "Magic Spoon",
     "domain": "magicspoon.com",
     "website": "magicspoon.com",
@@ -309,10 +849,10 @@
     "brand_niche": "High-Protein Childhood Cereal",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_c58514a3",
+    "id": "brand_ae07354b",
     "brand_name": "Four Sigmatic",
     "domain": "foursigmatic.com",
     "website": "foursigmatic.com",
@@ -321,10 +861,10 @@
     "brand_niche": "Functional Mushroom Coffee",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_87670dbf",
+    "id": "brand_15578708",
     "brand_name": "Nuun Hydration",
     "domain": "nuunlife.com",
     "website": "nuunlife.com",
@@ -333,10 +873,10 @@
     "brand_niche": "Effervescent Electrolyte Tablets",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_7e9f58a8",
+    "id": "brand_cc45116f",
     "brand_name": "Oatly",
     "domain": "oatly.com",
     "website": "oatly.com",
@@ -345,10 +885,10 @@
     "brand_niche": "Oat-Based Dairy Alternatives",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_b3cfdfd2",
+    "id": "brand_ce526b3e",
     "brand_name": "Athletic Greens (AG1)",
     "domain": "drinkag1.com",
     "website": "drinkag1.com",
@@ -357,10 +897,10 @@
     "brand_niche": "Foundational Daily Nutrition",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_9f25af46",
+    "id": "brand_694970ee",
     "brand_name": "Liquid I.V.",
     "domain": "liquid-iv.com",
     "website": "liquid-iv.com",
@@ -369,10 +909,10 @@
     "brand_niche": "Cellular Hydration Multiplier",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_43cb242e",
+    "id": "brand_035755ff",
     "brand_name": "Orbitkey",
     "domain": "orbitkey.com",
     "website": "orbitkey.com",
@@ -381,10 +921,10 @@
     "brand_niche": "Quiet Key Organization",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_d14f16e3",
+    "id": "brand_441c4501",
     "brand_name": "Ugmonk",
     "domain": "ugmonk.com",
     "website": "ugmonk.com",
@@ -393,10 +933,10 @@
     "brand_niche": "Analog Productivity Systems",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_cc018b89",
+    "id": "brand_f09fa0db",
     "brand_name": "Casetify",
     "domain": "casetify.com",
     "website": "casetify.com",
@@ -405,10 +945,10 @@
     "brand_niche": "Impact Tech Protection",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_3e1096b3",
+    "id": "brand_6a2665d7",
     "brand_name": "Bellroy",
     "domain": "bellroy.com",
     "website": "bellroy.com",
@@ -417,10 +957,10 @@
     "brand_niche": "Slim Carry & Eco Leather Goods",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_99225989",
+    "id": "brand_4e6e1d30",
     "brand_name": "Peak Design",
     "domain": "peakdesign.com",
     "website": "peakdesign.com",
@@ -429,10 +969,10 @@
     "brand_niche": "Modular Carry & Camera Gear",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_0c9b3da0",
+    "id": "brand_7853b807",
     "brand_name": "Nothing Technology",
     "domain": "nothing.tech",
     "website": "nothing.tech",
@@ -441,10 +981,10 @@
     "brand_niche": "Design-Forward Smartphones & Minimalist Tech",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_6b3670ff",
+    "id": "brand_5267dfad",
     "brand_name": "Aesop",
     "domain": "aesop.com",
     "website": "aesop.com",
@@ -453,10 +993,10 @@
     "brand_niche": "Sensory Botanical Care",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_35b84e21",
+    "id": "brand_c858660f",
     "brand_name": "Salt & Stone",
     "domain": "saltandstone.com",
     "website": "saltandstone.com",
@@ -465,10 +1005,10 @@
     "brand_niche": "High-Performance Natural Fragrance",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_4c58e047",
+    "id": "brand_509eeac5",
     "brand_name": "Merit Beauty",
     "domain": "meritbeauty.com",
     "website": "meritbeauty.com",
@@ -477,10 +1017,10 @@
     "brand_niche": "Five-Minute Morning Routine",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_c16bab39",
+    "id": "brand_bad6c9b7",
     "brand_name": "Tower 28 Beauty",
     "domain": "tower28beauty.com",
     "website": "tower28beauty.com",
@@ -489,10 +1029,10 @@
     "brand_niche": "Sensitive Skin Makeup & Care",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_1af0243a",
+    "id": "brand_16e2015f",
     "brand_name": "Dieux Skin",
     "domain": "dieuxskin.com",
     "website": "dieuxskin.com",
@@ -501,10 +1041,10 @@
     "brand_niche": "Clinically Validated Barrier Care",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_43d4d0c6",
+    "id": "brand_20035ac5",
     "brand_name": "Biossance",
     "domain": "biossance.com",
     "website": "biossance.com",
@@ -513,10 +1053,10 @@
     "brand_niche": "Sugarcane Squalane Skincare",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_15b9a076",
+    "id": "brand_5020b957",
     "brand_name": "Summer Fridays",
     "domain": "summerfridays.com",
     "website": "summerfridays.com",
@@ -525,10 +1065,10 @@
     "brand_niche": "Restorative Hydration",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_e1454faf",
+    "id": "brand_1545ff74",
     "brand_name": "Ilia Beauty",
     "domain": "iliabeauty.com",
     "website": "iliabeauty.com",
@@ -537,10 +1077,10 @@
     "brand_niche": "Clean Serum Makeup",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_75250f72",
+    "id": "brand_ae81497b",
     "brand_name": "Drunk Elephant",
     "domain": "drunkelephant.com",
     "website": "drunkelephant.com",
@@ -549,10 +1089,10 @@
     "brand_niche": "Biocompatible Skincare",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_1f5eb8ac",
+    "id": "brand_11b6766d",
     "brand_name": "Youth To The People",
     "domain": "youthtothepeople.com",
     "website": "youthtothepeople.com",
@@ -561,10 +1101,10 @@
     "brand_niche": "Superfood Cold-Pressed Skincare",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_259704b2",
+    "id": "brand_ecf8f467",
     "brand_name": "Kosas",
     "domain": "kosas.com",
     "website": "kosas.com",
@@ -573,10 +1113,10 @@
     "brand_niche": "Clean Makeup For Real Skin",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_381b124a",
+    "id": "brand_7e233afe",
     "brand_name": "Rhode Skin",
     "domain": "rhodeskin.com",
     "website": "rhodeskin.com",
@@ -585,10 +1125,10 @@
     "brand_niche": "Clean Barrier Skincare",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_84045622",
+    "id": "brand_04452c72",
     "brand_name": "Rhone",
     "domain": "rhone.com",
     "website": "rhone.com",
@@ -597,10 +1137,10 @@
     "brand_niche": "Premium Commuter & Athletic Wear",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_46eabd88",
+    "id": "brand_18cef039",
     "brand_name": "Hoka",
     "domain": "hoka.com",
     "website": "hoka.com",
@@ -609,10 +1149,10 @@
     "brand_niche": "Maximalist Performance Footwear",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_3ede9a01",
+    "id": "brand_a0aaf01c",
     "brand_name": "On Running",
     "domain": "on.com",
     "website": "on.com",
@@ -621,10 +1161,10 @@
     "brand_niche": "Swiss Engineered Running",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_dc374bc9",
+    "id": "brand_c74005ce",
     "brand_name": "Vuori",
     "domain": "vuoriclothing.com",
     "website": "vuoriclothing.com",
@@ -633,10 +1173,10 @@
     "brand_niche": "Coastal Performance Apparel",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_0da99b54",
+    "id": "brand_30716839",
     "brand_name": "Alo Yoga",
     "domain": "aloyoga.com",
     "website": "aloyoga.com",
@@ -645,10 +1185,10 @@
     "brand_niche": "Studio to Street Movement",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_94611cd6",
+    "id": "brand_049f73ee",
     "brand_name": "Gymshark",
     "domain": "gymshark.com",
     "website": "gymshark.com",
@@ -657,10 +1197,10 @@
     "brand_niche": "Performance Activewear",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_ea40f023",
+    "id": "brand_ae511503",
     "brand_name": "Taylor Stitch",
     "domain": "taylorstitch.com",
     "website": "taylorstitch.com",
@@ -669,10 +1209,10 @@
     "brand_niche": "Heritage Outdoor Menswear",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_44ba7236",
+    "id": "brand_00cab25e",
     "brand_name": "Pact",
     "domain": "wearpact.com",
     "website": "wearpact.com",
@@ -681,10 +1221,10 @@
     "brand_niche": "Organic Cotton Basics",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_7c6899d0",
+    "id": "brand_a6dca71c",
     "brand_name": "Cuyana",
     "domain": "cuyana.com",
     "website": "cuyana.com",
@@ -693,10 +1233,10 @@
     "brand_niche": "Fewer, Better Things",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_4038b54d",
+    "id": "brand_aa205020",
     "brand_name": "Buck Mason",
     "domain": "buckmason.com",
     "website": "buckmason.com",
@@ -705,10 +1245,10 @@
     "brand_niche": "American Tailoring & Knits",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_aef3316b",
+    "id": "brand_7232ded0",
     "brand_name": "Reformation",
     "domain": "thereformation.com",
     "website": "thereformation.com",
@@ -717,10 +1257,10 @@
     "brand_niche": "Sustainable Fashion",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_01ef4db2",
+    "id": "brand_9a63991e",
     "brand_name": "Everlane",
     "domain": "everlane.com",
     "website": "everlane.com",
@@ -729,10 +1269,10 @@
     "brand_niche": "Modern Ethical Basics",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_42a23c07",
+    "id": "brand_5d98d270",
     "brand_name": "Lunya",
     "domain": "lunya.co",
     "website": "lunya.co",
@@ -741,10 +1281,10 @@
     "brand_niche": "Washable Silk & Loungewear",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_c847000a",
+    "id": "brand_77ba25c8",
     "brand_name": "Zomato",
     "domain": "zomato.com",
     "website": "zomato.com",
@@ -753,10 +1293,10 @@
     "brand_niche": "Food Discovery & On-Demand Dining",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_92e21154",
+    "id": "brand_9ca4aa4a",
     "brand_name": "Urban Company",
     "domain": "urbancompany.com",
     "website": "urbancompany.com",
@@ -765,10 +1305,10 @@
     "brand_niche": "On-Demand Home Services & Salon",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_5a6e5963",
+    "id": "brand_2186c707",
     "brand_name": "Pilgrim",
     "domain": "discoverpilgrim.com",
     "website": "discoverpilgrim.com",
@@ -777,10 +1317,10 @@
     "brand_niche": "Global Island Beauty Rituals",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_cd8c98fb",
+    "id": "brand_a39f3459",
     "brand_name": "Portronics",
     "domain": "portronics.com",
     "website": "portronics.com",
@@ -789,10 +1329,10 @@
     "brand_niche": "Portable Gadgets & Workspace Tech",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_7fb8c245",
+    "id": "brand_a6fc7505",
     "brand_name": "Wakefit",
     "domain": "wakefit.co",
     "website": "wakefit.co",
@@ -801,10 +1341,10 @@
     "brand_niche": "Ergonomic Sleep & Workspace Furniture",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_3eee830d",
+    "id": "brand_d892550b",
     "brand_name": "Asket",
     "domain": "asket.com",
     "website": "asket.com",
@@ -813,10 +1353,10 @@
     "brand_niche": "Timeless Essentials",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Workspace and aesthetic essentials",
-    "recorded_at": "2026-09-21T08:17:21.357759+00:00"
+    "recorded_at": "2026-09-21T09:10:41.441772+00:00"
   },
   {
-    "id": "brand_2e6e1984",
+    "id": "brand_7811a628",
     "brand_name": "DailyObjects",
     "domain": "dailyobjects.com",
     "website": "dailyobjects.com",
@@ -825,10 +1365,10 @@
     "brand_niche": "Design-First Tech Accessories & Desks",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Desk setups and mechanical keyboards",
-    "recorded_at": "2026-09-21T08:17:21.269427+00:00"
+    "recorded_at": "2026-09-21T09:10:41.343985+00:00"
   },
   {
-    "id": "brand_a633f908",
+    "id": "brand_8100deab",
     "brand_name": "FabIndia",
     "domain": "fabindia.com",
     "website": "fabindia.com",
@@ -837,10 +1377,10 @@
     "brand_niche": "Handcrafted Indian Textiles & Heritage",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Desk setups and mechanical keyboards",
-    "recorded_at": "2026-09-21T08:17:21.269427+00:00"
+    "recorded_at": "2026-09-21T09:10:41.343985+00:00"
   },
   {
-    "id": "brand_55ce4f73",
+    "id": "brand_19bbe919",
     "brand_name": "The Souled Store",
     "domain": "thesouledstore.com",
     "website": "thesouledstore.com",
@@ -849,10 +1389,10 @@
     "brand_niche": "Fandom & Casual Streetwear",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Desk setups and mechanical keyboards",
-    "recorded_at": "2026-09-21T08:17:21.269427+00:00"
+    "recorded_at": "2026-09-21T09:10:41.343985+00:00"
   },
   {
-    "id": "brand_7a2a8600",
+    "id": "brand_aa0c87da",
     "brand_name": "Le Labo",
     "domain": "lelabofragrances.com",
     "website": "lelabofragrances.com",
@@ -861,10 +1401,10 @@
     "brand_niche": "Handcrafted Artisanal Perfumery",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Desk setups and mechanical keyboards",
-    "recorded_at": "2026-09-21T08:17:21.269427+00:00"
+    "recorded_at": "2026-09-21T09:10:41.343985+00:00"
   },
   {
-    "id": "brand_b4ad8614",
+    "id": "brand_c033fb36",
     "brand_name": "CHIMI",
     "domain": "chimieyewear.com",
     "website": "chimieyewear.com",
@@ -873,10 +1413,10 @@
     "brand_niche": "Scandinavian Statement Eyewear",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Desk setups and mechanical keyboards",
-    "recorded_at": "2026-09-21T08:17:21.269427+00:00"
+    "recorded_at": "2026-09-21T09:10:41.343985+00:00"
   },
   {
-    "id": "brand_024c4843",
+    "id": "brand_bb467c37",
     "brand_name": "Grovemade",
     "domain": "grovemade.com",
     "website": "grovemade.com",
@@ -885,10 +1425,10 @@
     "brand_niche": "Handcrafted Desk Accessories",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Desk setups and mechanical keyboards",
-    "recorded_at": "2026-09-21T08:17:21.269427+00:00"
+    "recorded_at": "2026-09-21T09:10:41.343985+00:00"
   },
   {
-    "id": "brand_172ac8ca",
+    "id": "brand_7842f7c2",
     "brand_name": "Keychron",
     "domain": "keychron.com",
     "website": "keychron.com",
@@ -897,10 +1437,10 @@
     "brand_niche": "Mechanical Keyboards & Input",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Desk setups and mechanical keyboards",
-    "recorded_at": "2026-09-21T08:17:21.269427+00:00"
+    "recorded_at": "2026-09-21T09:10:41.343985+00:00"
   },
   {
-    "id": "brand_b0f08c6a",
+    "id": "brand_5b332182",
     "brand_name": "Tracksmith",
     "domain": "tracksmith.com",
     "website": "tracksmith.com",
@@ -909,10 +1449,10 @@
     "brand_niche": "New England Running Heritage",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Desk setups and mechanical keyboards",
-    "recorded_at": "2026-09-21T08:17:21.269427+00:00"
+    "recorded_at": "2026-09-21T09:10:41.343985+00:00"
   },
   {
-    "id": "brand_fce662da",
+    "id": "brand_dcae87f2",
     "brand_name": "Ten Thousand",
     "domain": "tenthousand.cc",
     "website": "tenthousand.cc",
@@ -921,10 +1461,10 @@
     "brand_niche": "Tactical Athletic Gear",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Desk setups and mechanical keyboards",
-    "recorded_at": "2026-09-21T08:17:21.269427+00:00"
+    "recorded_at": "2026-09-21T09:10:41.343985+00:00"
   },
   {
-    "id": "brand_4915f03d",
+    "id": "brand_45ddf958",
     "brand_name": "Andamen",
     "domain": "andamen.com",
     "website": "andamen.com",
@@ -933,6 +1473,6 @@
     "brand_niche": "Menswear & Tailoring",
     "creator_name": "Alex Vance",
     "campaign_prompt": "Desk setups and mechanical keyboards",
-    "recorded_at": "2026-09-21T08:17:21.269427+00:00"
+    "recorded_at": "2026-09-21T09:10:41.343985+00:00"
   }
 ]

@@ -563,45 +563,20 @@ def generate_brand_pitches_ollama(
             )
 
         system_prompt = (
-            "You are the Brand Research, Lead Verification & Creative Campaign Strategist for Crevanta Agency (Creators × Advantage).\n\n"
-            "PART 1: STRICT BRAND RESEARCH & CONTACT VERIFICATION PROTOCOL\n"
-            "- Your highest priority is ACCURACY over completeness.\n"
-            "- NEVER invent, assume, estimate, reconstruct, or guess contact information.\n"
-            "- NEVER create an email based on a pattern (DO NOT assume hello@brand.com, contact@brand.com, marketing@brand.com, collab@brand.com, partnerships@brand.com merely from domain).\n"
-            "- DO NOT guess personal employee emails (e.g. rahul@brand.com).\n"
-            "- TAKE ONLY OFFICIAL EMAILS: Accept an email ONLY if it is explicitly published on the brand's official website (Contact, About, Press, Partnerships, Collab, Footer) or official verified social profile.\n"
-            "- NO THIRD-PARTY EMAILS: Do not output third-party or scraped directory emails.\n"
-            "- IF THERE IS NO OFFICIAL EMAIL: Set recipient_email to 'Not publicly available', verification to 'unverified', and email_source to 'Checked official website and contact pages. No publicly listed official email found.'\n"
-            "- CONTACT PRIORITY (ONLY IF ACTUALLY FOUND): partnerships@ > collab@ > marketing@ > influencer@ > social@ > business@ > hello@ > contact@ > info@.\n"
-            "- SOURCE RECORD: Always record where the contact was located in 'email_source'.\n\n"
-            "PART 2: UNIQUE VIDEO IDEAS PROTOCOL (NOT GENERIC ADS)\n"
-            "- Creative Formula: Brand → Differentiator → Audience problem/desire → Creator behaviour → Content hook → Concept.\n"
-            "- Choose an original concept format: Transformation, Versatility, Challenge, Experiment, Discovery, Personality, Comparison, Real-life scenario, Audience participation, or Story/experience.\n"
-            "- You MUST output these 4 specific creative components:\n"
-            "  * Brand Insight: 1-2 sentences explaining the most useful brand differentiator strictly relevant to this brand's niche.\n"
-            "  * Creative Opportunity: What kind of creator content could help the brand.\n"
-            "  * Concept Title: ONE strong, original, natural title tailored to this category.\n"
-            "  * How It Works: 2-4 sentences explaining what the creator actually DOES with the product or at the facility.\n\n"
-            "PART 3: SIGNATURE 15-DAY CAMPAIGN ROADMAP\n"
-            "- Day 1 Kickoff, Day 3-5 Hero Reel Drop, Day 7 Interactive Story Engagement, Day 10 Amplification, Day 15 Analytics Wrap.\n\n"
-            "PART 4: ANTI-SPAM & PRIMARY INBOX DELIVERABILITY PROTOCOL\n"
-            "- Your goal is to guarantee that the generated outreach lands in the brand's PRIMARY INBOX, NEVER in spam or junk.\n"
-            "- ZERO SPAM TRIGGER WORDS: Never use words like '100% free', 'guaranteed', 'urgent', 'act now', 'limited time', 'risk-free', 'buy now', 'cash', 'exclusive offer', 'winner', 'click here'.\n"
-            "- NATURAL CONVERSATIONAL TONE: Write like a senior talent manager composing a direct 1-to-1 message in Gmail.\n"
-            "- NO ALL-CAPS WORDS: Never write words in full capitals in subject or body.\n"
-            "- NO EXCLAMATION MARKS: Zero '!' in subject line; maximum one polite '!' in the entire body.\n"
-            "- CRISP LENGTH: Keep the complete outreach body between 120 and 190 words. Long emails trigger spam algorithms.\n"
-            "- CONVERSATIONAL SUBJECT LINE: Short (under 7 words), natural sentence or title case (e.g., 'Partnership Concept: {creator_name} × {brand_name}').\n\n"
-            "PART 5: TARGET NICHE & LOCATION FOCUS\n"
+            "You are the Brand Research & Creative Campaign Strategist for Crevanta Agency (Creators × Advantage).\n\n"
+            "STRICT PROTOCOL:\n"
+            "1. ACCURACY: Accept an email ONLY if explicitly published on the brand's official website or official profile. If not found, set recipient_email to 'Not publicly available', verification to 'unverified', and email_source to 'Checked official website and contact pages. No publicly listed official email found.'\n"
+            "2. ABOUT THE CREATOR: Write a compelling, concise 2-3 sentence paragraph introducing the creator's metrics, authentic trust, and audience fit for this specific brand.\n"
+            "3. CONCEPT TITLE: Create ONE strong, natural, memorable video concept title tailored directly to this brand (e.g., 'The 4K Creator Stress Test', 'Morning Routine Reset'). Keep it short and impactful.\n"
+            "4. TARGET NICHE & LOCATION FOCUS:\n"
             f"- TARGET LOCATION: {loc_target}\n"
-            "- Prioritize and discover authentic brands strictly operating in the requested category and target location.\n"
-            "- ZERO IRRELEVANT BRANDS: If user searches for gyms, return ONLY gyms/fitness brands. If coffee, return ONLY coffee brands. Never substitute with unrelated categories.\n"
+            "- Discover authentic brands strictly operating in the requested category and target location.\n"
             + ("- Reject foreign brands without Indian presence or operations.\n\n" if indian_only else "\n\n")
             + f"Tone / Style Requirement: {style_desc}\n"
             "Agency Name: Crevanta Agency (Creators × Advantage)\n\n"
-            "OUTPUT REQUIREMENT: Respond ONLY with a valid JSON object matching this schema:\n"
+            "OUTPUT REQUIREMENT: Respond ONLY with a valid JSON object matching this lightweight schema:\n"
             "{\n"
-            '  "summary": "Strategic overview of why these brands match the creator criteria",\n'
+            '  "summary": "Brief overview of why these brands match the creator",\n'
             '  "brands": [\n'
             "    {\n"
             '      "brand_name": "Official Brand Name",\n'
@@ -609,19 +584,12 @@ def generate_brand_pitches_ollama(
             '      "recipient_email": "partnerships@branddomain.com",\n'
             '      "verification": "official",\n'
             '      "email_source": "Official brand website contact page",\n'
-            '      "contact_person": "Head of Influencer Partnerships",\n'
             '      "brand_niche": "Brand category",\n'
             '      "location": "City or Region",\n'
-            '      "why_fit": "Strategic reason why this creator is an authentic partner",\n'
-            '      "subject": "Compelling subject line",\n'
-            '      "part1_about_creator": "Clear paragraph introducing creator metrics and audience trust",\n'
-            '      "part2_concept_title": "Short memorable title tailored to this brand",\n'
-            '      "part2_brand_insight": "1-2 sentences explaining the most useful brand differentiator",\n'
-            '      "part2_creative_opportunity": "What kind of creator content could help the brand",\n'
-            '      "part2_how_it_works": "2-4 sentences explaining the creator action and visual hook",\n'
-            '      "part2_video_idea": "Brand Insight: ...\\nCreative Opportunity: ...\\nConcept: \\"...\\"\\nHow It Works: ...",\n'
-            '      "part3_15day_campaign": "Concise breakdown of 15-day campaign milestones",\n'
-            '      "full_email_body": "Complete email connecting part 1, part 2, and part 3 with greeting and Crevanta sign-off"\n'
+            '      "why_fit": "1 concise sentence why this creator is an authentic partner",\n'
+            '      "subject": "Compelling short subject line",\n'
+            '      "part1_about_creator": "2-3 sentences introducing creator metrics and why their audience fits this brand",\n'
+            '      "part2_concept_title": "Short memorable bespoke video concept title tailored to this brand"\n'
             "    }\n"
             "  ]\n"
             "}"
@@ -641,10 +609,9 @@ def generate_brand_pitches_ollama(
             f"TARGET LOCATION: {loc_target}\n"
             f"{discovered_context}\n"
             f"{exclude_text}\n"
-            f"OUR UNIQUE VIDEO IDEA INSTRUCTIONS:\n"
-            f"{video_idea if video_idea else 'Develop a bespoke, natural video concept using the 4-part formula: Brand Insight, Creative Opportunity, Concept Title, and How It Works. Make it strictly fit the brand niche!'}\n\n"
-            f"OUR 15-DAY CAMPAIGN INSTRUCTIONS:\n"
-            f"{campaign_15day_notes if campaign_15day_notes else 'Crevanta structured 15-day campaign: Day 1 Launch, Day 3-5 Hero Reel drop, Day 7 Story dialogue, Day 10 Co-author amplification, Day 15 Analytics wrap.'}\n\n"
+            f"TASK FOR EACH BRAND:\n"
+            f"1. 'part1_about_creator': A crisp 2-3 sentence introduction connecting {creator_name}'s audience trust to the brand.\n"
+            f"2. 'part2_concept_title': One bespoke, catchy Concept Title tailored to the brand's product.\n\n"
             f"BATCH REQUEST: Please discover exactly {batch_target} distinct brand targets in this specific niche and location."
         )
 
@@ -659,7 +626,7 @@ def generate_brand_pitches_ollama(
                 model=target_model,
                 messages=messages,
                 is_json=True,
-                num_predict=min(2200, max(800, batch_target * 320)),
+                num_predict=min(1500, max(500, batch_target * 160)),
                 num_ctx=8192
             )
             content_text = res.get("message", {}).get("content", "").strip()
@@ -705,9 +672,6 @@ def generate_brand_pitches_ollama(
                         b["website"] = verified_match["website"]
                         if not b.get("part2_concept_title") or b.get("part2_concept_title") == "Bespoke Creator Integration":
                             b["part2_concept_title"] = verified_match.get("part2_concept_title") or b.get("part2_concept_title")
-                            b["part2_brand_insight"] = verified_match.get("part2_brand_insight") or b.get("part2_brand_insight")
-                            b["part2_creative_opportunity"] = verified_match.get("part2_creative_opportunity") or b.get("part2_creative_opportunity")
-                            b["part2_how_it_works"] = verified_match.get("part2_how_it_works") or b.get("part2_how_it_works")
                     else:
                         v_raw = (b.get("verification") or "").strip().lower()
                         if "official" in v_raw and "unverified" not in v_raw:
@@ -718,24 +682,11 @@ def generate_brand_pitches_ollama(
                         else:
                             b["verification"] = "unverified"
 
-                    # Ensure 4-part video concept integrity
-                    concept_title = b.get("part2_concept_title") or b.get("concept_title") or "Bespoke Creator Integration"
-                    brand_insight = b.get("part2_brand_insight") or b.get("brand_insight") or f"{b_name} offers differentiated quality in {b.get('brand_niche', 'its market')}."
-                    creative_opp = b.get("part2_creative_opportunity") or b.get("creative_opportunity") or f"Highlighting authentic product usage in {creator_name}'s high-trust content."
-                    how_it_works = b.get("part2_how_it_works") or b.get("how_it_works") or b.get("part2_video_idea") or f"{creator_name} showcases {b_name} in a realistic daily scenario."
-
+                    # 1. Concept Title (AI generated)
+                    concept_title = (b.get("part2_concept_title") or b.get("concept_title") or "Bespoke Creator Integration").strip().strip('"')
                     b["part2_concept_title"] = concept_title
-                    b["part2_brand_insight"] = brand_insight
-                    b["part2_creative_opportunity"] = creative_opp
-                    b["part2_how_it_works"] = how_it_works
-                    b["part2_video_idea"] = (
-                        f"Brand Insight: {brand_insight}\n"
-                        f"Creative Opportunity: {creative_opp}\n"
-                        f"Concept: \"{concept_title}\"\n"
-                        f"How It Works: {how_it_works}"
-                    )
 
-                    # Ensure 3-part full email completeness
+                    # 2. About Creator (AI generated)
                     p1_text = b.get("part1_about_creator") or (
                         f"{creator_name} ({creator_handle}) commands an authentic community of {creator_followers} engaged followers "
                         f"in the {creator_niche} space with a verified {creator_er} engagement rate. "
@@ -743,21 +694,34 @@ def generate_brand_pitches_ollama(
                     )
                     b["part1_about_creator"] = p1_text
 
-                    p3_text = b.get("part3_15day_campaign") or (
-                        campaign_15day_notes if campaign_15day_notes else
-                        "Crevanta's Structured 15-Day Campaign Framework: Day 1 Kickoff & Product Unboxing, Day 4 Hero Reel Drop, Day 7 Interactive Story Q&A with direct affiliate link, Day 11 Co-Author Boost, Day 15 Analytics & ROI Wrap."
+                    # 3. Assemble Video Idea programmatically using Concept Title (zero AI load)
+                    b_niche_str = b.get("brand_niche") or brand_prompt or "its category"
+                    b["part2_brand_insight"] = f"{b_name} delivers distinct quality and craft in {b_niche_str}."
+                    b["part2_creative_opportunity"] = f"Seamlessly integrating {b_name} into {creator_name}'s organic creator narrative."
+                    b["part2_how_it_works"] = f"{creator_name} tests and features {b_name} through the \"{concept_title}\" creative concept in an authentic setting."
+                    b["part2_video_idea"] = (
+                        f"Brand Insight: {b['part2_brand_insight']}\n"
+                        f"Creative Opportunity: {b['part2_creative_opportunity']}\n"
+                        f"Concept: \"{concept_title}\"\n"
+                        f"How It Works: {b['part2_how_it_works']}"
+                    )
+
+                    # 4. Standard 15-Day Campaign Roadmap (standardized & same for all)
+                    p3_text = (
+                        campaign_15day_notes.strip() if campaign_15day_notes and campaign_15day_notes.strip() else
+                        "Crevanta's Structured 15-Day Campaign Framework: Day 1 Kickoff & Gifting Unboxing, Day 4 Dedicated Hero Reel Drop, Day 7 Interactive Story Q&A with direct affiliate link, Day 11 Co-Author Boost, Day 15 Analytics & ROI Wrap."
                     )
                     b["part3_15day_campaign"] = p3_text
 
-                    # INHERENT ANTI-SPAM FORMATTING: Clean subject, sanitize copy, add opt-out reputation footer
+                    # 5. Programmatic Full Email Assembly (zero AI load, primary inbox optimized)
                     raw_subject = b.get("subject") or f"Partnership Concept: {creator_name} × {b_name}"
                     b["subject"] = optimize_subject_line(raw_subject, b_name, creator_name)
 
-                    raw_body = b.get("full_email_body") or (
+                    raw_body = (
                         f"Hi {b_name} Partnerships Team,\n\n"
                         f"I lead brand partnerships at Crevanta Agency (Creators × Advantage). We manage {creator_name} ({creator_handle}) and have identified {b_name} as an ideal collaborative fit.\n\n"
                         f"1. ABOUT THE CREATOR:\n{p1_text}\n\n"
-                        f"2. OUR UNIQUE VIDEO CONCEPT:\n{b['part2_video_idea']}\n\n"
+                        f"2. OUR UNIQUE VIDEO CONCEPT:\nConcept: \"{concept_title}\"\n\n"
                         f"3. OUR 15-DAY CAMPAIGN ROADMAP:\n{p3_text}\n\n"
                         f"Would your team be open to a 10-minute briefing call this week to review our creative moodboard and sample deliverables?\n\n"
                         f"Best regards,\n"
