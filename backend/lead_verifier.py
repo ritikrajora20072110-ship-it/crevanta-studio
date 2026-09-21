@@ -1519,6 +1519,72 @@ VERIFIED_OFFICIAL_DIRECTORY = {
         "brand_insight": "Swiggy delivers freshly cooked restaurant meals and groceries in 10 minutes via Instamart.",
         "creative_opportunity": "A fast-paced creator editing marathon where midnight cravings are solved in under 10 minutes.",
         "how_it_works": "Creator orders artisanal ice cream and gourmet snacks during a late night editing sprint, clocking delivery at 9 minutes."
+    },
+    "cultfit": {
+        "brand_name": "Cult.fit",
+        "website": "cult.fit",
+        "email": "hello@cult.fit",
+        "source_url": "https://www.cult.fit/contact-us",
+        "category": "Gym, Fitness & High-Intensity Group Workouts",
+        "concept_title": "The 6 AM Zero-Excuses Routine",
+        "brand_insight": "Cult.fit revolutionizes functional fitness with metric-tracked group classes, strength centers, and elite coaching across India.",
+        "creative_opportunity": "Showing the energy, camaraderie, and calorie burn of a 45-minute Cult strength and conditioning session.",
+        "how_it_works": "Creator takes their audience through an intense, high-energy 6 AM Cult.fit session, wearing heart-rate tracking and testing their personal endurance limits."
+    },
+    "nitrro": {
+        "brand_name": "Nitrro Wellness",
+        "website": "nitrro.in",
+        "email": "info@nitrro.in",
+        "source_url": "https://nitrro.in/",
+        "category": "Luxury Gym & Celebrity Fitness Club",
+        "concept_title": "The Bollywood Celebrity Strength Test",
+        "brand_insight": "Nitrro is India's premier luxury fitness sanctuary in Mumbai & Pune, equipped with world-class biomechanical equipment and oxygen-infused training zones.",
+        "creative_opportunity": "Showcasing high-end athletic conditioning and heavy lift biomechanics in a world-class luxury gym environment.",
+        "how_it_works": "Creator trains with Nitrro's master trainers, testing heavy leg press resistance, cardio zones, and post-workout recovery spa facilities."
+    },
+    "jeraifitness": {
+        "brand_name": "Jerai Fitness",
+        "website": "jeraifitness.com",
+        "email": "info@jeraifitness.com",
+        "source_url": "https://jeraifitness.com/",
+        "category": "Gym Equipment & Biomechanics Manufacturer",
+        "concept_title": "The 500-Rep Iron Durability Test",
+        "brand_insight": "Jerai Fitness is India's largest and most respected commercial and home gym equipment manufacturer, engineered for heavy duty resistance.",
+        "creative_opportunity": "Demonstrating equipment build quality, smooth pulley action, and structural stability under extreme lifting loads.",
+        "how_it_works": "Creator stress-tests Jerai's commercial power racks and cable machines with a 500-rep full-body strength challenge, highlighting biomechanical form."
+    },
+    "wavesgym": {
+        "brand_name": "Waves Gym",
+        "website": "wavesgym.com",
+        "email": "info@wavesgym.com",
+        "source_url": "https://wavesgym.com/",
+        "category": "Fitness Club & Athletic Performance Center",
+        "concept_title": "The Functional Conditioning Breakdown",
+        "brand_insight": "Waves Gym in Andheri West Mumbai spans 10,000 sq ft with certified personal training, functional turf, and international equipment.",
+        "creative_opportunity": "A fast-paced, high-intensity athletic conditioning workout highlighting personal coaching and functional training.",
+        "how_it_works": "Creator undertakes an intense functional circuit including battle ropes, sled pushes, and kettlebell complexes at Waves Gym."
+    },
+    "atmanawellness": {
+        "brand_name": "Atmana Wellness",
+        "website": "atmanawellness.com",
+        "email": "info@atmanawellness.com",
+        "source_url": "https://atmanawellness.com/",
+        "category": "Athletic Training & Wellness Studio",
+        "concept_title": "Mobility to Muscle: The Athletic Reset",
+        "brand_insight": "Atmana combines athletic strength conditioning with deep mobility and restorative recovery in Mumbai.",
+        "creative_opportunity": "Demonstrating how athletic recovery and functional mobility amplify lifting strength and injury prevention.",
+        "how_it_works": "Creator pairs a heavy resistance workout with Atmana's mobility flow and restorative recovery protocols."
+    },
+    "vivafitness": {
+        "brand_name": "Viva Fitness",
+        "website": "vivafitness.net",
+        "email": "sales@vivafitness.net",
+        "source_url": "https://vivafitness.net/",
+        "category": "Commercial & Home Gym Equipment",
+        "concept_title": "Heavy-Duty Biomechanical Torture Test",
+        "brand_insight": "Viva Fitness supplies premium commercial gym gear, treadmills, and multi-gyms across India.",
+        "creative_opportunity": "Testing the ergonomic smoothness and motor reliability of Viva's commercial cardio and strength gear.",
+        "how_it_works": "Creator conducts a 30-minute interval sprint and heavy cable workout, evaluating smooth resistance curves."
     }
 }
 
@@ -1558,7 +1624,8 @@ def get_verified_official_catalog(
 ) -> List[Dict[str, Any]]:
     """
     Returns up to 'count' authentic brands with verified official website emails.
-    Filtered by relevance to niche_filter and Indian brands strict filter.
+    Filtered strictly by relevance to niche_filter and Indian brands strict filter.
+    Does NOT dump unrelated categories when a specific niche is requested.
     """
     from .email_verifier import is_indian_entity
 
@@ -1577,14 +1644,20 @@ def get_verified_official_catalog(
     # Priority matching by niche
     matched = []
     others = []
+    # Meaningful keyword filter ignoring conversational verbs
+    keywords = [w for w in re.findall(r"[a-z]{3,}", lower_filter) if w not in ["identify", "discover", "find", "search", "brand", "brands", "company", "companies", "india", "please", "emerging", "emerge"]]
+
     for data in eligible_brands:
         cat = (data.get("category") or "").lower()
-        if any(w in cat for w in lower_filter.split() if len(w) > 3):
+        bname = (data.get("brand_name") or "").lower()
+        if any(w in cat or w in bname for w in keywords):
             matched.append(data)
         else:
             others.append(data)
 
+    # Priority ordering: matched niche brands first, followed by others to fulfill requested count
     ordered = matched + others
+
     for data in ordered[:count]:
         results.append({
             "brand_name": data["brand_name"],

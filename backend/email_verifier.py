@@ -104,6 +104,10 @@ KNOWN_INDIAN_DOMAINS = {
     "cred.club", "zerodha.com", "groww.in", "paytm.com", "phonepe.com", "razorpay.com",
     "cashfree.com", "inmobi.com", "zoho.com", "freshworks.com", "postman.com",
 
+    # Fitness, Gyms & Athletic Training
+    "cult.fit", "nitrro.in", "jeraifitness.com", "wavesgym.com", "atmanawellness.com",
+    "vivafitness.net", "chisel.co.in", "wtfgyms.com", "fitpass.co.in", "gymlocator.in",
+
     # Global brands with dedicated Indian operations / subsidiaries
     "amazon.in", "samsung.com/in", "nike.in", "adidas.co.in", "puma.com/in",
     "decathlon.in", "ikea.com/in", "muji.in", "uniqlo.com/in", "starbucks.in",
@@ -128,7 +132,8 @@ KNOWN_INDIAN_BRAND_NAMES = {
     "wakefit", "sleepycat", "the sleep company", "pepperfry", "urban ladder",
     "ather", "ather energy", "ola electric", "ultraviolette", "tata motors",
     "mahindra", "royal enfield", "tvs", "bajaj", "zomato", "swiggy", "flipkart",
-    "myntra", "ajio", "tata cliq", "jio", "urban company", "cult.fit",
+    "myntra", "ajio", "tata cliq", "jio", "urban company", "cult.fit", "cultfit",
+    "nitrro", "nitrro wellness", "jerai", "jerai fitness", "waves gym", "atmana wellness", "viva fitness",
     "cred", "zerodha", "groww", "paytm", "phonepe", "razorpay", "zoho"
 }
 

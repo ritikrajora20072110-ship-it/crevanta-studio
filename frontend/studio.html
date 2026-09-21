@@ -546,6 +546,46 @@
           <textarea id="campaignPrompt" rows="3" placeholder="e.g. Discover 50 emerging performance apparel and hydration brands in the US and Europe that collaborate with creators. Retrieve their verified partnership emails." class="w-full editorial-input p-3.5 rounded-lg text-sm leading-relaxed font-medium"></textarea>
         </div>
 
+        <!-- BRAND LOCATION FILTER & ONLINE WEB SEARCH -->
+        <div class="space-y-2.5 p-3.5 bg-[#FAF8F5] rounded-lg border border-[#E2DDD2]">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
+            <label class="block text-xs font-bold uppercase tracking-wider text-[#141413] flex items-center gap-1.5">
+              <i data-lucide="map-pin" class="w-3.5 h-3.5 text-[#B89248]"></i>
+              <span>Geographic Location Filter</span>
+            </label>
+            <span class="text-[11px] text-[#66615B]">Filters live search to brands in specific cities or Pan-India</span>
+          </div>
+
+          <!-- Quick Location Chips -->
+          <div class="flex flex-wrap items-center gap-1.5" id="locationChipsContainer">
+            <button type="button" onclick="selectLocationPreset('All India')" class="location-chip-btn active text-xs px-2.5 py-1 rounded-full border border-[#141413] bg-[#141413] text-[#FAF8F5] font-semibold transition" data-loc="All India">🇮🇳 All India</button>
+            <button type="button" onclick="selectLocationPreset('Mumbai')" class="location-chip-btn text-xs px-2.5 py-1 rounded-full border border-[#E2DDD2] bg-white text-[#383531] hover:border-[#141413] font-medium transition" data-loc="Mumbai">📍 Mumbai</button>
+            <button type="button" onclick="selectLocationPreset('Delhi NCR')" class="location-chip-btn text-xs px-2.5 py-1 rounded-full border border-[#E2DDD2] bg-white text-[#383531] hover:border-[#141413] font-medium transition" data-loc="Delhi NCR">📍 Delhi NCR</button>
+            <button type="button" onclick="selectLocationPreset('Bengaluru')" class="location-chip-btn text-xs px-2.5 py-1 rounded-full border border-[#E2DDD2] bg-white text-[#383531] hover:border-[#141413] font-medium transition" data-loc="Bengaluru">📍 Bengaluru</button>
+            <button type="button" onclick="selectLocationPreset('Pune')" class="location-chip-btn text-xs px-2.5 py-1 rounded-full border border-[#E2DDD2] bg-white text-[#383531] hover:border-[#141413] font-medium transition" data-loc="Pune">📍 Pune</button>
+            <button type="button" onclick="selectLocationPreset('Hyderabad')" class="location-chip-btn text-xs px-2.5 py-1 rounded-full border border-[#E2DDD2] bg-white text-[#383531] hover:border-[#141413] font-medium transition" data-loc="Hyderabad">📍 Hyderabad</button>
+            <button type="button" onclick="selectLocationPreset('Chennai')" class="location-chip-btn text-xs px-2.5 py-1 rounded-full border border-[#E2DDD2] bg-white text-[#383531] hover:border-[#141413] font-medium transition" data-loc="Chennai">📍 Chennai</button>
+            <button type="button" onclick="selectLocationPreset('Kolkata')" class="location-chip-btn text-xs px-2.5 py-1 rounded-full border border-[#E2DDD2] bg-white text-[#383531] hover:border-[#141413] font-medium transition" data-loc="Kolkata">📍 Kolkata</button>
+            <button type="button" onclick="selectLocationPreset('Ahmedabad')" class="location-chip-btn text-xs px-2.5 py-1 rounded-full border border-[#E2DDD2] bg-white text-[#383531] hover:border-[#141413] font-medium transition" data-loc="Ahmedabad">📍 Ahmedabad</button>
+            <button type="button" onclick="selectLocationPreset('Jaipur')" class="location-chip-btn text-xs px-2.5 py-1 rounded-full border border-[#E2DDD2] bg-white text-[#383531] hover:border-[#141413] font-medium transition" data-loc="Jaipur">📍 Jaipur</button>
+            <button type="button" onclick="selectLocationPreset('Chandigarh')" class="location-chip-btn text-xs px-2.5 py-1 rounded-full border border-[#E2DDD2] bg-white text-[#383531] hover:border-[#141413] font-medium transition" data-loc="Chandigarh">📍 Chandigarh</button>
+          </div>
+
+          <!-- Custom Location Input -->
+          <div class="pt-1">
+            <input type="text" id="campaignLocationInput" value="All India" oninput="handleCustomLocationInput(this.value)" placeholder="Or enter custom city / neighborhood (e.g. Bandra West, Indiranagar, Gurgaon, New York)..." class="w-full editorial-input px-3 py-2 rounded-md text-xs font-medium bg-white">
+          </div>
+
+          <!-- Real-Time Online Web Search Badge -->
+          <div class="flex items-center gap-2 pt-1 border-t border-[#EAE5DB]">
+            <span class="editorial-badge badge-active text-[10.5px]">
+              <i data-lucide="globe" class="w-3 h-3 text-emerald-600"></i>
+              <span>Real-Time Online Web Search Active</span>
+            </span>
+            <span class="text-[11px] text-[#66615B]">Ollama & Crevanta crawler search the live internet for brand websites, published contacts, and locations.</span>
+          </div>
+        </div>
+
         <!-- STRICT VERIFICATION & INDIAN BRAND FILTERS -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 p-3.5 bg-[#FAF8F5] rounded-lg border border-[#E2DDD2]">
           <div class="flex items-start gap-2.5">

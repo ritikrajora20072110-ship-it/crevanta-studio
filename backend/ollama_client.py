@@ -317,7 +317,17 @@ def _synthesize_brand_pitch(
 
     # 2. Bespoke Video Concept adhering to Crevanta's 10 Concept Archetypes & 4-part format
     lower_niche = (brand_niche or "").lower()
-    if any(k in lower_niche for k in ["fashion", "apparel", "wear", "tailor", "knit", "textile"]):
+    if any(k in lower_niche for k in ["gym", "fitness", "workout", "strength", "training", "athletic", "crossfit", "bodybuilding", "powerlifting"]):
+        concept_title = "The 500-Rep Iron Durability Test"
+        brand_insight = f"{brand_name} delivers elite biomechanical equipment and training environments engineered for heavy progressive overload and athletic precision."
+        creative_opp = f"Demonstrating heavy-load durability, form precision, and workout intensity under realistic PR-attempt conditions."
+        how_it_works = f"{c_name} takes their audience through an unedited, high-intensity strength session with {brand_name}, testing ergonomics, grip stability, and movement flow across squats, bench press, and functional circuits."
+    elif any(k in lower_niche for k in ["coffee", "cafe", "roast", "brew", "espresso", "barista"]):
+        concept_title = "The Blind Pour-Over Showdown"
+        brand_insight = f"{brand_name} sources specialty single-origin beans roasted to preserve delicate terroir notes and rich aromatics without commercial bitterness."
+        creative_opp = f"Educating coffee enthusiasts on brewing nuance, dial-in ratios, and sensory differences between commercial dark roasts and specialty craft beans."
+        how_it_works = f"{c_name} conducts a side-by-side blind tasting against generic grocery coffee, timing extraction and analyzing crema, mouthfeel, and tasting notes on camera."
+    elif any(k in lower_niche for k in ["fashion", "apparel", "wear", "tailor", "knit", "textile"]):
         concept_title = "One Wardrobe, Three Occasions"
         brand_insight = f"{brand_name} designs versatile, elevated tailoring built for multi-context everyday movement."
         creative_opp = f"Demonstrating functional versatility and elevated styling across contrasting daily scenarios."
@@ -327,18 +337,18 @@ def _synthesize_brand_pitch(
         brand_insight = f"{brand_name} focuses on bio-compatible, minimalist formulations without unnecessary fillers."
         creative_opp = f"Showcasing a real-life skin barrier recovery journey under high-stress daily environments."
         how_it_works = f"{c_name} documents morning and night application across 7 days, capturing macro texture comparisons and barrier hydration without heavy studio lighting."
-    elif any(k in lower_niche for k in ["tech", "workspace", "hardware", "lighting", "organization"]):
+    elif any(k in lower_niche for k in ["tech", "workspace", "hardware", "lighting", "organization", "keyboard"]):
         concept_title = "From Chaos to Command Center"
         brand_insight = f"{brand_name} delivers tactile, industrial-grade workspace tools that eliminate daily friction."
         creative_opp = f"A fast-paced, satisfying workspace transformation showing before vs after workflow efficiency."
         how_it_works = f"{c_name} performs a 60-second time-lapse reset of their desk, demonstrating how {brand_name}'s gear organizes cables, acoustics, and tactile input."
-    elif any(k in lower_niche for k in ["nutrition", "fuel", "beverage", "recovery", "wellness", "supplement"]):
+    elif any(k in lower_niche for k in ["nutrition", "fuel", "beverage", "recovery", "wellness", "supplement", "electrolyte"]):
         concept_title = "The 9 AM to 9 PM Test"
         brand_insight = f"{brand_name} provides clean, sustained functional fuel without the afternoon glycemic crash."
         creative_opp = f"Putting the product to a real-life endurance test during a high-output marathon creator day."
         how_it_works = f"{c_name} tracks their mental focus and energy levels hourly from morning filming to evening editing, contrasting it against regular caffeine routines."
     else:
-        concept_title = "The Daily Essential Test"
+        concept_title = "The Real-World Stress Test"
         brand_insight = f"{brand_name} engineers thoughtful, high-durability essentials designed for modern daily rituals."
         creative_opp = f"Integrating the product organically into {c_name}'s high-standards routine to show real-life utility."
         how_it_works = f"{c_name} tests {brand_name}'s hero offering under real-world conditions, showing what sets it apart from standard alternatives."
@@ -407,27 +417,26 @@ def generate_brand_pitches_ollama(
     model: Optional[str] = None,
     base_url: Optional[str] = None,
     strict_official_only: bool = False,
-    indian_only: bool = False
+    indian_only: bool = False,
+    location: Optional[str] = "All India"
 ) -> Dict[str, Any]:
     """
-    Real-time dynamic brand discovery and pitch writer using local Ollama.
+    Real-time dynamic brand discovery and pitch writer using live online web search & local Ollama.
     Supports high-volume discovery up to 50 brands via intelligent chunked batching.
     Strictly implements:
-      1. Crevanta Brand Research & Contact Verification Protocol:
+      1. Real-Time Online Web Search:
+         - Searches live internet for genuine brand domains and businesses matching the exact query & location.
+         - Extracts published emails and validates them through Crevanta's self-hosted email verification pipeline.
+      2. Grounded Ollama Creative Formulation:
+         - Real discovered brands are passed to Ollama as live context.
+         - Generates 4-part video concepts tailored strictly to the brand's niche (gyms -> PR tests/workouts; coffee -> brewing/taste).
+      3. Crevanta Brand Research & Contact Verification Protocol:
          - Accuracy over completeness.
          - ONLY official emails (official website or official social profile).
-         - NO third party emails.
-         - NEVER generate pattern-based or personal emails.
-         - Two-layer protection (Prompt rule + Programmatic rule).
-         - Brand skipping rule: discard unverified leads if strict_official_only is True.
-         - Self-Hosted Email Verification: Validates syntax, DNS, MX, SMTP handshake, and catch-all.
-      2. Crevanta Unique Video Ideas Protocol:
-         - Brand -> Differentiator -> Audience problem/desire -> Creator behaviour -> Content hook -> Concept.
-         - Exact 4-part breakdown: Brand Insight, Creative Opportunity, Concept Title, How It Works.
-      3. Signature 15-Day Campaign Roadmap.
-      4. Anti-Spam & Primary Inbox Deliverability Protocol.
-      5. INDIAN BRANDS ONLY — STRICT FILTER:
-         - Filters out all non-Indian companies or brands not operating in India.
+         - NO third party emails. Zero pattern-guessing.
+      4. Signature 15-Day Campaign Roadmap.
+      5. Anti-Spam & Primary Inbox Deliverability Protocol.
+      6. INDIAN BRANDS ONLY — STRICT FILTER & LOCATION TARGETING.
     """
     b_url = base_url or Config.OLLAMA_BASE_URL
     target_model = model or Config.OLLAMA_MODEL
@@ -468,6 +477,19 @@ def generate_brand_pitches_ollama(
     all_brands: List[Dict[str, Any]] = []
     seen_names = set()
 
+    # 1. Real-Time Live Online Web Search for authentic brands in requested niche & location
+    from .web_search import search_brands_online
+    loc_target = (location or "All India").strip()
+    try:
+        live_online_brands = search_brands_online(
+            query=brand_prompt,
+            location=loc_target,
+            count=max(target_count, 15),
+            indian_only=indian_only
+        )
+    except Exception:
+        live_online_brands = []
+
     for batch_idx, batch_target in enumerate(batch_sizes):
         if len(all_brands) >= target_count:
             break
@@ -476,6 +498,19 @@ def generate_brand_pitches_ollama(
         if seen_names:
             exclude_names = ", ".join(list(seen_names)[:15])
             exclude_text = f"\nDO NOT REPEAT any of these previously discovered brands: {exclude_names}.\n"
+
+        discovered_context = ""
+        if live_online_brands:
+            items_summary = []
+            for idx, lb in enumerate(live_online_brands[:batch_target]):
+                items_summary.append(
+                    f"Brand Candidate {idx+1}: {lb['brand_name']} ({lb['website']}) | Loc: {lb.get('location', loc_target)} | Email: {lb.get('recipient_email', 'Not publicly available')} | Detail: {lb.get('brand_insight', '')[:100]}"
+                )
+            discovered_context = (
+                f"\nREAL-TIME LIVE WEB SEARCH RESULTS FOR '{brand_prompt}' IN '{loc_target}':\n"
+                + "\n".join(items_summary)
+                + f"\nFormulate bespoke pitches for these real brands or similar brands in this exact niche and location.\n"
+            )
 
         system_prompt = (
             "You are the Brand Research, Lead Verification & Creative Campaign Strategist for Crevanta Agency (Creators × Advantage).\n\n"
@@ -493,10 +528,10 @@ def generate_brand_pitches_ollama(
             "- Creative Formula: Brand → Differentiator → Audience problem/desire → Creator behaviour → Content hook → Concept.\n"
             "- Choose an original concept format: Transformation, Versatility, Challenge, Experiment, Discovery, Personality, Comparison, Real-life scenario, Audience participation, or Story/experience.\n"
             "- You MUST output these 4 specific creative components:\n"
-            "  * Brand Insight: 1-2 sentences explaining the most useful brand differentiator.\n"
+            "  * Brand Insight: 1-2 sentences explaining the most useful brand differentiator strictly relevant to this brand's niche.\n"
             "  * Creative Opportunity: What kind of creator content could help the brand.\n"
-            "  * Concept Title: ONE strong, original, natural title (e.g., 'One Wardrobe, Three Occasions', 'Which Fragrance Is Actually Me?', 'The Shoes Decide the Outfit', 'The 9 AM to 9 PM Test').\n"
-            "  * How It Works: 2-4 sentences explaining what the creator actually DOES with the product.\n\n"
+            "  * Concept Title: ONE strong, original, natural title tailored to this category.\n"
+            "  * How It Works: 2-4 sentences explaining what the creator actually DOES with the product or at the facility.\n\n"
             "PART 3: SIGNATURE 15-DAY CAMPAIGN ROADMAP\n"
             "- Day 1 Kickoff, Day 3-5 Hero Reel Drop, Day 7 Interactive Story Engagement, Day 10 Amplification, Day 15 Analytics Wrap.\n\n"
             "PART 4: ANTI-SPAM & PRIMARY INBOX DELIVERABILITY PROTOCOL\n"
@@ -507,11 +542,12 @@ def generate_brand_pitches_ollama(
             "- NO EXCLAMATION MARKS: Zero '!' in subject line; maximum one polite '!' in the entire body.\n"
             "- CRISP LENGTH: Keep the complete outreach body between 120 and 190 words. Long emails trigger spam algorithms.\n"
             "- CONVERSATIONAL SUBJECT LINE: Short (under 7 words), natural sentence or title case (e.g., 'Partnership Concept: {creator_name} × {brand_name}').\n\n"
-            "PART 5: INDIAN BRANDS ONLY — STRICT FILTER\n"
-            "- Prioritize and discover ONLY brands that are Indian companies or brands with active operations in India.\n"
-            "- Focus on prominent Indian D2C brands, consumer tech, fashion, wellness, beauty, and lifestyle companies (e.g. boAt, Mamaearth, SUGAR Cosmetics, Licious, Snitch, Bewakoof, The Souled Store, Wakefit, BlueStone, CaratLane, Chumbak, FabIndia, Ather Energy, Noise, Paper Boat, Bira 91, Chaayos, Blue Tokai, etc.).\n"
-            "- Reject foreign brands without Indian presence or operations.\n\n"
-            f"Tone / Style Requirement: {style_desc}\n"
+            "PART 5: TARGET NICHE & LOCATION FOCUS\n"
+            f"- TARGET LOCATION: {loc_target}\n"
+            "- Prioritize and discover authentic brands strictly operating in the requested category and target location.\n"
+            "- ZERO IRRELEVANT BRANDS: If user searches for gyms, return ONLY gyms/fitness brands. If coffee, return ONLY coffee brands. Never substitute with unrelated categories.\n"
+            + ("- Reject foreign brands without Indian presence or operations.\n\n" if indian_only else "\n\n")
+            + f"Tone / Style Requirement: {style_desc}\n"
             "Agency Name: Crevanta Agency (Creators × Advantage)\n\n"
             "OUTPUT REQUIREMENT: Respond ONLY with a valid JSON object matching this schema:\n"
             "{\n"
@@ -525,10 +561,11 @@ def generate_brand_pitches_ollama(
             '      "email_source": "Official brand website contact page",\n'
             '      "contact_person": "Head of Influencer Partnerships",\n'
             '      "brand_niche": "Brand category",\n'
+            '      "location": "City or Region",\n'
             '      "why_fit": "Strategic reason why this creator is an authentic partner",\n'
             '      "subject": "Compelling subject line",\n'
             '      "part1_about_creator": "Clear paragraph introducing creator metrics and audience trust",\n'
-            '      "part2_concept_title": "Short memorable title like One Wardrobe, Three Occasions",\n'
+            '      "part2_concept_title": "Short memorable title tailored to this brand",\n'
             '      "part2_brand_insight": "1-2 sentences explaining the most useful brand differentiator",\n'
             '      "part2_creative_opportunity": "What kind of creator content could help the brand",\n'
             '      "part2_how_it_works": "2-4 sentences explaining the creator action and visual hook",\n'
@@ -551,12 +588,14 @@ def generate_brand_pitches_ollama(
             f"- Bio & Positioning: {creator_bio}\n\n"
             f"CAMPAIGN CRITERIA & BRAND REQUEST:\n"
             f"{brand_prompt}\n"
+            f"TARGET LOCATION: {loc_target}\n"
+            f"{discovered_context}\n"
             f"{exclude_text}\n"
             f"OUR UNIQUE VIDEO IDEA INSTRUCTIONS:\n"
-            f"{video_idea if video_idea else 'Develop a bespoke, natural video concept using the 4-part formula: Brand Insight, Creative Opportunity, Concept Title, and How It Works.'}\n\n"
+            f"{video_idea if video_idea else 'Develop a bespoke, natural video concept using the 4-part formula: Brand Insight, Creative Opportunity, Concept Title, and How It Works. Make it strictly fit the brand niche!'}\n\n"
             f"OUR 15-DAY CAMPAIGN INSTRUCTIONS:\n"
             f"{campaign_15day_notes if campaign_15day_notes else 'Crevanta structured 15-day campaign: Day 1 Launch, Day 3-5 Hero Reel drop, Day 7 Story dialogue, Day 10 Co-author amplification, Day 15 Analytics wrap.'}\n\n"
-            f"BATCH REQUEST: Please discover exactly {batch_target} distinct brand targets. Remember: TAKE ONLY OFFICIAL EMAILS. If not verified on official site, set recipient_email to 'Not publicly available' and verification to 'unverified'. Never guess pattern emails."
+            f"BATCH REQUEST: Please discover exactly {batch_target} distinct brand targets in this specific niche and location."
         )
 
         messages = [
@@ -583,6 +622,25 @@ def generate_brand_pitches_ollama(
                     if not b_name or b_name.lower() in seen_names:
                         continue
                     seen_names.add(b_name.lower())
+
+                    # Check if brand matches our real-time online web crawl
+                    web_match = None
+                    for wb in live_online_brands:
+                        if wb["brand_name"].lower() == b_name.lower() or wb["website"].lower() == (b.get("website") or "").lower():
+                            web_match = wb
+                            break
+
+                    if web_match:
+                        b["location"] = web_match.get("location") or f"{loc_target}, India"
+                        b["website"] = web_match["website"]
+                        b["search_source"] = web_match.get("search_source", "Live Online Search")
+                        if web_match.get("recipient_email") and web_match["recipient_email"] != "Not publicly available":
+                            b["recipient_email"] = web_match["recipient_email"]
+                            b["verification"] = web_match["verification"]
+                            b["email_source"] = web_match["email_source"]
+                            b["email_verification"] = web_match.get("email_verification")
+                    else:
+                        b["location"] = b.get("location") or (f"{loc_target}, India" if "india" not in loc_target.lower() else loc_target)
 
                     # Check verified directory for official authenticity & contact details
                     verified_match = lookup_verified_directory(b_name, b.get("website", ""))
@@ -688,13 +746,49 @@ def generate_brand_pitches_ollama(
         except Exception:
             continue
 
-    # RESILIENT GUARANTEE: If we fell short of target_count, backfill from Crevanta's verified official catalog.
-    # This guarantees that the user ALWAYS receives the exact requested brand count (up to 50),
-    # with 100% verified official emails when strict_official_only is True, eliminating "No brands found"!
+    # RESILIENT GUARANTEE: If we fell short of target_count, backfill from real live online web brands first!
+    if len(all_brands) < target_count and live_online_brands:
+        for web_b in live_online_brands:
+            if len(all_brands) >= target_count:
+                break
+            wb_name = web_b["brand_name"]
+            if wb_name.lower() in seen_names:
+                continue
+            seen_names.add(wb_name.lower())
+
+            synth_brand = _synthesize_brand_pitch(
+                brand_name=wb_name,
+                brand_niche=web_b.get("brand_niche") or brand_prompt,
+                creator=creator,
+                video_idea=video_idea,
+                campaign_15day_notes=campaign_15day_notes,
+                email_style=email_style
+            )
+            synth_brand["website"] = web_b["website"]
+            synth_brand["recipient_email"] = web_b["recipient_email"]
+            synth_brand["verification"] = web_b["verification"]
+            synth_brand["email_source"] = web_b["email_source"]
+            synth_brand["location"] = web_b.get("location") or loc_target
+            synth_brand["sources_checked"] = web_b.get("sources_checked", [])
+            synth_brand["email_verification"] = web_b.get("email_verification")
+            synth_brand["search_source"] = web_b.get("search_source", "Live Online Search")
+            synth_brand["brand_insight"] = web_b.get("brand_insight") or synth_brand.get("part2_brand_insight")
+            synth_brand["deliverability"] = analyze_deliverability(synth_brand["subject"], synth_brand["body"], synth_brand["recipient_email"])
+
+            lead = enforce_programmatic_rules(
+                synth_brand,
+                require_official=strict_official_only,
+                require_indian=indian_only,
+                verify_checker=False if synth_brand.get("email_verification") else strict_official_only
+            )
+            if lead is not None:
+                all_brands.append(lead)
+
+    # If still short, backfill from verified official catalog (STRICTLY matching category)
     if len(all_brands) < target_count:
         catalog_leads = get_verified_official_catalog(
-            niche_filter=f"{brand_prompt} {creator_niche}",
-            count=76,
+            niche_filter=brand_prompt,
+            count=target_count - len(all_brands),
             indian_only=indian_only
         )
         for cat_item in catalog_leads:
@@ -838,7 +932,8 @@ def generate_brand_pitches_ollama(
     from .email_verifier import verify_email
     for b in final_brands:
         email = b.get("recipient_email", "")
-        if "email_verification" not in b or not b["email_verification"].get("stages"):
+        ev = b.get("email_verification")
+        if not isinstance(ev, dict) or not ev.get("stages"):
             if email and email != "Not publicly available" and "@" in email:
                 b["email_verification"] = verify_email(
                     email,
@@ -860,7 +955,7 @@ def generate_brand_pitches_ollama(
                 }
 
         # Synchronize verification flags
-        ev = b.get("email_verification", {})
+        ev = b.get("email_verification") or {}
         if ev.get("approved"):
             b["verification"] = "official"
             b["is_official"] = True
@@ -871,9 +966,9 @@ def generate_brand_pitches_ollama(
             b["verification"] = "disposable"
             b["is_official"] = False
 
-    valid_count = sum(1 for b in final_brands if b.get("email_verification", {}).get("status") == "valid")
-    catch_all_count = sum(1 for b in final_brands if b.get("email_verification", {}).get("status") == "catch-all")
-    indian_count = sum(1 for b in final_brands if b.get("is_indian", True) or b.get("email_verification", {}).get("is_indian", True))
+    valid_count = sum(1 for b in final_brands if (b.get("email_verification") or {}).get("status") == "valid")
+    catch_all_count = sum(1 for b in final_brands if (b.get("email_verification") or {}).get("status") == "catch-all")
+    indian_count = sum(1 for b in final_brands if b.get("is_indian", True) or (b.get("email_verification") or {}).get("is_indian", True))
 
     return {
         "success": True,

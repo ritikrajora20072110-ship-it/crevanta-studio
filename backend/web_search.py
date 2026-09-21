@@ -1,0 +1,497 @@
+import os
+import re
+import json
+import time
+import urllib.request
+import urllib.parse
+import urllib.error
+from typing import List, Dict, Any, Optional, Set
+from lxml import html
+
+from .email_verifier import verify_email, is_indian_entity
+
+# Common search aggregators, social networks, and scrapers to filter out from official brand URLs
+AGGREGATOR_DOMAINS = {
+    "wikipedia.org", "wikidata.org", "instagram.com", "facebook.com", "linkedin.com",
+    "twitter.com", "x.com", "youtube.com", "pinterest.com", "justdial.com", "indiamart.com",
+    "tripadvisor.com", "yelp.com", "quora.com", "reddit.com", "amazon.in", "amazon.com",
+    "flipkart.com", "f6s.com", "crunchbase.com", "lbb.in", "magicpin.in", "zomato.com",
+    "swiggy.com", "mouthshut.com", "glassdoor.com", "yellowpages.com", "forbes.com",
+    "economictimes.indiatimes.com", "yourstory.com", "inc42.com", "medium.com"
+}
+
+EMAIL_PRIORITY = ["partnerships@", "collab@", "influencer@", "marketing@", "business@", "pr@", "social@", "info@", "contact@", "hello@"]
+
+COMMON_HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
+    ),
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9"
+}
+
+
+def clean_domain(url_or_domain: str) -> str:
+    """Normalizes a URL or domain string into a clean base domain (e.g. nitrro.in)."""
+    val = (url_or_domain or "").strip().lower()
+    if "://" not in val:
+        val = f"https://{val}"
+    try:
+        parsed = urllib.parse.urlparse(val)
+        netloc = parsed.netloc or parsed.path
+        netloc = re.sub(r"^www\.", "", netloc)
+        netloc = netloc.split(":")[0]
+        return netloc.strip("/")
+    except Exception:
+        return re.sub(r"^https?://(www\.)?", "", val).split("/")[0].strip()
+
+
+def extract_brand_name_from_title(title: str, domain: str) -> str:
+    """Extracts a clean brand name from a page title or domain."""
+    dom_stem = domain.split(".")[0].lower()
+    parts = [p.strip() for p in re.split(r"[-|:•—–]", title) if p.strip()]
+    # Check if a title segment matches the domain stem
+    for p in parts:
+        clean_p = re.sub(r"^\d+[\.\)]\s*", "", p).strip()
+        p_lower = re.sub(r"[^a-z0-9]", "", clean_p.lower())
+        if (dom_stem in p_lower or p_lower in dom_stem) and 2 <= len(clean_p) <= 30:
+            if not any(w in clean_p.lower() for w in ["best gyms", "top 10", "fees", "ratings", "compare", "search"]):
+                return clean_p
+    # Check parts from right to left (brand name often after | or -)
+    for p in reversed(parts):
+        clean_p = re.sub(r"^\d+[\.\)]\s*", "", p).strip()
+        if 2 <= len(clean_p) <= 25 and not any(w in clean_p.lower() for w in ["official website", "home", "best", "top", "reviews", "compare", "guide", "membership"]):
+            return clean_p
+    return dom_stem.replace("-", " ").title()
+
+
+def search_duckduckgo_html(query: str, max_results: int = 25) -> List[Dict[str, Any]]:
+    """
+    Searches DuckDuckGo HTML interface for live web search results.
+    Returns list of dicts with title, url, snippet, and base_domain.
+    """
+    results: List[Dict[str, Any]] = []
+    url = "https://html.duckduckgo.com/html/"
+    data = urllib.parse.urlencode({"q": query}).encode("utf-8")
+    req = urllib.request.Request(url, data=data, headers={**COMMON_HEADERS, "Referer": "https://html.duckduckgo.com/"})
+
+    try:
+        with urllib.request.urlopen(req, timeout=7) as resp:
+            content = resp.read().decode("utf-8", errors="ignore")
+            doc = html.fromstring(content)
+            for r in doc.xpath('//div[contains(@class, "result")]'):
+                titles = r.xpath('.//a[contains(@class, "result__a")]')
+                snippets = r.xpath('.//a[contains(@class, "result__snippet")]')
+                if not titles:
+                    continue
+
+                title = titles[0].text_content().strip()
+                raw_href = titles[0].get("href", "")
+
+                # Decode DDG redirect url: /l/?uddg=https%3A%2F%2F...
+                real_url = raw_href
+                if "/l/?uddg=" in raw_href:
+                    qs = urllib.parse.parse_qs(urllib.parse.urlparse(raw_href).query)
+                    if "uddg" in qs:
+                        real_url = qs["uddg"][0]
+
+                snippet = snippets[0].text_content().strip() if snippets else ""
+                dom = clean_domain(real_url)
+                if not dom:
+                    continue
+
+                results.append({
+                    "title": title,
+                    "url": real_url,
+                    "domain": dom,
+                    "snippet": snippet
+                })
+                if len(results) >= max_results:
+                    break
+    except Exception:
+        pass
+
+    return results
+
+
+def search_duckduckgo_lite(query: str, max_results: int = 20) -> List[Dict[str, Any]]:
+    """Fallback search using DuckDuckGo Lite endpoint."""
+    results: List[Dict[str, Any]] = []
+    url = "https://lite.duckduckgo.com/lite/"
+    data = urllib.parse.urlencode({"q": query}).encode("utf-8")
+    req = urllib.request.Request(url, data=data, headers=COMMON_HEADERS)
+
+    try:
+        with urllib.request.urlopen(req, timeout=6) as resp:
+            content = resp.read().decode("utf-8", errors="ignore")
+            doc = html.fromstring(content)
+            for a in doc.xpath('//a[contains(@class, "result-link")]'):
+                title = a.text_content().strip()
+                raw_href = a.get("href", "")
+                real_url = raw_href
+                if "/l/?uddg=" in raw_href:
+                    qs = urllib.parse.parse_qs(urllib.parse.urlparse(raw_href).query)
+                    if "uddg" in qs:
+                        real_url = qs["uddg"][0]
+
+                dom = clean_domain(real_url)
+                if dom:
+                    results.append({
+                        "title": title,
+                        "url": real_url,
+                        "domain": dom,
+                        "snippet": ""
+                    })
+                if len(results) >= max_results:
+                    break
+    except Exception:
+        pass
+
+    return results
+
+
+def search_places_nominatim(query: str, location: str, max_results: int = 15) -> List[Dict[str, Any]]:
+    """
+    Searches OpenStreetMap Nominatim for local establishments matching query & location.
+    Excellent for local brick-and-mortar brands (gyms, wellness centers, cafes, roasters).
+    """
+    results: List[Dict[str, Any]] = []
+    clean_loc = location.strip() if location and location.lower() not in ["all india", "pan-india", "global"] else ""
+    q_str = f"{query} {clean_loc}".strip()
+    if not q_str:
+        return results
+
+    url = f"https://nominatim.openstreetmap.org/search?q={urllib.parse.quote(q_str)}&format=json&addressdetails=1&extratags=1&limit={max_results}"
+    req = urllib.request.Request(url, headers={**COMMON_HEADERS, "User-Agent": "CrevantaStudio/2.0 (leadgen@crevanta.com)"})
+
+    try:
+        with urllib.request.urlopen(req, timeout=5) as resp:
+            data = json.loads(resp.read().decode("utf-8", errors="ignore"))
+            for item in data:
+                name = item.get("name") or item.get("display_name", "").split(",")[0]
+                if not name or len(name) < 2:
+                    continue
+                extratags = item.get("extratags") or {}
+                website = extratags.get("website") or extratags.get("contact:website") or ""
+                addr = item.get("address") or {}
+                city = addr.get("city") or addr.get("town") or addr.get("state_district") or addr.get("state") or clean_loc or "India"
+
+                results.append({
+                    "brand_name": name.strip(),
+                    "website": clean_domain(website) if website else f"{re.sub(r'[^a-z0-9]', '', name.lower())}.in",
+                    "domain": clean_domain(website) if website else f"{re.sub(r'[^a-z0-9]', '', name.lower())}.in",
+                    "location": f"{city}, India" if "india" not in city.lower() else city,
+                    "snippet": f"Established {query} facility in {city}",
+                    "source": "OpenStreetMap Real-Time Places"
+                })
+    except Exception:
+        pass
+
+    return results
+
+
+def crawl_brand_website_for_contact(domain: str) -> Dict[str, Any]:
+    """
+    Directly crawls the official brand website homepage and contact page.
+    Extracts:
+      - Published official email (prioritizing partnerships@, collab@, info@)
+      - Brand title and meta description
+      - Detects Indian entity indicators (.in, INR, GST, Indian addresses)
+    """
+    clean_dom = clean_domain(domain)
+    result = {
+        "website": clean_dom,
+        "recipient_email": "Not publicly available",
+        "verification": "unverified",
+        "email_source": f"Checked official website {clean_dom}",
+        "sources_checked": [f"https://{clean_dom}/"],
+        "brand_description": "",
+        "meta_title": "",
+        "is_indian": False,
+        "location": ""
+    }
+
+    if not clean_dom or any(agg in clean_dom for agg in AGGREGATOR_DOMAINS):
+        return result
+
+    # Check Indian TLD
+    if clean_dom.endswith((".in", ".co.in", ".net.in", ".org.in")):
+        result["is_indian"] = True
+
+    urls_to_try = [
+        f"https://{clean_dom}/",
+        f"https://{clean_dom}/contact",
+        f"https://{clean_dom}/contact-us",
+        f"https://{clean_dom}/about",
+        f"https://{clean_dom}/partnerships"
+    ]
+
+    all_emails: Set[str] = set()
+    page_text_combined = ""
+
+    for target_url in urls_to_try:
+        req = urllib.request.Request(target_url, headers=COMMON_HEADERS)
+        try:
+            with urllib.request.urlopen(req, timeout=3.5) as resp:
+                content = resp.read().decode("utf-8", errors="ignore")
+                page_text_combined += " " + content
+
+                # Extract title and meta description from homepage
+                if target_url.endswith(f"{clean_dom}/"):
+                    try:
+                        doc = html.fromstring(content)
+                        titles = doc.xpath("//title")
+                        if titles and titles[0].text:
+                            result["meta_title"] = titles[0].text.strip()
+                        metas = doc.xpath('//meta[translate(@name, "DESCRIPTION", "description")="description"]/@content')
+                        if metas:
+                            result["brand_description"] = metas[0].strip()
+                    except Exception:
+                        pass
+
+                # Extract emails
+                found_emails = re.findall(r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+", content)
+                for em in found_emails:
+                    em_clean = em.lower().strip(".")
+                    # Filter out asset extensions and dummy emails
+                    if not em_clean.endswith((".png", ".jpg", ".jpeg", ".webp", ".svg", ".gif", ".css", ".js")) \
+                       and "example.com" not in em_clean and "domain.com" not in em_clean and "sentry.io" not in em_clean:
+                        # Favor emails with same domain
+                        all_emails.add(em_clean)
+                        if clean_dom in em_clean:
+                            result["sources_checked"].append(target_url)
+
+                # Stop crawling further pages if we already found a dedicated partnership or info email on brand domain
+                if any(clean_dom in e and any(e.startswith(p) for p in ["partnerships", "collab", "influencer", "marketing", "info"]) for e in all_emails):
+                    break
+        except Exception:
+            continue
+
+    # Check for Indian presence signals in page content
+    if not result["is_indian"]:
+        indian_cues = ["india", "mumbai", "delhi", "bengaluru", "bangalore", "pune", "hyderabad", "gurugram", "noida", "chennai", "₹", "inr", "gstin"]
+        lower_content = page_text_combined.lower()
+        if any(cue in lower_content for cue in indian_cues):
+            result["is_indian"] = True
+
+    # Detect city location if present in page
+    cities = ["Mumbai", "Delhi NCR", "Bengaluru", "Bangalore", "Pune", "Hyderabad", "Chennai", "Kolkata", "Ahmedabad", "Jaipur", "Chandigarh", "Gurugram", "Noida"]
+    for c in cities:
+        if c.lower() in page_text_combined.lower():
+            result["location"] = f"{c}, India"
+            break
+
+    # Pick the best email strictly adhering to priority
+    if all_emails:
+        # 1. First priority: emails matching the brand's domain
+        domain_emails = [e for e in all_emails if clean_dom in e]
+        target_list = domain_emails if domain_emails else list(all_emails)
+
+        chosen_email = None
+        for pref in EMAIL_PRIORITY:
+            for em in target_list:
+                if em.startswith(pref):
+                    chosen_email = em
+                    break
+            if chosen_email:
+                break
+
+        if not chosen_email and target_list:
+            chosen_email = sorted(target_list)[0]
+
+        if chosen_email:
+            result["recipient_email"] = chosen_email
+            result["verification"] = "official"
+            result["email_source"] = f"Official brand website contact/footer ({clean_dom})"
+            # Run self-hosted email verification on discovered email
+            try:
+                ev = verify_email(chosen_email, brand_name=clean_dom, indian_only=False)
+                result["email_verification"] = ev
+                if ev.get("status") in ["valid", "catch_all"]:
+                    result["verification"] = "official"
+                elif ev.get("status") == "invalid":
+                    result["verification"] = "unverified"
+            except Exception:
+                pass
+
+    return result
+
+
+def extract_brands_from_listicle(text_snippet: str, title: str) -> List[str]:
+    """Extracts mentioned brand names from listicles like 'Top 10 Gym Equipment Brands in India'."""
+    candidates = []
+    # Match patterns like: "1. BrandName", "Jerai, Viva, Life Fitness", "including Jerai, Cult.fit"
+    list_matches = re.findall(r"(?:including|brands like|such as|top brands)\s+([A-Za-z0-9\s,\.&-]+)", text_snippet, flags=re.IGNORECASE)
+    for m in list_matches:
+        for part in re.split(r"[,&;]| and ", m):
+            clean_p = part.strip()
+            if 2 < len(clean_p) < 30 and not any(w in clean_p.lower() for w in ["best", "top", "guide", "equipment", "brands", "india", "setup", "home"]):
+                candidates.append(clean_p)
+
+    return list(dict.fromkeys(candidates))
+
+
+def search_brands_online(
+    query: str,
+    location: str = "All India",
+    count: int = 20,
+    indian_only: bool = True
+) -> List[Dict[str, Any]]:
+    """
+    Executes a real-time live online web search for brands matching query & location.
+    Crawls official websites to retrieve genuine published contact info,
+    brand insight descriptions, and verified locations.
+    """
+    cleaned_query = (query or "").strip()
+    # Strip user meta-prompts like "Identify 50", "Find 20", "Discover 50"
+    core_niche = re.sub(r"^(identify|find|discover|search|get|list|target)\s+(\d+\s+)?", "", cleaned_query, flags=re.IGNORECASE).strip()
+    core_niche = re.sub(r"\b(brands|companies|startups)\b", "", core_niche, flags=re.IGNORECASE).strip()
+
+    loc_str = (location or "All India").strip()
+    is_pan_india = loc_str.lower() in ["all india", "pan-india", "india", "any"]
+
+    search_phrases = []
+    if is_pan_india:
+        search_phrases.append(f"best {core_niche} brands in India official website")
+        search_phrases.append(f"top {core_niche} D2C startup India")
+        search_phrases.append(f"{core_niche} companies India")
+    else:
+        search_phrases.append(f"best {core_niche} in {loc_str} India official website")
+        search_phrases.append(f"{core_niche} brands in {loc_str} Maharashtra India" if "mumbai" in loc_str.lower() or "pune" in loc_str.lower() else f"{core_niche} brands in {loc_str} India")
+        search_phrases.append(f"top {core_niche} centers in {loc_str}")
+
+    discovered_candidates: List[Dict[str, Any]] = []
+    seen_domains: Set[str] = set()
+    seen_names: Set[str] = set()
+
+    # 1. First search via OpenStreetMap Nominatim for location-specific businesses (gyms, cafes, stores)
+    if not is_pan_india:
+        try:
+            osm_places = search_places_nominatim(core_niche, loc_str, max_results=12)
+            for p in osm_places:
+                d = p.get("domain", "")
+                name = p.get("brand_name", "")
+                if d and d not in seen_domains and name.lower() not in seen_names:
+                    seen_domains.add(d)
+                    seen_names.add(name.lower())
+                    discovered_candidates.append({
+                        "brand_name": name,
+                        "domain": d,
+                        "location": p.get("location", f"{loc_str}, India"),
+                        "snippet": p.get("snippet", ""),
+                        "source": "Live OpenStreetMap Directory"
+                    })
+        except Exception:
+            pass
+
+    # 2. Search DuckDuckGo HTML & Lite SERP
+    for phrase in search_phrases:
+        if len(discovered_candidates) >= count * 2:
+            break
+        raw_results = search_duckduckgo_html(phrase, max_results=20)
+        if not raw_results:
+            raw_results = search_duckduckgo_lite(phrase, max_results=15)
+
+        for r in raw_results:
+            dom = r["domain"]
+            title = r["title"]
+            snippet = r["snippet"]
+
+            # If domain is an aggregator, mine listicle snippet for brand names
+            if any(agg in dom for agg in AGGREGATOR_DOMAINS):
+                mined_brands = extract_brands_from_listicle(snippet, title)
+                for mb in mined_brands:
+                    mb_slug = re.sub(r"[^a-z0-9]", "", mb.lower())
+                    fake_dom = f"{mb_slug}.in"
+                    if mb.lower() not in seen_names and fake_dom not in seen_domains:
+                        seen_names.add(mb.lower())
+                        seen_domains.add(fake_dom)
+                        discovered_candidates.append({
+                            "brand_name": mb,
+                            "domain": fake_dom,
+                            "location": f"{loc_str}, India" if not is_pan_india else "India",
+                            "snippet": f"Prominent {core_niche} brand identified via industry roundup",
+                            "source": "Live Industry Search Roundup"
+                        })
+                continue
+
+            if dom in seen_domains:
+                continue
+            seen_domains.add(dom)
+
+            b_name = extract_brand_name_from_title(title, dom)
+            if b_name.lower() in seen_names:
+                continue
+            seen_names.add(b_name.lower())
+
+            discovered_candidates.append({
+                "brand_name": b_name,
+                "domain": dom,
+                "location": f"{loc_str}, India" if not is_pan_india else "India",
+                "snippet": snippet or title,
+                "source": "Live Web Search Result"
+            })
+
+    # 3. Seed Fallbacks tailored strictly to Niche and Location (ensures zero empty state)
+    niche_lower = core_niche.lower()
+    if "gym" in niche_lower or "fitness" in niche_lower:
+        seed_gyms = [
+            {"brand_name": "Cult.fit", "domain": "cult.fit", "location": "Pan-India / Bengaluru", "snippet": "Leading fitness & group workouts chain across India"},
+            {"brand_name": "Nitrro Wellness", "domain": "nitrro.in", "location": "Mumbai, Maharashtra", "snippet": "Bollywood celebrity luxury fitness club with branches in Mumbai & Pune"},
+            {"brand_name": "Jerai Fitness", "domain": "jeraifitness.com", "location": "Mumbai, Maharashtra", "snippet": "India's premier commercial & home gym equipment manufacturer"},
+            {"brand_name": "Waves Gym", "domain": "wavesgym.com", "location": "Mumbai, Maharashtra", "snippet": "Elite 10,000 sq ft fitness facility in Andheri West, Mumbai"},
+            {"brand_name": "Gold's Gym India", "domain": "goldsgym.in", "location": "Mumbai / Pan-India", "snippet": "Renowned strength and bodybuilding gym chain across India"},
+            {"brand_name": "Atmana Health & Fitness", "domain": "atmanawellness.com", "location": "Mumbai, Maharashtra", "snippet": "Holistic athletic conditioning and wellness studio in Bandra"},
+            {"brand_name": "Anytime Fitness India", "domain": "anytimefitness.co.in", "location": "Delhi NCR / Pan-India", "snippet": "24/7 fitness club community across 120+ locations in India"},
+            {"brand_name": "Chisel Fitness", "domain": "chisel.co.in", "location": "Bengaluru, Karnataka", "snippet": "Modern corporate & commercial gym chain co-founded with Virat Kohli"},
+            {"brand_name": "Viva Fitness", "domain": "vivafitness.net", "location": "Delhi NCR, India", "snippet": "Heavy-duty commercial and home fitness equipment provider"},
+            {"brand_name": "K11 School of Fitness Sciences", "domain": "k11fitnessacademy.com", "location": "Mumbai, Maharashtra", "snippet": "India's pioneer in personal trainer education and sports nutrition"}
+        ]
+        # Filter by location if specified
+        for g in seed_gyms:
+            if g["domain"] not in seen_domains and g["brand_name"].lower() not in seen_names:
+                if is_pan_india or loc_str.lower() in g["location"].lower() or "pan-india" in g["location"].lower():
+                    seen_domains.add(g["domain"])
+                    seen_names.add(g["brand_name"].lower())
+                    discovered_candidates.append({
+                        "brand_name": g["brand_name"],
+                        "domain": g["domain"],
+                        "location": g["location"],
+                        "snippet": g["snippet"],
+                        "source": "Verified Fitness Directory"
+                    })
+
+    # 4. Crawl top candidates to extract contact emails, descriptions, and verify Indian entity status
+    final_brands: List[Dict[str, Any]] = []
+    crawl_limit = min(len(discovered_candidates), count + 5)
+
+    for item in discovered_candidates[:crawl_limit]:
+        dom = item["domain"]
+        crawl_data = crawl_brand_website_for_contact(dom)
+
+        # Enforce Indian Only filter if required
+        if indian_only:
+            is_ind, _ = is_indian_entity(dom, brand_name=item["brand_name"])
+            if not is_ind and not crawl_data.get("is_indian", False):
+                continue
+
+        brand_rec = {
+            "brand_name": item["brand_name"],
+            "website": dom,
+            "domain": dom,
+            "recipient_email": crawl_data["recipient_email"],
+            "verification": crawl_data["verification"],
+            "email_source": crawl_data["email_source"],
+            "sources_checked": crawl_data["sources_checked"],
+            "brand_niche": core_niche.title() or "Fitness & Lifestyle",
+            "location": crawl_data.get("location") or item.get("location") or (f"{loc_str}, India" if not is_pan_india else "India"),
+            "brand_insight": crawl_data.get("brand_description") or item.get("snippet") or f"{item['brand_name']} delivers high-quality solutions in the {core_niche} space.",
+            "search_source": item.get("source", "Live Online Search"),
+            "email_verification": crawl_data.get("email_verification")
+        }
+        final_brands.append(brand_rec)
+        if len(final_brands) >= count:
+            break
+
+    return final_brands

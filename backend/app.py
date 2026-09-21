@@ -147,6 +147,14 @@ class GenerateRequest(BaseModel):
     ollama_model: Optional[str] = None
     strict_official_only: Optional[bool] = False
     indian_only: Optional[bool] = True
+    location: Optional[str] = "All India"
+
+
+class SearchBrandsRequest(BaseModel):
+    query: str
+    location: Optional[str] = "All India"
+    count: Optional[int] = 20
+    indian_only: Optional[bool] = True
 
 
 class VerifyLeadRequest(BaseModel):
@@ -357,8 +365,29 @@ def generate_pitches(req: GenerateRequest):
         count=req.count or 10,
         model=req.ollama_model or Config.OLLAMA_MODEL,
         strict_official_only=req.strict_official_only or False,
+        indian_only=req.indian_only if req.indian_only is not None else True,
+        location=req.location or "All India"
+    )
+
+
+# --- Live Online Brand Search Endpoint ---
+@app.post("/api/search-brands-online")
+def api_search_brands_online(req: SearchBrandsRequest):
+    """Executes a real-time online web crawl and search for authentic brands matching query & location."""
+    from .web_search import search_brands_online
+    results = search_brands_online(
+        query=req.query,
+        location=req.location or "All India",
+        count=req.count or 20,
         indian_only=req.indian_only if req.indian_only is not None else True
     )
+    return {
+        "success": True,
+        "query": req.query,
+        "location": req.location or "All India",
+        "count": len(results),
+        "brands": results
+    }
 
 
 # --- Standalone Brand Research & Official Lead Verification Endpoint ---

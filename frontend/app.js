@@ -17,6 +17,7 @@ let appState = {
   selectedBrandIds: new Set(),
   savedCommands: [],
   history: [],
+  selectedLocation: "All India",
   activeBulkJobId: null,
   bulkPollInterval: null,
   pendingDispatchMode: "send",
@@ -705,6 +706,38 @@ function insertPreset(promptText) {
   }
 }
 
+// --- LOCATION FILTER CONTROLLER ---
+function selectLocationPreset(loc) {
+  appState.selectedLocation = loc;
+  const input = document.getElementById("campaignLocationInput");
+  if (input) input.value = loc;
+
+  // Update chip styles
+  document.querySelectorAll(".location-chip-btn").forEach(btn => {
+    const bLoc = btn.getAttribute("data-loc");
+    if (bLoc === loc) {
+      btn.className = "location-chip-btn active text-xs px-2.5 py-1 rounded-full border border-[#141413] bg-[#141413] text-[#FAF8F5] font-semibold transition";
+    } else {
+      btn.className = "location-chip-btn text-xs px-2.5 py-1 rounded-full border border-[#E2DDD2] bg-white text-[#383531] hover:border-[#141413] font-medium transition";
+    }
+  });
+}
+
+function handleCustomLocationInput(val) {
+  const clean = val.trim();
+  appState.selectedLocation = clean || "All India";
+
+  // Match chip if exact
+  document.querySelectorAll(".location-chip-btn").forEach(btn => {
+    const bLoc = btn.getAttribute("data-loc");
+    if (bLoc && bLoc.toLowerCase() === clean.toLowerCase()) {
+      btn.className = "location-chip-btn active text-xs px-2.5 py-1 rounded-full border border-[#141413] bg-[#141413] text-[#FAF8F5] font-semibold transition";
+    } else {
+      btn.className = "location-chip-btn text-xs px-2.5 py-1 rounded-full border border-[#E2DDD2] bg-white text-[#383531] hover:border-[#141413] font-medium transition";
+    }
+  });
+}
+
 // --- GENERATE BRAND MATCHES & 3-PART BESPOKE PITCHES ---
 async function generatePitches() {
   const promptInput = document.getElementById("campaignPrompt");
@@ -712,6 +745,9 @@ async function generatePitches() {
   const emailStyle = document.getElementById("emailStyleSelect") ? document.getElementById("emailStyleSelect").value : "punchy";
   const countSelect = document.getElementById("brandCountSelect");
   const count = countSelect ? parseInt(countSelect.value) : 50;
+
+  const locInput = document.getElementById("campaignLocationInput");
+  const locationVal = (locInput ? locInput.value.trim() : "") || appState.selectedLocation || "All India";
 
   const part1Notes = document.getElementById("part1Notes")?.value.trim() || "";
   const part2Notes = document.getElementById("part2Notes")?.value.trim() || "";
@@ -738,6 +774,7 @@ async function generatePitches() {
 
   let payload = {
     prompt: prompt,
+    location: locationVal,
     email_style: emailStyle,
     count: count,
     video_idea: part2Notes,
@@ -792,17 +829,34 @@ async function generatePitches() {
     progressCard.classList.remove("hidden");
     if (progressBarFill) progressBarFill.style.width = "10%";
     if (progressPercent) progressPercent.innerText = "10%";
-    if (progressTitle) progressTitle.innerText = `Ollama (${appState.ollamaModel}) Discovering & Pitching ${count} Brands...`;
-    if (progressBatchStep) progressBatchStep.innerText = count > 10 ? "Batch 1 of " + Math.ceil(count / 10) : "Processing batch...";
+    if (progressTitle) progressTitle.innerText = `Searching Web & Ollama Discovering ${count} Brands (${locationVal})...`;
+    if (progressSubtext) progressSubtext.innerText = `Phase 1: Searching live web for authentic brands in ${locationVal}...`;
+    if (progressBatchStep) progressBatchStep.innerText = count > 10 ? "Batch 1 of " + Math.ceil(count / 10) : "Processing live web crawl...";
   }
 
-  // Progress ticker for smooth UX
+  // Multi-phase progress ticker for transparent live search UX
   let currentPct = 10;
+  const progressPhases = [
+    `Phase 1: Searching live web for authentic brands in ${locationVal}...`,
+    `Phase 2: Crawling official websites & extracting published contacts...`,
+    `Phase 3: Ollama (${appState.ollamaModel}) formulating bespoke 4-part video concepts...`,
+    `Phase 4: Running SMTP handshakes & inbox deliverability sanitization...`
+  ];
+  let phaseIdx = 0;
   const progressTicker = setInterval(() => {
-    if (currentPct < 90) {
-      currentPct += count > 10 ? 8 : 15;
+    if (currentPct < 92) {
+      currentPct += count > 10 ? 6 : 12;
+      if (currentPct > 92) currentPct = 92;
       if (progressBarFill) progressBarFill.style.width = `${currentPct}%`;
       if (progressPercent) progressPercent.innerText = `${currentPct}%`;
+
+      if (progressSubtext && progressPhases[phaseIdx]) {
+        progressSubtext.innerText = progressPhases[phaseIdx];
+        if (currentPct > (phaseIdx + 1) * 22 && phaseIdx < progressPhases.length - 1) {
+          phaseIdx++;
+        }
+      }
+
       if (progressBatchStep && count > 10) {
         const batchNum = Math.min(Math.ceil(count / 10), Math.floor((currentPct / 100) * Math.ceil(count / 10)) + 1);
         progressBatchStep.innerText = `Batch ${batchNum} of ${Math.ceil(count / 10)}`;
@@ -919,6 +973,14 @@ function renderPitches(data) {
                 <i data-lucide="arrow-up-right" class="w-3 h-3"></i>
               </a>
               <span class="text-[10px] uppercase font-bold px-2.5 py-0.5 rounded-full bg-[#FAF5EB] text-[#8F6F30] border border-[#E8D7B8]">${item.brand_niche || "Partner"}</span>
+              <span class="text-[10px] uppercase font-bold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-300 inline-flex items-center gap-1">
+                <i data-lucide="map-pin" class="w-2.5 h-2.5 text-[#B89248]"></i>
+                <span>${item.location || 'India'}</span>
+              </span>
+              <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-blue-50 text-blue-800 border border-blue-200 inline-flex items-center gap-1">
+                <i data-lucide="globe" class="w-2.5 h-2.5 text-blue-600"></i>
+                <span>${item.search_source || 'Live Web Discovered'}</span>
+              </span>
             </div>
             
             <!-- VERIFICATION LEVEL PILL & DELIVERABILITY SHIELD -->

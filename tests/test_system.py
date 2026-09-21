@@ -117,15 +117,16 @@ class TestCrevantaSystem(unittest.TestCase):
 
     def test_gmail_zero_faking_policy(self):
         # Smtp sending with invalid password MUST fail transparently without mock success
-        res_send = send_email_via_smtp(
-            to_email="test@brand.com",
-            subject="Collab Pitch",
-            body_text="Hi,\nLet's work together.",
-            creator_name="Maya Sen",
-            brand_name="Test Brand"
-        )
-        self.assertFalse(res_send["success"])
-        self.assertTrue(len(res_send.get("error", "")) > 0)
+        with patch("backend.config.Config.GMAIL_APP_PASSWORD", "invalidpassword123"):
+            res_send = send_email_via_smtp(
+                to_email="test@brand.com",
+                subject="Collab Pitch",
+                body_text="Hi,\nLet's work together.",
+                creator_name="Maya Sen",
+                brand_name="Test Brand"
+            )
+            self.assertFalse(res_send["success"])
+            self.assertTrue(len(res_send.get("error", "")) > 0)
 
     def test_gmail_credentials_test_endpoint(self):
         # Testing invalid credentials via endpoint should report error without crashing
