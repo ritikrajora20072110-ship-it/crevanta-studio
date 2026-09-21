@@ -166,11 +166,13 @@ class AutonomousCampaignAgent:
             emit("internet_search", "Search Fallback", f"Web search adjusted: {str(e)}", False, 45)
 
         # Stage 4: Deep Website Crawling & Live Inspection
-        emit("website_crawl", "🌐 Deep Website Crawling", "Inspecting official brand domains for published partnership contacts & products...", True, 50)
-        for b_cand in live_online_brands[:target_count]:
+        emit("website_crawl", "🌐 Deep Website Crawling", f"Inspecting official brand domains for published partnership contacts & products ({len(live_online_brands)} discovered)...", True, 50)
+        for idx, b_cand in enumerate(live_online_brands[:target_count]):
             dom = b_cand.get("domain", "")
-            if dom and dom not in seen_domains:
-                emit("website_crawl", f"🌐 Crawling {dom}", f"Extracting published contacts, about info, and Indian presence signals from {dom}...", True, 60)
+            b_name = b_cand.get("brand_name", dom)
+            sources = ", ".join(b_cand.get("sources_checked", [f"https://{dom}/"]))
+            email_info = b_cand.get("recipient_email", "Not publicly available")
+            emit("website_crawl", f"🌐 Researched {b_name} ({dom})", f"Scraped brand positioning and contacts across {sources}. Email: {email_info}", True, min(68, 50 + int((idx + 1) / max(1, target_count) * 18)))
 
         # Stage 5: Local Ollama Reasoning & Bespoke Pitch Formulation
         emit("ai_synthesis", f"⚡ Ollama {target_model} Reasoning", "Formulating bespoke 4-part video concepts based on crawled website data...", False, 70)

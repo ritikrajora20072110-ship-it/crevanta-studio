@@ -178,9 +178,9 @@ def _call_ollama_chat(
     model: str,
     messages: List[Dict[str, str]],
     is_json: bool = False,
-    timeout: float = 300.0,
-    num_predict: int = 1200,
-    num_ctx: int = 4096,
+    timeout: float = 450.0,
+    num_predict: int = 4096,
+    num_ctx: int = 16384,
     temperature: float = 0.6
 ) -> Dict[str, Any]:
     """Sends a chat completion request to the Ollama local API with keep-alive memory pinning."""
@@ -551,15 +551,26 @@ def generate_brand_pitches_ollama(
 
         discovered_context = ""
         if live_online_brands:
+            batch_offset = sum(batch_sizes[:batch_idx])
+            batch_candidates = live_online_brands[batch_offset:batch_offset + batch_target]
+            if not batch_candidates:
+                batch_candidates = [b for b in live_online_brands if b["brand_name"].lower() not in seen_names][:batch_target]
+            if not batch_candidates:
+                batch_candidates = live_online_brands[:batch_target]
+
             items_summary = []
-            for idx, lb in enumerate(live_online_brands[:batch_target]):
+            for idx, lb in enumerate(batch_candidates):
+                insight_str = lb.get('brand_insight', '')[:500]
+                social_snippet = ""
+                if lb.get("social_profiles"):
+                    social_snippet = f" | Social: {json.dumps(lb['social_profiles'])}"
                 items_summary.append(
-                    f"Brand Candidate {idx+1}: {lb['brand_name']} ({lb['website']}) | Loc: {lb.get('location', loc_target)} | Email: {lb.get('recipient_email', 'Not publicly available')} | Detail: {lb.get('brand_insight', '')[:100]}"
+                    f"Brand Candidate {idx+1}: {lb['brand_name']} ({lb['website']}) | Loc: {lb.get('location', loc_target)} | Email: {lb.get('recipient_email', 'Not publicly available')}{social_snippet} | Scraped Insight: {insight_str}"
                 )
             discovered_context = (
-                f"\nREAL-TIME LIVE WEB SEARCH RESULTS FOR '{brand_prompt}' IN '{loc_target}':\n"
+                f"\nREAL-TIME DEEP WEB RESEARCH & CRAWLED INTELLIGENCE FOR '{brand_prompt}' IN '{loc_target}':\n"
                 + "\n".join(items_summary)
-                + f"\nFormulate bespoke pitches for these real brands or similar brands in this exact niche and location.\n"
+                + f"\nFormulate bespoke pitches for these real brands with deep, authentic concept titles and creator synergy.\n"
             )
 
         system_prompt = (
@@ -626,8 +637,9 @@ def generate_brand_pitches_ollama(
                 model=target_model,
                 messages=messages,
                 is_json=True,
-                num_predict=min(1500, max(500, batch_target * 160)),
-                num_ctx=8192
+                timeout=450.0,
+                num_predict=min(8192, max(2048, batch_target * 1024)),
+                num_ctx=16384
             )
             content_text = res.get("message", {}).get("content", "").strip()
 
@@ -1124,7 +1136,10 @@ def converse_with_ollama(
             base_url=b_url,
             model=target_model,
             messages=ollama_msgs,
-            is_json=False
+            is_json=False,
+            timeout=450.0,
+            num_predict=4096,
+            num_ctx=16384
         )
         reply = res.get("message", {}).get("content", "")
         return {

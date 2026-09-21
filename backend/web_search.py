@@ -77,7 +77,7 @@ def search_duckduckgo_html(query: str, max_results: int = 25) -> List[Dict[str, 
     req = urllib.request.Request(url, data=data, headers={**COMMON_HEADERS, "Referer": "https://html.duckduckgo.com/"})
 
     try:
-        with urllib.request.urlopen(req, timeout=7) as resp:
+        with urllib.request.urlopen(req, timeout=12) as resp:
             content = resp.read().decode("utf-8", errors="ignore")
             doc = html.fromstring(content)
             for r in doc.xpath('//div[contains(@class, "result")]'):
@@ -123,7 +123,7 @@ def search_duckduckgo_lite(query: str, max_results: int = 20) -> List[Dict[str, 
     req = urllib.request.Request(url, data=data, headers=COMMON_HEADERS)
 
     try:
-        with urllib.request.urlopen(req, timeout=6) as resp:
+        with urllib.request.urlopen(req, timeout=12) as resp:
             content = resp.read().decode("utf-8", errors="ignore")
             doc = html.fromstring(content)
             for a in doc.xpath('//a[contains(@class, "result-link")]'):
@@ -163,7 +163,7 @@ def search_wikipedia_entities(query: str, max_results: int = 15) -> List[Dict[st
     req = urllib.request.Request(url, headers={"User-Agent": "CrevantaStudio/2.0 (leadgen@crevanta.com)"})
 
     try:
-        with urllib.request.urlopen(req, timeout=5) as resp:
+        with urllib.request.urlopen(req, timeout=10) as resp:
             data = json.loads(resp.read().decode("utf-8", errors="ignore"))
             items = data.get("query", {}).get("search", [])
             for item in items:
@@ -206,7 +206,7 @@ def search_places_nominatim(query: str, location: str, max_results: int = 15) ->
     req = urllib.request.Request(url, headers={**COMMON_HEADERS, "User-Agent": "CrevantaStudio/2.0 (leadgen@crevanta.com)"})
 
     try:
-        with urllib.request.urlopen(req, timeout=5) as resp:
+        with urllib.request.urlopen(req, timeout=10) as resp:
             data = json.loads(resp.read().decode("utf-8", errors="ignore"))
             for item in data:
                 name = item.get("name") or item.get("display_name", "").split(",")[0]
@@ -241,6 +241,7 @@ def crawl_brand_website_for_contact(
       - Published official email (prioritizing partnerships@, collab@, info@)
       - Brand title and meta description
       - Detects Indian entity indicators (.in, INR, GST, Indian addresses)
+      - Social profile handles and dynamic sub-page links
     """
     clean_dom = clean_domain(domain)
     result = {
@@ -252,7 +253,8 @@ def crawl_brand_website_for_contact(
         "brand_description": "",
         "meta_title": "",
         "is_indian": False,
-        "location": ""
+        "location": "",
+        "social_profiles": {}
     }
 
     if not clean_dom or any(agg in clean_dom for agg in AGGREGATOR_DOMAINS):
@@ -273,29 +275,86 @@ def crawl_brand_website_for_contact(
         f"https://{clean_dom}/contact",
         f"https://{clean_dom}/contact-us",
         f"https://{clean_dom}/about",
-        f"https://{clean_dom}/partnerships"
+        f"https://{clean_dom}/about-us",
+        f"https://{clean_dom}/partnerships",
+        f"https://{clean_dom}/partner",
+        f"https://{clean_dom}/collaborate",
+        f"https://{clean_dom}/collab",
+        f"https://{clean_dom}/influencers",
+        f"https://{clean_dom}/creators",
+        f"https://{clean_dom}/press"
     ]
 
     all_emails: Set[str] = set()
     page_text_combined = ""
+    discovered_socials: Dict[str, str] = {}
+    visited_urls: Set[str] = set()
 
-    for target_url in urls_to_try:
+    for target_url in list(urls_to_try):
+        if target_url in visited_urls or len(visited_urls) >= 8:
+            continue
+        visited_urls.add(target_url)
+
+        if on_event and not target_url.endswith(f"{clean_dom}/"):
+            try:
+                on_event("website_crawl", f"Deep crawling sub-page {target_url}...", True)
+            except Exception:
+                pass
+
         req = urllib.request.Request(target_url, headers=COMMON_HEADERS)
         try:
-            with urllib.request.urlopen(req, timeout=3.5) as resp:
+            with urllib.request.urlopen(req, timeout=8.0) as resp:
                 content = resp.read().decode("utf-8", errors="ignore")
                 page_text_combined += " " + content
 
-                # Extract title and meta description from homepage
-                if target_url.endswith(f"{clean_dom}/"):
+                try:
+                    doc = html.fromstring(content)
+                except Exception:
+                    doc = None
+
+                # Extract title, meta description, and discover internal links from homepage
+                if target_url.endswith(f"{clean_dom}/") and doc is not None:
                     try:
-                        doc = html.fromstring(content)
                         titles = doc.xpath("//title")
                         if titles and titles[0].text:
                             result["meta_title"] = titles[0].text.strip()
                         metas = doc.xpath('//meta[translate(@name, "DESCRIPTION", "description")="description"]/@content')
                         if metas:
                             result["brand_description"] = metas[0].strip()
+                        else:
+                            og_desc = doc.xpath('//meta[@property="og:description"]/@content')
+                            if og_desc:
+                                result["brand_description"] = og_desc[0].strip()
+
+                        # Dynamic internal link discovery from homepage
+                        for a in doc.xpath("//a[@href]"):
+                            href = a.get("href", "").strip()
+                            if not href or href.startswith(("#", "javascript:", "mailto:", "tel:")):
+                                continue
+                            full_url = urllib.parse.urljoin(target_url, href)
+                            parsed_u = urllib.parse.urlparse(full_url)
+                            if clean_domain(parsed_u.netloc) == clean_dom:
+                                path_lower = parsed_u.path.lower()
+                                if any(kw in path_lower for kw in ["contact", "about", "partner", "collab", "influencer", "creator", "press", "media", "team"]):
+                                    clean_sub = f"{parsed_u.scheme}://{parsed_u.netloc}{parsed_u.path}".rstrip("/")
+                                    if clean_sub not in urls_to_try and len(urls_to_try) < 14:
+                                        urls_to_try.append(clean_sub)
+                    except Exception:
+                        pass
+
+                # Extract social profiles
+                if doc is not None:
+                    try:
+                        for a in doc.xpath("//a[@href]"):
+                            href = a.get("href", "").strip()
+                            if "instagram.com/" in href and "instagram" not in discovered_socials:
+                                handle = href.split("instagram.com/")[-1].split("/")[0].split("?")[0].strip()
+                                if handle and handle not in ["explore", "direct", "accounts", "p", "reel", "stories"]:
+                                    discovered_socials["instagram"] = f"@{handle}"
+                            elif "linkedin.com/company/" in href and "linkedin" not in discovered_socials:
+                                comp = href.split("linkedin.com/company/")[-1].split("/")[0].split("?")[0].strip()
+                                if comp:
+                                    discovered_socials["linkedin"] = comp
                     except Exception:
                         pass
 
@@ -303,19 +362,24 @@ def crawl_brand_website_for_contact(
                 found_emails = re.findall(r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+", content)
                 for em in found_emails:
                     em_clean = em.lower().strip(".")
-                    # Filter out asset extensions and dummy emails
                     if not em_clean.endswith((".png", ".jpg", ".jpeg", ".webp", ".svg", ".gif", ".css", ".js")) \
                        and "example.com" not in em_clean and "domain.com" not in em_clean and "sentry.io" not in em_clean:
-                        # Favor emails with same domain
                         all_emails.add(em_clean)
                         if clean_dom in em_clean:
                             result["sources_checked"].append(target_url)
+                            if on_event:
+                                try:
+                                    on_event("website_crawl", f"Discovered official contact on {clean_dom}: {em_clean}", True)
+                                except Exception:
+                                    pass
 
                 # Stop crawling further pages if we already found a dedicated partnership or info email on brand domain
                 if any(clean_dom in e and any(e.startswith(p) for p in ["partnerships", "collab", "influencer", "marketing", "info"]) for e in all_emails):
                     break
         except Exception:
             continue
+
+    result["social_profiles"] = discovered_socials
 
     # Check for Indian presence signals in page content
     if not result["is_indian"]:
@@ -415,11 +479,14 @@ def search_brands_online(
     if is_pan_india:
         search_phrases.append(f"best {core_niche} brands in India official website")
         search_phrases.append(f"top {core_niche} D2C startup India")
-        search_phrases.append(f"{core_niche} companies India")
+        search_phrases.append(f"{core_niche} creator collaboration influencer partnerships India")
+        search_phrases.append(f"{core_niche} companies store India")
+        search_phrases.append(f"leading {core_niche} brands India")
     else:
         search_phrases.append(f"best {core_niche} in {loc_str} India official website")
         search_phrases.append(f"{core_niche} brands in {loc_str} Maharashtra India" if "mumbai" in loc_str.lower() or "pune" in loc_str.lower() else f"{core_niche} brands in {loc_str} India")
         search_phrases.append(f"top {core_niche} centers in {loc_str}")
+        search_phrases.append(f"{core_niche} stores and studios in {loc_str}")
 
     discovered_candidates: List[Dict[str, Any]] = []
     seen_domains: Set[str] = set(d.lower().strip() for d in (excluded_domains or []) if d)
@@ -447,8 +514,13 @@ def search_brands_online(
 
     # 2. Search DuckDuckGo HTML & Lite SERP
     for phrase in search_phrases:
-        if len(discovered_candidates) >= count * 2:
+        if len(discovered_candidates) >= count * 3:
             break
+        if on_event:
+            try:
+                on_event("internet_search", f"Querying search index for '{phrase}'...", True)
+            except Exception:
+                pass
         raw_results = search_duckduckgo_html(phrase, max_results=20)
         if not raw_results:
             raw_results = search_duckduckgo_lite(phrase, max_results=15)
@@ -558,12 +630,17 @@ def search_brands_online(
                     "source": "Verified Smartphone Directory"
                 })
 
-    # 4. Crawl top candidates to extract contact emails, descriptions, and verify Indian entity status
+    # 4. Crawl candidates to extract contact emails, descriptions, and verify Indian entity status
     final_brands: List[Dict[str, Any]] = []
-    crawl_limit = min(len(discovered_candidates), count + 5)
+    crawl_limit = min(len(discovered_candidates), count + 15)
 
     for item in discovered_candidates[:crawl_limit]:
         dom = item["domain"]
+        if on_event:
+            try:
+                on_event("website_crawl", f"Deep crawling candidate [{len(final_brands) + 1}/{count}]: https://{dom}...", True)
+            except Exception:
+                pass
         crawl_data = crawl_brand_website_for_contact(dom, on_event=on_event)
 
         # Enforce Indian Only filter if required
@@ -571,6 +648,10 @@ def search_brands_online(
             is_ind, _ = is_indian_entity(dom, brand_name=item["brand_name"])
             if not is_ind and not crawl_data.get("is_indian", False):
                 continue
+
+        insight = crawl_data.get("brand_description") or item.get("snippet") or f"{item['brand_name']} delivers high-quality solutions in the {core_niche} space."
+        if crawl_data.get("meta_title") and crawl_data["meta_title"] not in insight:
+            insight = f"{crawl_data['meta_title']}. {insight}"
 
         brand_rec = {
             "brand_name": item["brand_name"],
@@ -582,7 +663,8 @@ def search_brands_online(
             "sources_checked": crawl_data["sources_checked"],
             "brand_niche": core_niche.title() or "Fitness & Lifestyle",
             "location": crawl_data.get("location") or item.get("location") or (f"{loc_str}, India" if not is_pan_india else "India"),
-            "brand_insight": crawl_data.get("brand_description") or item.get("snippet") or f"{item['brand_name']} delivers high-quality solutions in the {core_niche} space.",
+            "brand_insight": insight,
+            "social_profiles": crawl_data.get("social_profiles", {}),
             "search_source": item.get("source", "Live Online Search"),
             "email_verification": crawl_data.get("email_verification")
         }
