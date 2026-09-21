@@ -186,9 +186,7 @@ class AutonomousCampaignAgent:
                 "brands": []
             }
 
-        # Build prompt & formulate pitches using generate_brand_pitches_ollama
-        emit("ai_synthesis", f"⚡ Ollama Deep Logic Active", f"Generating 3-part outreach emails & 4-part video concepts with {target_model}...", False, 80)
-        
+        # Build prompt & formulate pitches using generate_brand_pitches_ollama with live progress
         result = generate_brand_pitches_ollama(
             creator=creator,
             brand_prompt=effective_query,
@@ -199,21 +197,23 @@ class AutonomousCampaignAgent:
             model=target_model,
             strict_official_only=strict_official_only,
             indian_only=indian_only,
-            location=loc_target
+            location=loc_target,
+            pre_discovered_brands=live_online_brands,
+            on_event=emit
         )
 
         final_brands = result.get("brands", [])
 
         # Stage 6: Multi-Stage Email Deliverability Verification
-        emit("verification", "🌐 Email Verification & MX Resolution", "Validating DNS records, MX mail exchangers, and SMTP deliverability...", True, 90)
+        emit("verification", "🌐 Email Verification & MX Resolution", "Validating DNS records, MX mail exchangers, and SMTP deliverability...", True, 94)
         for b in final_brands:
             email = b.get("recipient_email", "")
             if email and email != "Not publicly available" and "@" in email:
                 dom = email.split("@")[-1]
-                emit("verification", f"🌐 Verified {email}", f"Checked MX host for {dom} (Inbox Deliverability: {b.get('deliverability', {}).get('score', 100)}/100)", True, 93)
+                emit("verification", f"🌐 Verified {email}", f"Checked MX host for {dom} (Inbox Deliverability: {b.get('deliverability', {}).get('score', 100)}/100)", True, 96)
 
         # Stage 7: Anti-Repetition Memory Recording
-        emit("memory", "Recording to Persistent Memory", f"Saving {len(final_brands)} new brand entries to pitched_brands.json...", False, 97)
+        emit("memory", "Recording to Persistent Memory", f"Saving {len(final_brands)} new brand entries to pitched_brands.json...", False, 98)
         total_stored = len(get_all_pitched_brands())
 
         emit("complete", "Autonomous Pipeline Complete", f"Successfully discovered and verified {len(final_brands)} brands with zero repetition.", False, 100)

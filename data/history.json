@@ -8,6 +8,30 @@
     "brand_name": "Test Brand",
     "status": "Delivery Failed: [Errno 8] nodename nor servname provided, or not known",
     "success": false,
+    "id": "outreach_ba9f71bd",
+    "timestamp": "2026-09-21T08:17:21.555836+00:00"
+  },
+  {
+    "type": "failed",
+    "to_email": "ritikrajora20072110@gmail.com",
+    "subject": "[Test Pitch] Crevanta Collab Preview: Mayank Tanwar x Sample Brand",
+    "body": "Hi there,\n\nThis is a live test email sent from Crevanta Studio via your connected Gmail.\n\nYour system is successfully hooked up to Gmail SMTP! When you run commands for Mayank Tanwar, pitches will be delivered in this exact formatting.\n\nBest regards,\nCrevanta Partnerships Team",
+    "creator_name": "Mayank Tanwar",
+    "brand_name": "Crevanta Test",
+    "status": "Delivery Failed: timed out",
+    "success": false,
+    "id": "outreach_4c965c72",
+    "timestamp": "2026-09-21T07:21:33.411587+00:00"
+  },
+  {
+    "type": "failed",
+    "to_email": "test@brand.com",
+    "subject": "Collab Pitch",
+    "body": "Hi,\nLet's work together.",
+    "creator_name": "Maya Sen",
+    "brand_name": "Test Brand",
+    "status": "Delivery Failed: [Errno 8] nodename nor servname provided, or not known",
+    "success": false,
     "id": "outreach_3463c936",
     "timestamp": "2026-09-21T07:05:37.864720+00:00"
   },

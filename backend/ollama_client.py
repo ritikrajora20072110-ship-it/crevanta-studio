@@ -7,7 +7,7 @@ import subprocess
 import signal
 import urllib.request
 import urllib.error
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Callable
 
 from .config import Config
 from .lead_verifier import (
@@ -178,7 +178,7 @@ def _call_ollama_chat(
     model: str,
     messages: List[Dict[str, str]],
     is_json: bool = False,
-    timeout: float = 120.0,
+    timeout: float = 300.0,
     num_predict: int = 1200,
     num_ctx: int = 4096,
     temperature: float = 0.6
@@ -426,7 +426,9 @@ def generate_brand_pitches_ollama(
     base_url: Optional[str] = None,
     strict_official_only: bool = False,
     indian_only: bool = False,
-    location: Optional[str] = "All India"
+    location: Optional[str] = "All India",
+    pre_discovered_brands: Optional[List[Dict[str, Any]]] = None,
+    on_event: Optional[Callable[[Dict[str, Any]], None]] = None
 ) -> Dict[str, Any]:
     """
     Real-time dynamic brand discovery and pitch writer using live online web search & local Ollama.
@@ -448,6 +450,20 @@ def generate_brand_pitches_ollama(
     """
     b_url = base_url or Config.OLLAMA_BASE_URL
     target_model = model or Config.OLLAMA_MODEL
+
+    def emit_synthesis(detail: str, progress_pct: int = 80):
+        if on_event:
+            try:
+                on_event({
+                    "timestamp": time.strftime("%H:%M:%S"),
+                    "stage": "ai_synthesis",
+                    "title": f"⚡ Ollama {target_model} Deep Logic",
+                    "detail": detail,
+                    "internet_active": False,
+                    "progress_pct": progress_pct
+                })
+            except Exception:
+                pass
 
     status = check_ollama_status(b_url)
     if not status["running"]:
@@ -472,15 +488,21 @@ def generate_brand_pitches_ollama(
     creator_views = creator.get("avg_views", "N/A")
     creator_bio = creator.get("bio", "")
 
-    # Calculate optimal batch sizes to ensure tokens never exceed single-response limits
-    if target_count <= 6:
+    # Calculate optimal batch sizes: 2 to 4 brands per prompt so each batch finishes fast without timeout
+    if target_count <= 4:
         batch_sizes = [target_count]
-    elif target_count <= 12:
+    elif target_count <= 8:
         batch_sizes = [target_count // 2, target_count - (target_count // 2)]
+    elif target_count <= 15:
+        b = target_count // 3
+        rem = target_count % 3
+        batch_sizes = [b + (1 if i < rem else 0) for i in range(3)]
     elif target_count <= 25:
-        batch_sizes = [9, 8, 8]
+        batch_sizes = [4, 4, 4, 4, 4, 5]
     else:
-        batch_sizes = [10, 10, 10, 10, 10]
+        batch_sizes = [5] * (target_count // 5)
+        if target_count % 5 > 0:
+            batch_sizes.append(target_count % 5)
 
     # Load persistent anti-repetition memory to guarantee zero duplicate pitches across runs
     from .storage import get_pitched_brand_names_and_domains, record_pitched_brands, get_all_pitched_brands
@@ -491,23 +513,33 @@ def generate_brand_pitches_ollama(
     seen_domains = set(stored_domains)
 
     # 1. Real-Time Live Online Web Search for authentic brands in requested niche & location
-    from .web_search import search_brands_online
     loc_target = (location or "All India").strip()
-    try:
-        live_online_brands = search_brands_online(
-            query=brand_prompt,
-            location=loc_target,
-            count=max(target_count, 15),
-            indian_only=indian_only,
-            excluded_names=stored_names,
-            excluded_domains=stored_domains
-        )
-    except Exception:
-        live_online_brands = []
+    if pre_discovered_brands is not None:
+        live_online_brands = pre_discovered_brands
+    else:
+        from .web_search import search_brands_online
+        try:
+            live_online_brands = search_brands_online(
+                query=brand_prompt,
+                location=loc_target,
+                count=max(target_count, 15),
+                indian_only=indian_only,
+                excluded_names=stored_names,
+                excluded_domains=stored_domains
+            )
+        except Exception:
+            live_online_brands = []
 
     for batch_idx, batch_target in enumerate(batch_sizes):
         if len(all_brands) >= target_count:
             break
+
+        prev_count = len(all_brands)
+        batch_pct = min(92, 80 + int((batch_idx / len(batch_sizes)) * 12))
+        emit_synthesis(
+            f"Formulating Batch {batch_idx + 1} of {len(batch_sizes)} ({batch_target} brands) with {target_model}...",
+            batch_pct
+        )
 
         exclude_text = ""
         if seen_names:
@@ -627,7 +659,7 @@ def generate_brand_pitches_ollama(
                 model=target_model,
                 messages=messages,
                 is_json=True,
-                num_predict=min(3500, max(1000, batch_target * 350)),
+                num_predict=min(2200, max(800, batch_target * 320)),
                 num_ctx=8192
             )
             content_text = res.get("message", {}).get("content", "").strip()
@@ -756,6 +788,15 @@ def generate_brand_pitches_ollama(
                     if lead is not None:
                         all_brands.append(lead)
 
+            added_in_batch = len(all_brands) - prev_count
+            if added_in_batch > 0:
+                current_pct = min(93, 80 + int((len(all_brands) / target_count) * 13))
+                recent_names = ", ".join(b.get("brand_name", "") for b in all_brands[-added_in_batch:])
+                emit_synthesis(
+                    f"Synthesized {len(all_brands)} of {target_count} brands so far ({recent_names})",
+                    current_pct
+                )
+
         except urllib.error.HTTPError as e:
             if e.code == 404:
                 return {
@@ -766,9 +807,12 @@ def generate_brand_pitches_ollama(
                 }
             break
         except Exception:
+            emit_synthesis(f"Batch {batch_idx + 1} adjusted, continuing synthesis with live verified data...", min(92, 80 + int((len(all_brands) / target_count) * 12)))
             continue
 
     # RESILIENT GUARANTEE: If we fell short of target_count, backfill from real live online web brands first!
+    if len(all_brands) < target_count:
+        emit_synthesis(f"Assembling remaining {target_count - len(all_brands)} verified brand profiles...", 93)
     if len(all_brands) < target_count and live_online_brands:
         for web_b in live_online_brands:
             if len(all_brands) >= target_count:

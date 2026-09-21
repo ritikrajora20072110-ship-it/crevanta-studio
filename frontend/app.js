@@ -263,7 +263,7 @@ async function toggleOllamaOneClick() {
 function updateGenerateButtonText() {
   const btnText = document.getElementById("generateBtnText");
   const countSelect = document.getElementById("brandCountSelect");
-  const count = countSelect ? countSelect.value : "50";
+  const count = countSelect ? countSelect.value : "10";
   if (!btnText) return;
   btnText.innerText = `Discover & Pitch ${count} Brands with Ollama (Local)`;
 }
@@ -827,7 +827,7 @@ async function generatePitches() {
   const prompt = promptInput ? promptInput.value.trim() : "";
   const emailStyle = document.getElementById("emailStyleSelect") ? document.getElementById("emailStyleSelect").value : "punchy";
   const countSelect = document.getElementById("brandCountSelect");
-  const count = countSelect ? parseInt(countSelect.value) : 50;
+  const count = countSelect ? parseInt(countSelect.value) : 10;
 
   const locInput = document.getElementById("campaignLocationInput");
   const locationVal = (locInput ? locInput.value.trim() : "") || appState.selectedLocation || "All India";
