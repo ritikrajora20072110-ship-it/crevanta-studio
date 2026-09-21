@@ -108,6 +108,12 @@ KNOWN_INDIAN_DOMAINS = {
     "cult.fit", "nitrro.in", "jeraifitness.com", "wavesgym.com", "atmanawellness.com",
     "vivafitness.net", "chisel.co.in", "wtfgyms.com", "fitpass.co.in", "gymlocator.in",
 
+    # Mobile Phones, Smartphones & Electronics in Indian Market
+    "lavamobiles.com", "micromaxinfo.com", "karbonnmobiles.com", "oneplus.in", "oneplus.com",
+    "mi.com", "xiaomi.com", "xiaomi.in", "redmi.in", "samsung.com", "samsung.com/in",
+    "realme.com", "realme.com/in", "vivo.com", "vivo.com/in", "oppo.com", "oppo.com/in",
+    "nothing.tech", "in.nothing.tech", "iqoo.com", "poco.in", "motorola.in", "apple.com/in",
+
     # Global brands with dedicated Indian operations / subsidiaries
     "amazon.in", "samsung.com/in", "nike.in", "adidas.co.in", "puma.com/in",
     "decathlon.in", "ikea.com/in", "muji.in", "uniqlo.com/in", "starbucks.in",
@@ -134,6 +140,10 @@ KNOWN_INDIAN_BRAND_NAMES = {
     "mahindra", "royal enfield", "tvs", "bajaj", "zomato", "swiggy", "flipkart",
     "myntra", "ajio", "tata cliq", "jio", "urban company", "cult.fit", "cultfit",
     "nitrro", "nitrro wellness", "jerai", "jerai fitness", "waves gym", "atmana wellness", "viva fitness",
+    "lava", "lava mobiles", "micromax", "karbonn", "oneplus", "oneplus india",
+    "xiaomi", "xiaomi india", "redmi", "samsung", "samsung india", "realme",
+    "vivo", "vivo india", "oppo", "oppo india", "nothing", "nothing phone",
+    "iqoo", "poco", "motorola", "motorola india",
     "cred", "zerodha", "groww", "paytm", "phonepe", "razorpay", "zoho"
 }
 

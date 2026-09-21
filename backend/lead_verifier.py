@@ -1585,6 +1585,105 @@ VERIFIED_OFFICIAL_DIRECTORY = {
         "brand_insight": "Viva Fitness supplies premium commercial gym gear, treadmills, and multi-gyms across India.",
         "creative_opportunity": "Testing the ergonomic smoothness and motor reliability of Viva's commercial cardio and strength gear.",
         "how_it_works": "Creator conducts a 30-minute interval sprint and heavy cable workout, evaluating smooth resistance curves."
+    },
+    "oneplus": {
+        "brand_name": "OnePlus India",
+        "website": "oneplus.in",
+        "email": "partnerships@oneplus.in",
+        "source_url": "https://www.oneplus.in/press",
+        "category": "Flagship Smartphones & Mobile Audio",
+        "concept_title": "The 4K 60FPS Low-Light Cinematic Vlog Test",
+        "brand_insight": "OnePlus pairs Hasselblad color science and high-refresh AMOLED fluid displays with lightning Warp/SuperVOOC fast charging.",
+        "creative_opportunity": "Highlighting raw low-light camera stabilization, true-to-life skin tones, and battery top-up speeds during busy production days.",
+        "how_it_works": "Creator shoots an entire high-movement travel vlog exclusively on the OnePlus flagship phone, testing color grading directly on device."
+    },
+    "lavamobiles": {
+        "brand_name": "Lava International",
+        "website": "lavamobiles.com",
+        "email": "customercare@lavainternational.in",
+        "source_url": "https://www.lavamobiles.com/contact-us",
+        "category": "Indian Homegrown Smartphones & Electronics",
+        "concept_title": "The Made-in-India Hardware Teardown & Benchmark",
+        "brand_insight": "Lava delivers clean, bloatware-free Android experiences engineered and manufactured end-to-end within India.",
+        "creative_opportunity": "Demonstrating clean stock Android performance, screen durability, and benchmark reliability against import rivals.",
+        "how_it_works": "Creator runs a 24-hour multitasking and gaming endurance test, showcasing battery longevity and clean software with zero ads."
+    },
+    "nothing": {
+        "brand_name": "Nothing Technology",
+        "website": "nothing.tech",
+        "email": "press@nothing.tech",
+        "source_url": "https://nothing.tech/pages/contact",
+        "category": "Design-Forward Smartphones & Minimalist Tech",
+        "concept_title": "The Glyph Interface & Minimalist Focus Workflow",
+        "brand_insight": "Nothing combines transparent retro-futuristic hardware, distinctive glyph lighting notifications, and distraction-free monochrome OS.",
+        "creative_opportunity": "Demonstrating how custom Glyph light patterns replace noisy screen notifications to keep creators deep in focused flow states.",
+        "how_it_works": "Creator demonstrates a full creative workday using flip-to-glyph lighting cues, highlighting aesthetic device interaction and screen-time moderation."
+    },
+    "xiaomi": {
+        "brand_name": "Xiaomi India",
+        "website": "mi.com/in",
+        "email": "service.in@xiaomi.com",
+        "source_url": "https://www.mi.com/in/support",
+        "category": "Smartphones & Smart Ecosystem",
+        "concept_title": "The 120W HyperCharge Speed Challenge",
+        "brand_insight": "Xiaomi leads camera hardware innovations, high-wattage battery replenishment, and high-performance mobile chipsets at accessible price tiers.",
+        "creative_opportunity": "Demonstrating 0-to-100% battery top-ups in minutes and 200MP detail resolution on mobile photo shoots.",
+        "how_it_works": "Creator plugs the device in while making a morning espresso, showing a full day's battery charged before the coffee finishes brewing."
+    },
+    "samsung": {
+        "brand_name": "Samsung India",
+        "website": "samsung.com/in",
+        "email": "support.india@samsung.com",
+        "source_url": "https://www.samsung.com/in/info/contact-us/",
+        "category": "Premium Mobile & Foldable Ecosystem",
+        "concept_title": "The 100x Space Zoom & Foldable Hands-Free Studio",
+        "brand_insight": "Samsung pioneers dynamic AMOLED folding screens, multi-camera computational photography, and S-Pen productivity integration.",
+        "creative_opportunity": "Using Flex Mode to shoot hands-free vertical video without a tripod or assistant.",
+        "how_it_works": "Creator folds the phone 90-degrees onto a coffee shop table and films high-res content effortlessly using gesture control."
+    },
+    "realme": {
+        "brand_name": "Realme India",
+        "website": "realme.com/in",
+        "email": "service.in@realme.com",
+        "source_url": "https://www.realme.com/in/support",
+        "category": "High-Performance Youth Smartphones",
+        "concept_title": "The 120Hz Esports & Thermal Throttle Marathon",
+        "brand_insight": "Realme engineers high-refresh displays, vapor cooling chambers, and rapid fast-charging for mobile gamers and young creators.",
+        "creative_opportunity": "Demonstrating sustained frame rates during competitive mobile gaming rounds with zero overheating or lag.",
+        "how_it_works": "Creator hosts a 2-hour continuous mobile gaming livestream, measuring surface temperatures and frame stability."
+    },
+    "vivo": {
+        "brand_name": "Vivo India",
+        "website": "vivo.com/in",
+        "email": "vcare@vivo.com",
+        "source_url": "https://www.vivo.com/in/support/service-center",
+        "category": "Cinematic Portrait Smartphones",
+        "concept_title": "The Zeiss Natural Color Portrait Studio",
+        "brand_insight": "Vivo partners with Zeiss for professional optical coatings, floating telephoto portrait lenses, and studio aura lighting.",
+        "creative_opportunity": "Showcasing studio-grade portrait bokeh and night photography without bulky lighting rigs.",
+        "how_it_works": "Creator tests night portraits in challenging neon street lighting, demonstrating aura light fill and natural skin tone rendition."
+    },
+    "iqoo": {
+        "brand_name": "iQOO India",
+        "website": "iqoo.com/in",
+        "email": "care@iqoo.com",
+        "source_url": "https://www.iqoo.com/in/support",
+        "category": "Flagship Mobile Gaming & Performance",
+        "concept_title": "The Zero-Drop Frame Rate Benchmark",
+        "brand_insight": "iQOO pairs Snapdragon flagship silicon with dedicated display chips and ultra-fast touch response for competitive gaming.",
+        "creative_opportunity": "Highlighting instant touch response, vapor cooling, and graphics fidelity under extreme loads.",
+        "how_it_works": "Creator runs back-to-back heavy 3D rendering and gaming sessions side-by-side with previous generation hardware."
+    },
+    "poco": {
+        "brand_name": "POCO India",
+        "website": "poco.in",
+        "email": "service.in@poco.net",
+        "source_url": "https://www.poco.in/contact-us",
+        "category": "Budget Flagship Smartphones",
+        "concept_title": "The Everyday Speed & Flagship Killer Breakdown",
+        "brand_insight": "Poco delivers top-tier processing power and fluid screens at disruptively accessible price points for tech-savvy audiences.",
+        "creative_opportunity": "Showing how everyday power users can edit 4K Reels and multitask smoothly on a budget-friendly device.",
+        "how_it_works": "Creator edits and exports an entire multi-track video timeline on the phone, timing the export against a laptop."
     }
 }
 
@@ -1641,22 +1740,39 @@ def get_verified_official_catalog(
                 continue
         eligible_brands.append(data)
 
-    # Priority matching by niche
-    matched = []
+    # Priority matching by niche: exact keyword matches first, then related industry broad matches
+    exact_matches = []
+    broad_matches = []
     others = []
     # Meaningful keyword filter ignoring conversational verbs
     keywords = [w for w in re.findall(r"[a-z]{3,}", lower_filter) if w not in ["identify", "discover", "find", "search", "brand", "brands", "company", "companies", "india", "please", "emerging", "emerge"]]
+
+    # Synonym expansion for category relevance
+    keyword_synonyms = set(keywords)
+    if any(k in ["mobile", "phone", "phones", "smartphone", "smartphones", "cellphone", "cellular"] for k in keywords):
+        keyword_synonyms.update(["mobile", "phone", "smartphone", "cellular", "electronics", "gadgets", "power", "audio", "hardware", "tech"])
+    elif any(k in ["gym", "gyms", "fitness", "workout", "athletic"] for k in keywords):
+        keyword_synonyms.update(["fitness", "gym", "workout", "athletic", "wellness", "training", "exercise", "equipment"])
+    elif any(k in ["coffee", "cafe", "roaster", "brew"] for k in keywords):
+        keyword_synonyms.update(["coffee", "roasters", "beverage", "brew", "espresso"])
+    elif any(k in ["fashion", "apparel", "clothing", "wear", "shirt", "suit"] for k in keywords):
+        keyword_synonyms.update(["fashion", "apparel", "clothing", "menswear", "tailoring", "streetwear"])
 
     for data in eligible_brands:
         cat = (data.get("category") or "").lower()
         bname = (data.get("brand_name") or "").lower()
         if any(w in cat or w in bname for w in keywords):
-            matched.append(data)
+            exact_matches.append(data)
+        elif any(w in cat or w in bname for w in keyword_synonyms):
+            broad_matches.append(data)
         else:
             others.append(data)
 
-    # Priority ordering: matched niche brands first, followed by others to fulfill requested count
-    ordered = matched + others
+    # When a specific niche is requested, NEVER dump unrelated categories as fallback
+    if keywords:
+        ordered = exact_matches + broad_matches
+    else:
+        ordered = exact_matches + broad_matches + others
 
     for data in ordered[:count]:
         results.append({

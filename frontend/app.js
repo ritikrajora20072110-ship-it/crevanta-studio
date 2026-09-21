@@ -12,7 +12,7 @@ let appState = {
   ollamaRunning: false,
   ollamaModels: [],
   ollamaBaseUrl: "http://127.0.0.1:11434",
-  ollamaModel: "llama3.2:1b",
+  ollamaModel: "qwen2.5:7b",
   generatedBrands: [],
   selectedBrandIds: new Set(),
   savedCommands: [],
@@ -292,6 +292,7 @@ function renderOllamaControlStatus() {
   const actionArea = document.getElementById("ollamaPowerActionArea");
   const badge = document.getElementById("ollamaActiveModelBadge");
   const timestamp = document.getElementById("ollamaStatusTimestamp");
+  const cardFlagship = document.getElementById("modelCardFlagship");
   const cardTurbo = document.getElementById("modelCardTurbo");
   const cardStandard = document.getElementById("modelCardStandard");
 
@@ -303,16 +304,24 @@ function renderOllamaControlStatus() {
     badge.innerText = `Active: ${appState.ollamaModel}`;
   }
 
+  const isFlagship = (appState.ollamaModel || "").includes("qwen");
   const isTurbo = (appState.ollamaModel || "").includes("1b");
+  const isStandard = !isFlagship && !isTurbo;
+
+  if (cardFlagship) {
+    cardFlagship.className = isFlagship
+      ? "p-2.5 border rounded cursor-pointer transition border-purple-600 bg-purple-50/70 ring-2 ring-purple-600 shadow-sm"
+      : "p-2.5 border border-[#D9D6CE] rounded cursor-pointer transition hover:border-[#171717] bg-[#F7F5F0]";
+  }
   if (cardTurbo) {
     cardTurbo.className = isTurbo
-      ? "p-3 border rounded cursor-pointer transition border-[#171717] bg-[#EFECE6] ring-1 ring-[#171717] shadow-sm"
-      : "p-3 border border-[#D9D6CE] rounded cursor-pointer transition hover:border-[#171717] bg-[#F7F5F0]";
+      ? "p-2.5 border rounded cursor-pointer transition border-[#171717] bg-[#EFECE6] ring-1 ring-[#171717] shadow-sm"
+      : "p-2.5 border border-[#D9D6CE] rounded cursor-pointer transition hover:border-[#171717] bg-[#F7F5F0]";
   }
   if (cardStandard) {
-    cardStandard.className = !isTurbo
-      ? "p-3 border rounded cursor-pointer transition border-[#171717] bg-[#EFECE6] ring-1 ring-[#171717] shadow-sm"
-      : "p-3 border border-[#D9D6CE] rounded cursor-pointer transition hover:border-[#171717] bg-[#F7F5F0]";
+    cardStandard.className = isStandard
+      ? "p-2.5 border rounded cursor-pointer transition border-[#171717] bg-[#EFECE6] ring-1 ring-[#171717] shadow-sm"
+      : "p-2.5 border border-[#D9D6CE] rounded cursor-pointer transition hover:border-[#171717] bg-[#F7F5F0]";
   }
 
   if (appState.ollamaRunning) {

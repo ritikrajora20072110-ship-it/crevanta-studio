@@ -175,10 +175,14 @@ class TestCrevantaSystem(unittest.TestCase):
         self.assertIn("base_url", data)
 
     def test_ollama_switch_model_endpoint(self):
-        res = client.post("/api/ollama/switch-model", json={"model": "llama3.2:1b"})
-        self.assertEqual(res.status_code, 200)
-        self.assertEqual(res.json()["active_model"], "llama3.2:1b")
-        self.assertEqual(Config.OLLAMA_MODEL, "llama3.2:1b")
+        orig_model = Config.OLLAMA_MODEL
+        try:
+            res = client.post("/api/ollama/switch-model", json={"model": "llama3.2:1b"})
+            self.assertEqual(res.status_code, 200)
+            self.assertEqual(res.json()["active_model"], "llama3.2:1b")
+            self.assertEqual(Config.OLLAMA_MODEL, "llama3.2:1b")
+        finally:
+            client.post("/api/ollama/switch-model", json={"model": orig_model})
 
     def test_ollama_offline_policy(self):
         # When Ollama is offline, MUST return OLLAMA_NOT_RUNNING error without canned mock brands

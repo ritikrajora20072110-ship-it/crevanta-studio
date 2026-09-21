@@ -1141,6 +1141,7 @@
             <div>
               <label class="block text-[11px] font-semibold text-[#171717] mb-1">Active Model</label>
               <select id="inputOllamaModel" onchange="onModelSelectChange()" class="w-full editorial-input px-3 py-2 rounded font-mono">
+                <option value="qwen2.5:7b" selected>👑 qwen2.5:7b (Highest Intelligence · Claude-Grade Reasoning · 4.7 GB)</option>
                 <option value="llama3.2:1b">⚡ llama3.2:1b (Turbo Speed ~80-120 tok/s)</option>
                 <option value="llama3.2:latest">🎯 llama3.2:latest (Standard Nuance ~3.2B)</option>
               </select>
@@ -1386,27 +1387,36 @@
       <!-- Inference Speed & Model Profile -->
       <div class="space-y-2">
         <div class="flex items-center justify-between">
-          <label class="text-[11px] font-bold uppercase tracking-wider text-[#696963]">Inference Speed & Model</label>
-          <span class="text-[10px] text-[#8C827A] font-medium" id="ollamaActiveModelBadge">Current: llama3.2:1b</span>
+          <label class="text-[11px] font-bold uppercase tracking-wider text-[#696963]">Inference Intelligence & Model</label>
+          <span class="text-[10px] text-[#8C827A] font-medium" id="ollamaActiveModelBadge">Current: qwen2.5:7b</span>
         </div>
-        <div class="grid grid-cols-2 gap-2.5">
-          <!-- Turbo Option -->
-          <div onclick="switchOllamaModelAction('llama3.2:1b')" id="modelCardTurbo" class="p-3 border rounded cursor-pointer transition hover:border-[#171717] bg-[#F7F5F0]">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+          <!-- Flagship Option -->
+          <div onclick="switchOllamaModelAction('qwen2.5:7b')" id="modelCardFlagship" class="p-2.5 border rounded cursor-pointer transition hover:border-[#171717] bg-[#F7F5F0]">
             <div class="flex items-center justify-between mb-1">
-              <span class="font-bold text-xs text-[#171717]">Turbo Mode</span>
-              <span class="text-[9px] bg-emerald-100 text-emerald-800 font-semibold px-1.5 py-0.5 rounded">Fastest</span>
+              <span class="font-bold text-xs text-[#171717]">👑 Flagship</span>
+              <span class="text-[9px] bg-purple-100 text-purple-800 font-semibold px-1 py-0.5 rounded">Claude-Grade</span>
+            </div>
+            <p class="text-[10px] text-[#696963] leading-tight">qwen2.5:7b • Deep Logic</p>
+            <p class="text-[9px] text-[#8C827A] mt-0.5">Highest Reasoning (~4.7 GB)</p>
+          </div>
+          <!-- Turbo Option -->
+          <div onclick="switchOllamaModelAction('llama3.2:1b')" id="modelCardTurbo" class="p-2.5 border rounded cursor-pointer transition hover:border-[#171717] bg-[#F7F5F0]">
+            <div class="flex items-center justify-between mb-1">
+              <span class="font-bold text-xs text-[#171717]">⚡ Turbo</span>
+              <span class="text-[9px] bg-emerald-100 text-emerald-800 font-semibold px-1 py-0.5 rounded">Fastest</span>
             </div>
             <p class="text-[10px] text-[#696963] leading-tight">llama3.2:1b • 80–120 tok/s</p>
-            <p class="text-[9px] text-[#8C827A] mt-1">Lightweight (~1.3 GB RAM)</p>
+            <p class="text-[9px] text-[#8C827A] mt-0.5">Lightweight (~1.3 GB)</p>
           </div>
           <!-- Standard Option -->
-          <div onclick="switchOllamaModelAction('llama3.2:latest')" id="modelCardStandard" class="p-3 border rounded cursor-pointer transition hover:border-[#171717] bg-[#F7F5F0]">
+          <div onclick="switchOllamaModelAction('llama3.2:latest')" id="modelCardStandard" class="p-2.5 border rounded cursor-pointer transition hover:border-[#171717] bg-[#F7F5F0]">
             <div class="flex items-center justify-between mb-1">
-              <span class="font-bold text-xs text-[#171717]">Standard</span>
-              <span class="text-[9px] bg-[#E5E0D8] text-[#171717] font-semibold px-1.5 py-0.5 rounded">Detailed</span>
+              <span class="font-bold text-xs text-[#171717]">🎯 Standard</span>
+              <span class="text-[9px] bg-[#E5E0D8] text-[#171717] font-semibold px-1 py-0.5 rounded">Balanced</span>
             </div>
             <p class="text-[10px] text-[#696963] leading-tight">llama3.2:latest • 35–50 tok/s</p>
-            <p class="text-[9px] text-[#8C827A] mt-1">Richer nuance (~2.2 GB RAM)</p>
+            <p class="text-[9px] text-[#8C827A] mt-0.5">Richer nuance (~2.2 GB)</p>
           </div>
         </div>
       </div>

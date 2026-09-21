@@ -178,7 +178,10 @@ def _call_ollama_chat(
     model: str,
     messages: List[Dict[str, str]],
     is_json: bool = False,
-    timeout: float = 120.0
+    timeout: float = 120.0,
+    num_predict: int = 1200,
+    num_ctx: int = 4096,
+    temperature: float = 0.6
 ) -> Dict[str, Any]:
     """Sends a chat completion request to the Ollama local API with keep-alive memory pinning."""
     url = base_url.rstrip("/") + "/api/chat"
@@ -188,9 +191,9 @@ def _call_ollama_chat(
         "stream": False,
         "keep_alive": -1,  # Keep model warm in GPU/RAM indefinitely - eliminates cold-start reloading lag
         "options": {
-            "temperature": 0.6,
-            "num_ctx": 4096,
-            "num_predict": 1200,
+            "temperature": temperature,
+            "num_ctx": num_ctx,
+            "num_predict": num_predict,
             "num_thread": 8
         }
     }
@@ -327,6 +330,11 @@ def _synthesize_brand_pitch(
         brand_insight = f"{brand_name} sources specialty single-origin beans roasted to preserve delicate terroir notes and rich aromatics without commercial bitterness."
         creative_opp = f"Educating coffee enthusiasts on brewing nuance, dial-in ratios, and sensory differences between commercial dark roasts and specialty craft beans."
         how_it_works = f"{c_name} conducts a side-by-side blind tasting against generic grocery coffee, timing extraction and analyzing crema, mouthfeel, and tasting notes on camera."
+    elif any(k in lower_niche for k in ["mobile", "phone", "phones", "smartphone", "smartphones", "cellular"]):
+        concept_title = "The 4K 60FPS Creator Field Stress Test"
+        brand_insight = f"{brand_name} combines high-refresh displays, multi-lens camera systems, and high-efficiency thermal performance for mobile power users."
+        creative_opp = f"Demonstrating raw low-light camera stabilization, high-frame-rate capture, and all-day battery endurance under heavy filming routines."
+        how_it_works = f"{c_name} shoots, edits, and renders an entire high-movement video project exclusively on {brand_name}'s flagship device, benchmarking render speed and thermal stability."
     elif any(k in lower_niche for k in ["fashion", "apparel", "wear", "tailor", "knit", "textile"]):
         concept_title = "One Wardrobe, Three Occasions"
         brand_insight = f"{brand_name} designs versatile, elevated tailoring built for multi-context everyday movement."
@@ -802,7 +810,7 @@ def generate_brand_pitches_ollama(
             # Synthesize anti-spam spintax pitch
             synth_brand = _synthesize_brand_pitch(
                 brand_name=c_name,
-                brand_niche=cat_item.get("brand_niche") or creator_niche,
+                brand_niche=cat_item.get("category") or cat_item.get("brand_niche") or brand_prompt,
                 creator=creator,
                 video_idea=video_idea,
                 campaign_15day_notes=campaign_15day_notes,
@@ -843,6 +851,42 @@ def generate_brand_pitches_ollama(
                 require_official=strict_official_only,
                 require_indian=indian_only,
                 verify_checker=False  # Catalog directory is pre-verified
+            )
+            if lead is not None:
+                all_brands.append(lead)
+
+    # If still below target_count in strict_official_only mode, backfill from remaining official directory to fulfill count guarantee
+    if len(all_brands) < target_count and strict_official_only:
+        remaining_catalog = get_verified_official_catalog(
+            niche_filter="",
+            count=150,
+            indian_only=indian_only
+        )
+        for cat_item in remaining_catalog:
+            if len(all_brands) >= target_count:
+                break
+            c_name = cat_item["brand_name"]
+            if c_name.lower() in seen_names:
+                continue
+            seen_names.add(c_name.lower())
+            synth_brand = _synthesize_brand_pitch(
+                brand_name=c_name,
+                brand_niche=cat_item.get("category") or cat_item.get("brand_niche") or creator_niche,
+                creator=creator,
+                video_idea=video_idea,
+                campaign_15day_notes=campaign_15day_notes,
+                email_style=email_style
+            )
+            synth_brand["website"] = cat_item["website"]
+            synth_brand["recipient_email"] = cat_item["recipient_email"]
+            synth_brand["verification"] = "official"
+            synth_brand["email_source"] = cat_item["email_source"]
+            synth_brand["deliverability"] = analyze_deliverability(synth_brand["subject"], synth_brand["body"], cat_item["recipient_email"])
+            lead = enforce_programmatic_rules(
+                synth_brand,
+                require_official=strict_official_only,
+                require_indian=indian_only,
+                verify_checker=False
             )
             if lead is not None:
                 all_brands.append(lead)

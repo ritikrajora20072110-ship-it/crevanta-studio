@@ -11,7 +11,7 @@ class Config:
     AI_PROVIDER: str = "ollama"
     
     OLLAMA_BASE_URL: str = os.getenv("OLLAMA_BASE_URL", "http://127.0.0.1:11434")
-    OLLAMA_MODEL: str = os.getenv("OLLAMA_MODEL", "llama3.2")
+    OLLAMA_MODEL: str = os.getenv("OLLAMA_MODEL", "qwen2.5:7b")
     
     GMAIL_USER: str = os.getenv("GMAIL_USER", "")
     GMAIL_APP_PASSWORD: str = os.getenv("GMAIL_APP_PASSWORD", "")
@@ -28,7 +28,7 @@ class Config:
         load_dotenv(BASE_DIR / ".env", override=True)
         cls.AI_PROVIDER = "ollama"
         cls.OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://127.0.0.1:11434")
-        cls.OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "llama3.2")
+        cls.OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen2.5:7b")
         cls.GMAIL_USER = os.getenv("GMAIL_USER", "")
         cls.GMAIL_APP_PASSWORD = os.getenv("GMAIL_APP_PASSWORD", "")
         cls.AGENCY_NAME = os.getenv("AGENCY_NAME", "Crevanta")
