@@ -12,6 +12,7 @@ HISTORY_FILE = DATA_DIR / "history.json"
 INQUIRIES_FILE = DATA_DIR / "inquiries.json"
 APPLICATIONS_FILE = DATA_DIR / "applications.json"
 TALKS_FILE = DATA_DIR / "talks.json"
+PITCHED_BRANDS_FILE = DATA_DIR / "pitched_brands.json"
 
 
 def _read_json(file_path: Path, default_value: Any) -> Any:
@@ -287,6 +288,98 @@ def delete_talk_session(session_id: str) -> bool:
 
 def clear_all_talks() -> bool:
     _write_json(TALKS_FILE, [])
+    return True
+
+
+# --- De-Duplication Anti-Repetition Brand Memory ---
+def get_all_pitched_brands() -> List[Dict[str, Any]]:
+    """Returns all brands that have been discovered or pitched, with metadata."""
+    return _read_json(PITCHED_BRANDS_FILE, [])
+
+
+def record_pitched_brands(
+    brands: List[Dict[str, Any]],
+    creator_name: str = "",
+    campaign_prompt: str = ""
+) -> int:
+    """
+    Saves a list of discovered/pitched brands to the persistent memory store.
+    Prevents any duplicate brand entries in pitched_brands.json.
+    Returns number of newly recorded brands.
+    """
+    if not brands:
+        return 0
+    stored = get_all_pitched_brands()
+    seen_names = set((b.get("brand_name") or "").lower().strip() for b in stored)
+    seen_domains = set((b.get("domain") or "").lower().strip() for b in stored if b.get("domain"))
+
+    new_records = 0
+    now_iso = datetime.now(timezone.utc).isoformat()
+
+    for b in brands:
+        b_name = (b.get("brand_name") or "").strip()
+        raw_site = b.get("website") or b.get("domain") or ""
+        b_domain = raw_site.lower().replace("https://", "").replace("http://", "").split("/")[0].strip()
+        if not b_name:
+            continue
+        if b_name.lower() in seen_names or (b_domain and b_domain in seen_domains):
+            continue
+
+        seen_names.add(b_name.lower())
+        if b_domain:
+            seen_domains.add(b_domain)
+
+        stored.insert(0, {
+            "id": f"brand_{uuid.uuid4().hex[:8]}",
+            "brand_name": b_name,
+            "domain": b_domain,
+            "website": b.get("website", b_domain),
+            "recipient_email": b.get("recipient_email", ""),
+            "verification": b.get("verification", "unverified"),
+            "brand_niche": b.get("brand_niche", ""),
+            "creator_name": creator_name,
+            "campaign_prompt": campaign_prompt,
+            "recorded_at": now_iso
+        })
+        new_records += 1
+
+    if new_records > 0:
+        _write_json(PITCHED_BRANDS_FILE, stored)
+    return new_records
+
+
+def get_pitched_brand_names_and_domains() -> tuple:
+    """
+    Aggregates all previously seen brand names and domains across:
+      1. pitched_brands.json
+      2. history.json (outreach audit log)
+      3. talks.json (chat history)
+    Returns (set of lowercase brand names, set of lowercase clean domains).
+    """
+    names: set = set()
+    domains: set = set()
+
+    # 1. From persistent pitched brands
+    for b in get_all_pitched_brands():
+        if b.get("brand_name"):
+            names.add(b["brand_name"].lower().strip())
+        if b.get("domain"):
+            domains.add(b["domain"].lower().strip())
+
+    # 2. From outreach history
+    for h in get_outreach_history():
+        if h.get("brand_name"):
+            names.add(h["brand_name"].lower().strip())
+        if h.get("to_email") and "@" in h["to_email"]:
+            dom = h["to_email"].split("@")[-1].lower().strip()
+            domains.add(dom)
+
+    return names, domains
+
+
+def clear_pitched_memory() -> bool:
+    """Clears all stored pitched brands memory."""
+    _write_json(PITCHED_BRANDS_FILE, [])
     return True
 
 

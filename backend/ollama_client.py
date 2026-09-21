@@ -482,8 +482,13 @@ def generate_brand_pitches_ollama(
     else:
         batch_sizes = [10, 10, 10, 10, 10]
 
+    # Load persistent anti-repetition memory to guarantee zero duplicate pitches across runs
+    from .storage import get_pitched_brand_names_and_domains, record_pitched_brands, get_all_pitched_brands
+    stored_names, stored_domains = get_pitched_brand_names_and_domains()
+
     all_brands: List[Dict[str, Any]] = []
-    seen_names = set()
+    seen_names = set(stored_names)
+    seen_domains = set(stored_domains)
 
     # 1. Real-Time Live Online Web Search for authentic brands in requested niche & location
     from .web_search import search_brands_online
@@ -493,7 +498,9 @@ def generate_brand_pitches_ollama(
             query=brand_prompt,
             location=loc_target,
             count=max(target_count, 15),
-            indian_only=indian_only
+            indian_only=indian_only,
+            excluded_names=stored_names,
+            excluded_domains=stored_domains
         )
     except Exception:
         live_online_brands = []
@@ -504,8 +511,11 @@ def generate_brand_pitches_ollama(
 
         exclude_text = ""
         if seen_names:
-            exclude_names = ", ".join(list(seen_names)[:15])
-            exclude_text = f"\nDO NOT REPEAT any of these previously discovered brands: {exclude_names}.\n"
+            exclude_names = ", ".join(sorted(list(seen_names))[:30])
+            exclude_text = (
+                f"\nCRITICAL ANTI-REPETITION MEMORY: These brands were ALREADY discovered or pitched in previous campaigns: {exclude_names}.\n"
+                f"DO NOT repeat any of these brands. You MUST formulate pitches for completely NEW and DIFFERENT brands.\n"
+            )
 
         discovered_context = ""
         if live_online_brands:
@@ -617,7 +627,7 @@ def generate_brand_pitches_ollama(
                 model=target_model,
                 messages=messages,
                 is_json=True,
-                num_predict=3500,
+                num_predict=min(3500, max(1000, batch_target * 350)),
                 num_ctx=8192
             )
             content_text = res.get("message", {}).get("content", "").strip()
@@ -627,9 +637,13 @@ def generate_brand_pitches_ollama(
                 batch_brands = parsed.get("brands", [])
                 for b in batch_brands:
                     b_name = (b.get("brand_name") or "").strip()
-                    if not b_name or b_name.lower() in seen_names:
+                    raw_site = b.get("website") or b.get("domain") or ""
+                    b_dom = raw_site.lower().replace("https://", "").replace("http://", "").split("/")[0].strip()
+                    if not b_name or b_name.lower() in seen_names or (b_dom and b_dom in seen_domains):
                         continue
                     seen_names.add(b_name.lower())
+                    if b_dom:
+                        seen_domains.add(b_dom)
 
                     # Check if brand matches our real-time online web crawl
                     web_match = None
@@ -760,9 +774,12 @@ def generate_brand_pitches_ollama(
             if len(all_brands) >= target_count:
                 break
             wb_name = web_b["brand_name"]
-            if wb_name.lower() in seen_names:
+            wb_dom = (web_b.get("domain") or web_b.get("website") or "").lower().replace("https://", "").replace("http://", "").split("/")[0].strip()
+            if wb_name.lower() in seen_names or (wb_dom and wb_dom in seen_domains):
                 continue
             seen_names.add(wb_name.lower())
+            if wb_dom:
+                seen_domains.add(wb_dom)
 
             synth_brand = _synthesize_brand_pitch(
                 brand_name=wb_name,
@@ -803,9 +820,12 @@ def generate_brand_pitches_ollama(
             if len(all_brands) >= target_count:
                 break
             c_name = cat_item["brand_name"]
-            if c_name.lower() in seen_names:
+            c_dom = (cat_item.get("website") or "").lower().replace("https://", "").replace("http://", "").split("/")[0].strip()
+            if c_name.lower() in seen_names or (c_dom and c_dom in seen_domains):
                 continue
             seen_names.add(c_name.lower())
+            if c_dom:
+                seen_domains.add(c_dom)
 
             # Synthesize anti-spam spintax pitch
             synth_brand = _synthesize_brand_pitch(
@@ -866,9 +886,12 @@ def generate_brand_pitches_ollama(
             if len(all_brands) >= target_count:
                 break
             c_name = cat_item["brand_name"]
-            if c_name.lower() in seen_names:
+            c_dom = (cat_item.get("website") or "").lower().replace("https://", "").replace("http://", "").split("/")[0].strip()
+            if c_name.lower() in seen_names or (c_dom and c_dom in seen_domains):
                 continue
             seen_names.add(c_name.lower())
+            if c_dom:
+                seen_domains.add(c_dom)
             synth_brand = _synthesize_brand_pitch(
                 brand_name=c_name,
                 brand_niche=cat_item.get("category") or cat_item.get("brand_niche") or creator_niche,
@@ -1014,18 +1037,38 @@ def generate_brand_pitches_ollama(
     catch_all_count = sum(1 for b in final_brands if (b.get("email_verification") or {}).get("status") == "catch-all")
     indian_count = sum(1 for b in final_brands if b.get("is_indian", True) or (b.get("email_verification") or {}).get("is_indian", True))
 
+    # Record newly discovered / pitched brands in persistent anti-repetition memory
+    try:
+        newly_recorded = record_pitched_brands(
+            brands=final_brands,
+            creator_name=creator_name,
+            campaign_prompt=brand_prompt
+        )
+    except Exception:
+        newly_recorded = 0
+
+    total_remembered = len(get_all_pitched_brands())
+
     return {
         "success": True,
         "provider": "ollama",
         "model": target_model,
         "strict_official_only": strict_official_only,
         "indian_only": indian_only,
-        "summary": f"Discovered and formulated 3-part pitches for {len(final_brands)} brands via local {target_model} with real-time official verification ({valid_count} valid, {catch_all_count} catch-all).",
+        "summary": (
+            f"Discovered and formulated 3-part pitches for {len(final_brands)} brands via local {target_model} "
+            f"with real-time official verification ({valid_count} valid, {catch_all_count} catch-all). "
+            f"Anti-repetition memory active ({total_remembered} brands remembered)."
+        ),
         "verification_summary": {
             "total": len(final_brands),
             "valid": valid_count,
             "catch_all": catch_all_count,
             "indian": indian_count
+        },
+        "memory": {
+            "new_recorded": newly_recorded,
+            "total_remembered": total_remembered
         },
         "brands": final_brands
     }

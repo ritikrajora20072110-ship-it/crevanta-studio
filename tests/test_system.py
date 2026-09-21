@@ -453,6 +453,71 @@ class TestCrevantaSystem(unittest.TestCase):
                 self.assertIn("is_indian", brand["email_verification"])
                 self.assertIn("stages", brand["email_verification"])
 
+    def test_anti_repetition_memory_storage_and_api(self):
+        """Tests that anti-repetition memory accurately tracks pitched brands and excludes them across campaigns."""
+        from backend.storage import (
+            record_pitched_brands,
+            get_all_pitched_brands,
+            get_pitched_brand_names_and_domains,
+            clear_pitched_memory
+        )
+
+        # 1. Reset memory via API
+        del_res = client.delete("/api/memory/pitched-brands")
+        self.assertEqual(del_res.status_code, 200)
+        self.assertTrue(del_res.json()["success"])
+
+        # Check count is 0
+        get_res = client.get("/api/memory/pitched-brands")
+        self.assertEqual(get_res.status_code, 200)
+        self.assertEqual(get_res.json()["count"], 0)
+
+        # 2. Record batch of brands
+        sample_brands = [
+            {"brand_name": "Cult.fit", "website": "cult.fit", "recipient_email": "partnerships@cult.fit"},
+            {"brand_name": "Nitrro Wellness", "website": "nitrro.in", "recipient_email": "info@nitrro.in"},
+            {"brand_name": "Waves Gym", "website": "wavesgym.com", "recipient_email": "collab@wavesgym.com"}
+        ]
+        num_new = record_pitched_brands(sample_brands, creator_name="Test Creator", campaign_prompt="Gyms in Mumbai")
+        self.assertEqual(num_new, 3)
+
+        # Duplicate recording should be skipped
+        num_dup = record_pitched_brands(sample_brands)
+        self.assertEqual(num_dup, 0)
+
+        # Check API reflects 3 brands
+        get_res2 = client.get("/api/memory/pitched-brands")
+        self.assertEqual(get_res2.status_code, 200)
+        self.assertEqual(get_res2.json()["count"], 3)
+
+        names, domains = get_pitched_brand_names_and_domains()
+        self.assertIn("cult.fit", names)
+        self.assertIn("nitrro wellness", names)
+        self.assertIn("waves gym", names)
+        self.assertIn("cult.fit", domains)
+        self.assertIn("nitrro.in", domains)
+
+        # 3. Discovery run strictly excludes these 3 brands
+        with patch("backend.ollama_client.check_ollama_status", return_value={"running": True, "models": ["qwen2.5:7b"]}):
+            api_res = client.post("/api/generate-pitches", json={
+                "creator_id": "creator_1",
+                "prompt": "Find 5 premium gym and fitness centers in Mumbai",
+                "count": 5,
+                "location": "Mumbai",
+                "strict_official_only": False
+            })
+            self.assertEqual(api_res.status_code, 200)
+            disc_brands = api_res.json().get("brands", [])
+            disc_names = [b["brand_name"].lower() for b in disc_brands]
+            # Ensure none of the 3 recorded brands are repeated
+            self.assertNotIn("cult.fit", disc_names)
+            self.assertNotIn("nitrro wellness", disc_names)
+            self.assertNotIn("waves gym", disc_names)
+
+        # Clean up
+        clear_pitched_memory()
+        self.assertEqual(len(get_all_pitched_brands()), 0)
+
 
 if __name__ == "__main__":
     unittest.main()

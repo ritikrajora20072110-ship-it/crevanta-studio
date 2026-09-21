@@ -366,7 +366,7 @@ def extract_brands_from_listicle(text_snippet: str, title: str) -> List[str]:
     for m in list_matches:
         for part in re.split(r"[,&;]| and ", m):
             clean_p = part.strip()
-            if 2 < len(clean_p) < 30 and not any(w in clean_p.lower() for w in ["best", "top", "guide", "equipment", "brands", "india", "setup", "home"]):
+            if 2 < len(clean_p) < 30 and not any(w in clean_p.lower() for w in ["best", "top", "guide", "equipment", "brands", "india", "setup", "home", "mobile phone", "phone", "smartphone", "company", "companies", "service", "services", "online", "market"]):
                 candidates.append(clean_p)
 
     return list(dict.fromkeys(candidates))
@@ -376,12 +376,15 @@ def search_brands_online(
     query: str,
     location: str = "All India",
     count: int = 20,
-    indian_only: bool = True
+    indian_only: bool = True,
+    excluded_names: Optional[Set[str]] = None,
+    excluded_domains: Optional[Set[str]] = None
 ) -> List[Dict[str, Any]]:
     """
     Executes a real-time live online web search for brands matching query & location.
     Crawls official websites to retrieve genuine published contact info,
     brand insight descriptions, and verified locations.
+    Filters out any brands present in excluded_names or excluded_domains.
     """
     cleaned_query = (query or "").strip()
     # Strip user meta-prompts like "Identify 50", "Find 20", "Discover 50"
@@ -402,8 +405,8 @@ def search_brands_online(
         search_phrases.append(f"top {core_niche} centers in {loc_str}")
 
     discovered_candidates: List[Dict[str, Any]] = []
-    seen_domains: Set[str] = set()
-    seen_names: Set[str] = set()
+    seen_domains: Set[str] = set(d.lower().strip() for d in (excluded_domains or []) if d)
+    seen_names: Set[str] = set(n.lower().strip() for n in (excluded_names or []) if n)
 
     # 1. First search via OpenStreetMap Nominatim for location-specific businesses (gyms, cafes, stores)
     if not is_pan_india:

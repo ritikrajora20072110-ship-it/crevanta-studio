@@ -26,7 +26,9 @@ from .storage import (
     save_talk_session,
     append_talk_message,
     delete_talk_session,
-    clear_all_talks
+    clear_all_talks,
+    get_all_pitched_brands,
+    clear_pitched_memory
 )
 from .ollama_client import (
     check_ollama_status,
@@ -683,6 +685,23 @@ def send_test_email(req: TestEmailRequest):
         creator_name=req.creator_name,
         brand_name="Crevanta Test"
     )
+
+
+# --- Persistent Anti-Repetition Brand Memory ---
+@app.get("/api/memory/pitched-brands")
+def list_pitched_brands():
+    brands = get_all_pitched_brands()
+    return {
+        "success": True,
+        "count": len(brands),
+        "brands": brands
+    }
+
+
+@app.delete("/api/memory/pitched-brands")
+def reset_pitched_brands():
+    clear_pitched_memory()
+    return {"success": True, "message": "Pitched brand memory cleared successfully."}
 
 
 # --- History / Audit Log ---

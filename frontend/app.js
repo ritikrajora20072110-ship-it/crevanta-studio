@@ -39,6 +39,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   await loadCommands();
   await loadHistory();
   await loadTalks();
+  await refreshBrandMemoryBadge();
 
   // Attach listener to brand count select
   const countSelect = document.getElementById("brandCountSelect");
@@ -46,6 +47,42 @@ document.addEventListener("DOMContentLoaded", async () => {
     countSelect.addEventListener("change", updateGenerateButtonText);
   }
 });
+
+// --- ANTI-REPETITION BRAND MEMORY ---
+async function refreshBrandMemoryBadge() {
+  const badge = document.getElementById("antiRepetitionMemoryBadge");
+  if (!badge) return;
+  try {
+    const res = await fetch("/api/memory/pitched-brands");
+    if (res.ok) {
+      const data = await res.json();
+      const count = data.count || 0;
+      badge.innerText = `Anti-Repetition Memory: ${count} Brands Remembered`;
+    } else {
+      badge.innerText = "Anti-Repetition Memory: Active";
+    }
+  } catch (e) {
+    badge.innerText = "Anti-Repetition Memory: Active";
+  }
+  if (window.lucide) lucide.createIcons();
+}
+
+async function clearBrandMemory() {
+  if (!confirm("Are you sure you want to reset the brand discovery memory? This will clear the exclusion list and allow previously pitched brands to be discovered again.")) {
+    return;
+  }
+  try {
+    const res = await fetch("/api/memory/pitched-brands", { method: "DELETE" });
+    if (res.ok) {
+      showToast("Anti-repetition memory reset. Brand exclusion list cleared.");
+      await refreshBrandMemoryBadge();
+    } else {
+      showToast("Failed to reset brand memory.", false);
+    }
+  } catch (err) {
+    showToast("Error resetting brand memory: " + err.message, false);
+  }
+}
 
 // --- TOAST NOTIFICATIONS ---
 function showToast(msg, isSuccess = true) {
@@ -915,6 +952,7 @@ async function generatePitches() {
 
       appState.selectedBrandIds = new Set(appState.generatedBrands.map(b => b.id));
       renderPitches(data);
+      await refreshBrandMemoryBadge();
       showToast(`Discovered & formulated 3-part pitches for ${data.brands.length} brands via local Ollama!`);
 
       // Smooth scroll to results

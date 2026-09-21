@@ -519,6 +519,10 @@
         <!-- QUICK PRESET CHIPS -->
         <div class="flex flex-wrap items-center gap-2 pt-1">
           <span class="text-xs text-[#66615B] font-bold uppercase tracking-wider mr-1">Suggested Briefs:</span>
+          <button onclick="insertPreset('Discover 10 leading smartphone, mobile hardware, and personal tech brands in India.')" class="studio-chip-btn flex items-center gap-1.5">
+            <i data-lucide="smartphone" class="w-3 h-3 text-[#B89248]"></i>
+            <span>Smartphones & Mobile Tech</span>
+          </button>
           <button onclick="insertPreset('Find 50 high-growth activewear, running footwear, and clean electrolyte recovery brands.')" class="studio-chip-btn flex items-center gap-1.5">
             <i data-lucide="zap" class="w-3 h-3 text-[#B89248]"></i>
             <span>Activewear & Hydration</span>
@@ -583,6 +587,21 @@
               <span>Real-Time Online Web Search Active</span>
             </span>
             <span class="text-[11px] text-[#66615B]">Ollama & Crevanta crawler search the live internet for brand websites, published contacts, and locations.</span>
+          </div>
+
+          <!-- Anti-Repetition Brand Memory Badge & Controls -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2 border-t border-[#EAE5DB]">
+            <div class="flex items-center gap-2">
+              <span class="editorial-badge text-[10.5px] bg-[#141413] text-[#FAF8F5] flex items-center gap-1.5 px-2.5 py-1 rounded-full font-medium">
+                <i data-lucide="shield-check" class="w-3 h-3 text-[#B89248]"></i>
+                <span id="antiRepetitionMemoryBadge">Anti-Repetition Memory: Loading...</span>
+              </span>
+              <span class="text-[11px] text-[#66615B]">Remembers all past pitches to guarantee 100% brand freshness with zero re-pitching.</span>
+            </div>
+            <button type="button" onclick="clearBrandMemory()" title="Reset memory to allow re-pitching previously discovered brands" class="text-[11px] text-[#8C827A] hover:text-red-600 underline font-medium cursor-pointer transition flex items-center gap-1">
+              <i data-lucide="rotate-ccw" class="w-3 h-3"></i>
+              <span>Reset Memory</span>
+            </button>
           </div>
         </div>
 
