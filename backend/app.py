@@ -3,10 +3,11 @@ from pathlib import Path
 from typing import Dict, Any, List, Optional
 from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, StreamingResponse
 from pydantic import BaseModel
 
 from .config import Config
+from .agent_orchestrator import AutonomousCampaignAgent
 from .storage import (
     get_all_creators,
     get_creator_by_id,
@@ -150,6 +151,17 @@ class GenerateRequest(BaseModel):
     strict_official_only: Optional[bool] = False
     indian_only: Optional[bool] = True
     location: Optional[str] = "All India"
+
+
+class AutoPilotRequest(BaseModel):
+    creator_id: Optional[str] = None
+    custom_creator: Optional[Dict[str, Any]] = None
+    prompt: Optional[str] = ""
+    count: Optional[int] = 10
+    location: Optional[str] = "All India"
+    indian_only: Optional[bool] = True
+    strict_official_only: Optional[bool] = False
+    ollama_model: Optional[str] = None
 
 
 class SearchBrandsRequest(BaseModel):
@@ -369,6 +381,88 @@ def generate_pitches(req: GenerateRequest):
         strict_official_only=req.strict_official_only or False,
         indian_only=req.indian_only if req.indian_only is not None else True,
         location=req.location or "All India"
+    )
+
+
+# --- Autonomous AI Agent: Live Internet Streaming & Auto-Pilot ---
+@app.post("/api/agent/stream-discovery")
+def stream_agent_discovery(req: AutoPilotRequest):
+    """
+    Server-Sent Events (SSE) streaming endpoint.
+    Emits real-time notification events as the AI uses the internet to search,
+    crawls live brand websites, verifies contacts, and synthesizes concepts with local Ollama.
+    """
+    creator = None
+    if req.creator_id:
+        creator = get_creator_by_id(req.creator_id)
+    if not creator and req.custom_creator:
+        creator = req.custom_creator
+    if not creator:
+        raise HTTPException(status_code=400, detail="Creator not found or not specified")
+
+    import queue
+    import threading
+    import json
+
+    event_queue = queue.Queue()
+
+    def on_event(ev: Dict[str, Any]):
+        event_queue.put({"type": "event", "data": ev})
+
+    def worker():
+        try:
+            result = AutonomousCampaignAgent.execute_autonomous_pipeline(
+                creator=creator,
+                brand_prompt=req.prompt or None,
+                count=req.count or 10,
+                location=req.location or "All India",
+                indian_only=req.indian_only if req.indian_only is not None else True,
+                strict_official_only=req.strict_official_only or False,
+                model=req.ollama_model or Config.OLLAMA_MODEL,
+                on_event=on_event
+            )
+            event_queue.put({"type": "complete", "result": result})
+        except Exception as e:
+            event_queue.put({"type": "error", "message": str(e)})
+        finally:
+            event_queue.put(None)
+
+    thread = threading.Thread(target=worker, daemon=True)
+    thread.start()
+
+    def event_generator():
+        while True:
+            item = event_queue.get()
+            if item is None:
+                break
+            payload = json.dumps(item)
+            yield f"data: {payload}\n\n"
+
+    return StreamingResponse(event_generator(), media_type="text/event-stream")
+
+
+@app.post("/api/agent/auto-pilot")
+def auto_pilot_discovery(req: AutoPilotRequest):
+    """
+    Synchronous Autonomous Auto-Pilot endpoint.
+    Executes full pipeline with zero user interference.
+    """
+    creator = None
+    if req.creator_id:
+        creator = get_creator_by_id(req.creator_id)
+    if not creator and req.custom_creator:
+        creator = req.custom_creator
+    if not creator:
+        raise HTTPException(status_code=400, detail="Creator not found or not specified")
+
+    return AutonomousCampaignAgent.execute_autonomous_pipeline(
+        creator=creator,
+        brand_prompt=req.prompt or None,
+        count=req.count or 10,
+        location=req.location or "All India",
+        indian_only=req.indian_only if req.indian_only is not None else True,
+        strict_official_only=req.strict_official_only or False,
+        model=req.ollama_model or Config.OLLAMA_MODEL
     )
 
 

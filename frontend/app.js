@@ -18,6 +18,7 @@ let appState = {
   savedCommands: [],
   history: [],
   selectedLocation: "All India",
+  isAutoPilot: false,
   activeBulkJobId: null,
   bulkPollInterval: null,
   pendingDispatchMode: "send",
@@ -784,7 +785,43 @@ function handleCustomLocationInput(val) {
   });
 }
 
-// --- GENERATE BRAND MATCHES & 3-PART BESPOKE PITCHES ---
+function toggleAutoPilotMode(enabled) {
+  appState.isAutoPilot = enabled;
+  const promptEl = document.getElementById("campaignPrompt");
+  const chipsContainer = document.getElementById("presetChipsContainer");
+  const statusLabel = document.getElementById("autoPilotStatusLabel");
+  const btnText = document.getElementById("generateBtnText");
+
+  if (enabled) {
+    if (promptEl) {
+      promptEl.disabled = true;
+      promptEl.classList.add("opacity-60", "bg-gray-50");
+      promptEl.dataset.prevVal = promptEl.value;
+      promptEl.value = "🤖 [Autonomous Auto-Pilot Active] AI will autonomously inspect the selected creator profile, derive high-affinity brand categories, search the live web, crawl websites, and formulate bespoke video concepts.";
+    }
+    if (chipsContainer) chipsContainer.classList.add("opacity-40", "pointer-events-none");
+    if (statusLabel) {
+      statusLabel.innerText = "⚡ Auto-Pilot Active (Zero Interference)";
+      statusLabel.className = "text-xs font-bold text-emerald-700";
+    }
+    if (btnText) btnText.innerText = "🚀 Launch Autonomous AI Campaign (Zero Interference)";
+    showToast("Autonomous Auto-Pilot enabled! Click the button below to let AI handle everything autonomously.");
+  } else {
+    if (promptEl) {
+      promptEl.disabled = false;
+      promptEl.classList.remove("opacity-60", "bg-gray-50");
+      promptEl.value = promptEl.dataset.prevVal || "";
+    }
+    if (chipsContainer) chipsContainer.classList.remove("opacity-40", "pointer-events-none");
+    if (statusLabel) {
+      statusLabel.innerText = "Manual Mode";
+      statusLabel.className = "text-xs font-semibold text-[#66615B]";
+    }
+    updateGenerateButtonText();
+  }
+}
+
+// --- GENERATE BRAND MATCHES & 3-PART BESPOKE PITCHES (STREAMING AGENT) ---
 async function generatePitches() {
   const promptInput = document.getElementById("campaignPrompt");
   const prompt = promptInput ? promptInput.value.trim() : "";
@@ -799,8 +836,8 @@ async function generatePitches() {
   const part2Notes = document.getElementById("part2Notes")?.value.trim() || "";
   const part3Notes = document.getElementById("part3Notes")?.value.trim() || "";
 
-  if (!prompt) {
-    showToast("Please enter your brand discovery criteria first", false);
+  if (!appState.isAutoPilot && !prompt) {
+    showToast("Please enter your brand discovery criteria first, or enable Auto-Pilot", false);
     if (promptInput) promptInput.focus();
     return;
   }
@@ -819,7 +856,7 @@ async function generatePitches() {
   const indianOnly = indianFilter ? indianFilter.checked : true;
 
   let payload = {
-    prompt: prompt,
+    prompt: appState.isAutoPilot ? "" : prompt,
     location: locationVal,
     email_style: emailStyle,
     count: count,
@@ -866,84 +903,103 @@ async function generatePitches() {
   const progressTitle = document.getElementById("progressTitle");
   const progressSubtext = document.getElementById("progressSubtext");
   const progressBatchStep = document.getElementById("progressBatchStep");
+  const consoleEl = document.getElementById("agentActivityConsole");
+  const internetBadge = document.getElementById("internetStatusBadge");
+  const internetText = document.getElementById("internetStatusText");
 
   btn.disabled = true;
-  btnText.innerText = `Discovering & Pitching ${count} Brands with Ollama...`;
+  btnText.innerText = appState.isAutoPilot ? "Autonomous AI Agent Running..." : `Discovering & Pitching ${count} Brands...`;
 
   // Display and animate live progress card
   if (progressCard) {
     progressCard.classList.remove("hidden");
-    if (progressBarFill) progressBarFill.style.width = "10%";
-    if (progressPercent) progressPercent.innerText = "10%";
-    if (progressTitle) progressTitle.innerText = `Searching Web & Ollama Discovering ${count} Brands (${locationVal})...`;
-    if (progressSubtext) progressSubtext.innerText = `Phase 1: Searching live web for authentic brands in ${locationVal}...`;
-    if (progressBatchStep) progressBatchStep.innerText = count > 10 ? "Batch 1 of " + Math.ceil(count / 10) : "Processing live web crawl...";
+    if (progressBarFill) progressBarFill.style.width = "5%";
+    if (progressPercent) progressPercent.innerText = "5%";
+    if (progressTitle) progressTitle.innerText = appState.isAutoPilot ? "Autonomous AI Agent Formulating Campaign..." : `Searching Web & Ollama Discovering ${count} Brands...`;
+    if (progressSubtext) progressSubtext.innerHTML = `<span>Initializing autonomous pipeline...</span>`;
+    if (progressBatchStep) progressBatchStep.innerText = "Live Stream Active";
   }
 
-  // Multi-phase progress ticker for transparent live search UX
-  let currentPct = 10;
-  const progressPhases = [
-    `Phase 1: Searching live web for authentic brands in ${locationVal}...`,
-    `Phase 2: Crawling official websites & extracting published contacts...`,
-    `Phase 3: Ollama (${appState.ollamaModel}) formulating bespoke 4-part video concepts...`,
-    `Phase 4: Running SMTP handshakes & inbox deliverability sanitization...`
-  ];
-  let phaseIdx = 0;
-  const progressTicker = setInterval(() => {
-    if (currentPct < 92) {
-      currentPct += count > 10 ? 6 : 12;
-      if (currentPct > 92) currentPct = 92;
-      if (progressBarFill) progressBarFill.style.width = `${currentPct}%`;
-      if (progressPercent) progressPercent.innerText = `${currentPct}%`;
-
-      if (progressSubtext && progressPhases[phaseIdx]) {
-        progressSubtext.innerText = progressPhases[phaseIdx];
-        if (currentPct > (phaseIdx + 1) * 22 && phaseIdx < progressPhases.length - 1) {
-          phaseIdx++;
-        }
-      }
-
-      if (progressBatchStep && count > 10) {
-        const batchNum = Math.min(Math.ceil(count / 10), Math.floor((currentPct / 100) * Math.ceil(count / 10)) + 1);
-        progressBatchStep.innerText = `Batch ${batchNum} of ${Math.ceil(count / 10)}`;
-      }
-    }
-  }, 1200);
+  if (consoleEl) {
+    consoleEl.innerHTML = `<div class="text-emerald-400 font-bold">[${new Date().toLocaleTimeString()}] 🤖 Autonomous AI Agent initialized. Target: ${count} brands. Project workspace secured.</div>`;
+  }
 
   try {
-    const res = await fetch("/api/generate-pitches", {
+    const res = await fetch("/api/agent/stream-discovery", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
     });
 
-    clearInterval(progressTicker);
-
-    const data = await res.json();
-
-    if (data.error === "OLLAMA_NOT_RUNNING") {
-      if (progressCard) progressCard.classList.add("hidden");
-      openOllamaControlModal();
-      showToast(data.message, false);
-      return;
+    if (!res.ok) {
+      throw new Error(`Server status ${res.status}: ${res.statusText}`);
     }
 
-    if (data.error === "MODEL_NOT_FOUND") {
-      if (progressCard) progressCard.classList.add("hidden");
-      showToast(data.message, false);
-      openOllamaControlModal();
-      return;
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = "";
+    let finalResult = null;
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const frames = buffer.split("\n\n");
+      buffer = frames.pop();
+
+      for (const frame of frames) {
+        const trimmed = frame.trim();
+        if (!trimmed.startsWith("data: ")) continue;
+        try {
+          const item = JSON.parse(trimmed.slice(6));
+          if (item.type === "event") {
+            const ev = item.data;
+            if (progressBarFill && ev.progress_pct) progressBarFill.style.width = `${ev.progress_pct}%`;
+            if (progressPercent && ev.progress_pct) progressPercent.innerText = `${ev.progress_pct}%`;
+            if (progressTitle && ev.title) progressTitle.innerText = ev.title;
+            if (progressSubtext && ev.detail) progressSubtext.innerHTML = `<span>${ev.detail}</span>`;
+
+            // Update live internet badge notification
+            if (internetBadge && internetText) {
+              if (ev.internet_active) {
+                internetBadge.className = "flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-300 transition-all duration-300";
+                internetText.innerText = "🌐 LIVE INTERNET ACTIVE";
+              } else {
+                internetBadge.className = "flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200 transition-all duration-300";
+                internetText.innerText = `⚡ LOCAL OLLAMA (${appState.ollamaModel})`;
+              }
+            }
+
+            // Append live console log entry
+            if (consoleEl) {
+              const colorClass = ev.internet_active ? "text-emerald-300" : (ev.stage === "ai_synthesis" ? "text-amber-300" : "text-gray-300");
+              const icon = ev.internet_active ? "🌐" : (ev.stage === "ai_synthesis" ? "⚡" : "✓");
+              const line = document.createElement("div");
+              line.className = colorClass;
+              line.innerText = `[${ev.timestamp}] ${icon} [${ev.stage.toUpperCase()}] ${ev.detail}`;
+              consoleEl.appendChild(line);
+              consoleEl.scrollTop = consoleEl.scrollHeight;
+            }
+          } else if (item.type === "complete") {
+            finalResult = item.result;
+          } else if (item.type === "error") {
+            showToast("Agent error: " + item.message, false);
+          }
+        } catch (parseErr) {
+          console.warn("Error parsing SSE frame:", parseErr);
+        }
+      }
     }
 
-    if (data.brands && data.brands.length > 0) {
+    if (finalResult && finalResult.brands && finalResult.brands.length > 0) {
       if (progressBarFill) progressBarFill.style.width = "100%";
       if (progressPercent) progressPercent.innerText = "100%";
 
       setTimeout(() => {
         if (progressCard) progressCard.classList.add("hidden");
-      }, 500);
+      }, 800);
 
-      appState.generatedBrands = data.brands.map((b, i) => ({
+      appState.generatedBrands = finalResult.brands.map((b, i) => ({
         ...b,
         id: `brand_${Date.now()}_${i}`,
         creator_id: payload.creator_id || "custom",
@@ -951,9 +1007,9 @@ async function generatePitches() {
       }));
 
       appState.selectedBrandIds = new Set(appState.generatedBrands.map(b => b.id));
-      renderPitches(data);
+      renderPitches(finalResult);
       await refreshBrandMemoryBadge();
-      showToast(`Discovered & formulated 3-part pitches for ${data.brands.length} brands via local Ollama!`);
+      showToast(`Autonomous AI Agent completed! Discovered & formulated pitches for ${finalResult.brands.length} brands.`);
 
       // Smooth scroll to results
       const resultsSec = document.getElementById("resultsSection");
@@ -962,13 +1018,12 @@ async function generatePitches() {
       }
     } else {
       if (progressCard) progressCard.classList.add("hidden");
-      showToast(data.message || "No brands found. Please refine your criteria.", false);
+      showToast((finalResult && finalResult.message) || "No brands found. Please refine criteria or creator profile.", false);
     }
   } catch (err) {
-    clearInterval(progressTicker);
     if (progressCard) progressCard.classList.add("hidden");
-    console.error("Pitch generation error:", err);
-    showToast("Error connecting to local Ollama: " + err.message, false);
+    console.error("Agent error:", err);
+    showToast("Autonomous discovery error: " + err.message, false);
   } finally {
     btn.disabled = false;
     updateGenerateButtonText();

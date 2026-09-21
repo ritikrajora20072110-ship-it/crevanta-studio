@@ -5,7 +5,7 @@ import time
 import urllib.request
 import urllib.parse
 import urllib.error
-from typing import List, Dict, Any, Optional, Set
+from typing import List, Dict, Any, Optional, Set, Callable
 from lxml import html
 
 from .email_verifier import verify_email, is_indian_entity
@@ -231,7 +231,10 @@ def search_places_nominatim(query: str, location: str, max_results: int = 15) ->
     return results
 
 
-def crawl_brand_website_for_contact(domain: str) -> Dict[str, Any]:
+def crawl_brand_website_for_contact(
+    domain: str,
+    on_event: Optional[Callable[[str, str, bool], None]] = None
+) -> Dict[str, Any]:
     """
     Directly crawls the official brand website homepage and contact page.
     Extracts:
@@ -254,6 +257,12 @@ def crawl_brand_website_for_contact(domain: str) -> Dict[str, Any]:
 
     if not clean_dom or any(agg in clean_dom for agg in AGGREGATOR_DOMAINS):
         return result
+
+    if on_event:
+        try:
+            on_event("website_crawl", f"Connecting to live website https://{clean_dom}...", True)
+        except Exception:
+            pass
 
     # Check Indian TLD
     if clean_dom.endswith((".in", ".co.in", ".net.in", ".org.in")):
@@ -378,13 +387,15 @@ def search_brands_online(
     count: int = 20,
     indian_only: bool = True,
     excluded_names: Optional[Set[str]] = None,
-    excluded_domains: Optional[Set[str]] = None
+    excluded_domains: Optional[Set[str]] = None,
+    on_event: Optional[Callable[[str, str, bool], None]] = None
 ) -> List[Dict[str, Any]]:
     """
     Executes a real-time live online web search for brands matching query & location.
     Crawls official websites to retrieve genuine published contact info,
     brand insight descriptions, and verified locations.
     Filters out any brands present in excluded_names or excluded_domains.
+    Emits real-time notifications via on_event callback whenever internet is queried.
     """
     cleaned_query = (query or "").strip()
     # Strip user meta-prompts like "Identify 50", "Find 20", "Discover 50"
@@ -393,6 +404,12 @@ def search_brands_online(
 
     loc_str = (location or "All India").strip()
     is_pan_india = loc_str.lower() in ["all india", "pan-india", "india", "any"]
+
+    if on_event:
+        try:
+            on_event("internet_search", f"Querying search engines for '{core_niche}' in '{loc_str}'...", True)
+        except Exception:
+            pass
 
     search_phrases = []
     if is_pan_india:
@@ -547,7 +564,7 @@ def search_brands_online(
 
     for item in discovered_candidates[:crawl_limit]:
         dom = item["domain"]
-        crawl_data = crawl_brand_website_for_contact(dom)
+        crawl_data = crawl_brand_website_for_contact(dom, on_event=on_event)
 
         # Enforce Indian Only filter if required
         if indian_only:

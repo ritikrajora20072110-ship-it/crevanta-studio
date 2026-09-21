@@ -4,7 +4,9 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 
-DATA_DIR = Path(__file__).resolve().parent.parent / "data"
+BASE_DIR = Path(__file__).resolve().parent.parent
+ROOT_DIR = BASE_DIR
+DATA_DIR = BASE_DIR / "data"
 
 CREATORS_FILE = DATA_DIR / "creators.json"
 COMMANDS_FILE = DATA_DIR / "commands.json"
